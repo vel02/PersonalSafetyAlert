@@ -33,7 +33,7 @@ public class HomeFragment extends DaggerFragment {
         binding = FragmentHomeBinding.inflate(inflater);
         return binding.getRoot();
     }
-
+    
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(HomeFragmentViewModel.class);
