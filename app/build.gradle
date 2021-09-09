@@ -25,14 +25,57 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    buildFeatures {
+        dataBinding = true
+    }
 }
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+
+    def preference_version = "1.1.1"
+    implementation "androidx.preference:preference:$preference_version"
+    //reference: https://developer.android.com/jetpack/androidx/releases/preference/
+
+    def fragment_version = "1.3.6"
+    implementation "androidx.fragment:fragment:$fragment_version"
+    //reference: https://developer.android.com/jetpack/androidx/releases/fragment#version_130_2
+
+    def dagger_version = "2.35.1"
+    api "com.google.dagger:dagger:$dagger_version"
+    api "com.google.dagger:dagger-android:$dagger_version"
+    api "com.google.dagger:dagger-android-support:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
+    //reference: https://github.com/google/dagger
+
+    def lifecycle_version = "2.3.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+    //reference: https://developer.android.com/jetpack/androidx/releases/lifecycle
+
+    def nav_version = "2.3.5"
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+    //reference: https://developer.android.com/guide/navigation/navigation-getting-started
+
+    def google_location = "18.0.0"
+    implementation "com.google.android.gms:play-services-location:$google_location"
+    //reference: https://developers.google.com/android/guides/setup
+
+    def broadcast_manager = "1.0.0"
+    implementation "androidx.localbroadcastmanager:localbroadcastmanager:$broadcast_manager"
+
+    def java_mail = '1.6.5'
+    implementation "com.sun.mail:android-mail:$java_mail"
+    implementation "com.sun.mail:android-activation:$java_mail"
+    //reference: https://javaee.github.io/javamail/
 }
