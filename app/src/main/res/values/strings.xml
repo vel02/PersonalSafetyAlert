@@ -1,5 +1,26 @@
 <resources>
     <string name="app_name">Personal Safety Alert</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Home Fragment -->
+    <string name="txt_start_safety">Safety Alert OFF</string>
+    <string name="txt_stop_safety">Safety Alert ON</string>
+
+    <string name="desc_mobile_phone">Go to contact screen.</string>
+    <string name="desc_pen_edit">Go to edit message replay text screen.</string>
+    <string name="desc_long_press_contact">Go to Contact to select to whom you preferred to receive alert message.</string>
+    <string name="desc_long_press_edit_message">Go to Message to set custom message.</string>
+    <string name="desc_long_press_visual_message">Go to Visual Message to visualize your custom message in real time.</string>
+    <string name="desc_menu_more">Popup menu to clear text list.</string>
+
+    <string name="txt_message_reply_text">Message reply text</string>
+    <string name="txt_select_your_text">Select your text</string>
+    <string name="txt_hide">HIDE</string>
+
+    <string name="txt_sample_text_00">I am in trouble, please help by reaching to below location.</string>
+    <string name="txt_sample_text_01">I am in trouble, this is an emergency please help me.</string>
+    <string name="txt_sample_text_02">I am in need, do reach me ASAP!</string>
+    <string name="txt_sample_text_03">Emergency! something happened to me please reach me.</string>
+    <string name="txt_sample_text_04">Emergency! Emergency!</string>
+
+    <string name="popup_clear_all">Clear All</string>
 </resources>
