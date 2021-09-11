@@ -6,6 +6,7 @@
     <color name="primaryDark">#004ba0</color>
 
     <color name="black">#FF000000</color>
+    <color name="black_800">#424242</color>
     <color name="white">#FFFFFFFF</color>
 
     <color name="background_default_screen">#FAFAFA</color>

@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background_default_screen"
-            android:padding="16dp"
+            android:padding="12dp"
             tools:context=".ui.screen.home.HomeFragment">
 
             <androidx.cardview.widget.CardView
@@ -59,7 +59,10 @@
                     <View
                         android:layout_width="0dp"
                         android:layout_height="@dimen/divider_vertical_view_separator_dp"
-                        android:layout_margin="8dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="8dp"
                         android:layout_weight="0.02"
                         android:background="?android:attr/dividerVertical" />
 
@@ -72,6 +75,7 @@
                         android:clickable="true"
                         android:contentDescription="@string/desc_mobile_phone"
                         android:focusable="true"
+                        android:padding="1dp"
                         android:src="@drawable/ic_mobile_phone" />
 
 
@@ -138,12 +142,16 @@
                         android:clickable="true"
                         android:contentDescription="@string/desc_pen_edit"
                         android:focusable="true"
+                        android:padding="1dp"
                         android:src="@drawable/ic_pen_edit" />
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="@dimen/divider_vertical_view_separator_dp"
-                        android:layout_margin="8dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="8dp"
                         android:layout_weight="0.02"
                         android:background="?android:attr/dividerVertical" />
 
@@ -156,6 +164,7 @@
                         android:clickable="true"
                         android:contentDescription="@string/desc_mobile_phone"
                         android:focusable="true"
+                        android:padding="1dp"
                         android:src="@drawable/ic_visual_message" />
 
                 </LinearLayout>

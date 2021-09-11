@@ -11,7 +11,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PersonalSafetyAlert.NoActionBar">
-
+        <activity
+            android:name=".ui.screen.menu.help.HelpActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.screen.menu.notworking.NotWorkingActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.screen.menu.settings.SettingsActivity"
+            android:exported="true" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
@@ -24,6 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

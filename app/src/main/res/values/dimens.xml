@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="divider_vertical_view_separator_dp">35dp</dimen>
+    <dimen name="text_size_small">13sp</dimen>
+    <dimen name="text_size_large">16sp</dimen>
+
+    <integer name="anim_duration_very_long">1000</integer>
+    <integer name="anim_duration_long">500</integer>
+    <integer name="anim_duration_medium">300</integer>
+
 </resources>

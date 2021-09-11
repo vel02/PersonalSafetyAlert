@@ -11,9 +11,7 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class MainFragmentBuilderModule {
 
     @HomeScreenScope
-    @ContributesAndroidInjector(modules = {
-            HomeScreenViewModelModule.class
-    })
+    @ContributesAndroidInjector(modules = {HomeScreenViewModelModule.class})
     abstract HomeFragment contributeHomeFragment();
 
 }

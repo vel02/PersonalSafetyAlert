@@ -3,13 +3,26 @@ package com.sti.research.personalsafetyalert.di;
 import com.sti.research.personalsafetyalert.di.ui.MainFragmentBuilderModule;
 import com.sti.research.personalsafetyalert.di.ui.MainScope;
 import com.sti.research.personalsafetyalert.di.ui.MainViewModelModule;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.help.HelpFragmentBuilderModule;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.help.HelpScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.help.HelpViewModelModule;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.notworking.NotWorkingFragmentBuilderModule;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.notworking.NotWorkingScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.notworking.NotWorkingViewModelModule;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.SettingsFragmentBuilderModule;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.SettingsScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.SettingsViewModelModule;
 import com.sti.research.personalsafetyalert.ui.MainActivity;
+import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
+import com.sti.research.personalsafetyalert.ui.screen.menu.notworking.NotWorkingActivity;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class ActivityBuilderModule {
+
     @MainScope
     @ContributesAndroidInjector(modules = {
             MainFragmentBuilderModule.class,
@@ -17,5 +30,24 @@ public abstract class ActivityBuilderModule {
     })
     abstract MainActivity contributeMainActivity();
 
+    @SettingsScope
+    @ContributesAndroidInjector(modules = {
+            SettingsFragmentBuilderModule.class,
+            SettingsViewModelModule.class
+    })
+    abstract SettingsActivity contributeSettingsActivity();
 
+    @NotWorkingScope
+    @ContributesAndroidInjector(modules = {
+            NotWorkingFragmentBuilderModule.class,
+            NotWorkingViewModelModule.class
+    })
+    abstract NotWorkingActivity contributeNotWorkingActivity();
+
+    @HelpScope
+    @ContributesAndroidInjector(modules = {
+            HelpFragmentBuilderModule.class,
+            HelpViewModelModule.class
+    })
+    abstract HelpActivity contributeHelpActivity();
 }
