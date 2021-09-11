@@ -43,5 +43,7 @@
     <string name="txt_app_version">App Version</string>
     <string name="desc_version">1.0 version</string>
     <string name="desc_licensed">Copyright Personal Safety Alert <br />Licensed under the MIT License</string>
+    <string name="desc_navigate_next">Navigate Next</string>
+    <string name="desc_navigate_previous">Navigate previous</string>
 
 </resources>

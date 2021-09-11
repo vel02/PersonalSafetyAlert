@@ -64,6 +64,7 @@ public class NotWorkingActivity extends DaggerAppCompatActivity {
         navController = navHostFragment.getNavController();
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
+        binding.appBarLayout.setTargetElevation(0);
 
         AppBarConfiguration configuration = new AppBarConfiguration.Builder().build();
         NavigationUI.setupActionBarWithNavController(this, navController, configuration);

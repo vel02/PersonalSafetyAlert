@@ -9,6 +9,11 @@
     <color name="black_800">#424242</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="grey">#c3c3c3</color>
+    <color name="lightGrey">#f2f2f2</color>
+    <color name="mediumLightGrey">#d9d9d9</color>
+    <color name="darkGrey">#a6a6a6</color>
+
     <color name="background_default_screen">#FAFAFA</color>
     <color name="background_white">#EDE9E9</color>
     <color name="hintColor">#928E8E</color>

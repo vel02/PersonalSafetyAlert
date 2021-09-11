@@ -5,29 +5,89 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sti.research.personalsafetyalert.R;
+import com.sti.research.personalsafetyalert.adapter.NotWorkingPagerAdapter;
 import com.sti.research.personalsafetyalert.databinding.FragmentNotWorkingBinding;
+import com.sti.research.personalsafetyalert.model.Instruction;
+import com.sti.research.personalsafetyalert.resources.Instructions;
+import com.sti.research.personalsafetyalert.ui.screen.menu.notworking.screen.pager.NotWorkingFragmentViewPager;
+import com.sti.research.personalsafetyalert.util.animation.CubeInScalingTransformation;
+import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
+
+import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import dagger.android.support.DaggerFragment;
 
 public class NotWorkingFragment extends DaggerFragment {
 
+    @Inject
+    ViewModelProviderFactory providerFactory;
+
     private FragmentNotWorkingBinding binding;
+    private static final String TAG = "test";
+
+    private NotWorkingFragmentViewModel viewModel;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentNotWorkingBinding.inflate(inflater);
+        viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(NotWorkingFragmentViewModel.class);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        Instruction[] instructions = Instructions.getInstructions();
+        for (Instruction instruction : instructions) {
+            NotWorkingFragmentViewPager fragment = NotWorkingFragmentViewPager.getInstance(instruction);
+            fragments.add(fragment);
+        }
+
+        NotWorkingPagerAdapter pagerAdapter = new NotWorkingPagerAdapter(requireActivity().getSupportFragmentManager(), fragments);
+        viewPagerAnimation();
+        binding.viewPager.setAdapter(pagerAdapter);
+        binding.tabLayout.setupWithViewPager(binding.viewPager, true);
+
+        navigate();
+
+    }
+
+    private void viewPagerAnimation() {
+        binding.viewPager.setPageTransformer(true, new CubeInScalingTransformation());
+    }
+
+    private void navigate() {
+
+        Log.d(TAG, "position: " + binding.tabLayout.getSelectedTabPosition());
+        Log.d(TAG, "count: " + binding.tabLayout.getTabCount());
+
+        binding.previousInstruction.setOnClickListener(v -> {
+            int position = binding.tabLayout.getSelectedTabPosition();
+
+            if (position > 0) {
+                binding.viewPager.setCurrentItem(position - 1);
+            }
+
+        });
+
+        binding.nextInstruction.setOnClickListener(v -> {
+            int position = binding.tabLayout.getSelectedTabPosition();
+
+            if (position < binding.tabLayout.getTabCount()) {
+                binding.viewPager.setCurrentItem(position + 1);
+            }
+        });
     }
 }

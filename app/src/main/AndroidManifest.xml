@@ -13,13 +13,19 @@
         android:theme="@style/Theme.PersonalSafetyAlert.NoActionBar">
         <activity
             android:name=".ui.screen.menu.help.HelpActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.screen.menu.notworking.NotWorkingActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.screen.menu.settings.SettingsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"

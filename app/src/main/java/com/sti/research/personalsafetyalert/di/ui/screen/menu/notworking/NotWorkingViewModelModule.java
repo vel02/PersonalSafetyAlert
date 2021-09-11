@@ -16,4 +16,5 @@ public abstract class NotWorkingViewModelModule {
     @IntoMap
     @ViewModelKey(NotWorkingViewModel.class)
     abstract ViewModel bindNotWorkingViewModel(NotWorkingViewModel viewModel);
+
 }
