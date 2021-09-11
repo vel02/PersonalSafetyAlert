@@ -3,6 +3,7 @@ package com.sti.research.personalsafetyalert.ui.screen.menu.notworking.screen.pa
 import static com.sti.research.personalsafetyalert.util.Utility.*;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,7 @@ public class NotWorkingFragmentViewPager extends DaggerFragment {
 
         binding.setTitle(instruction.getTitleText());
         binding.setMessage(instruction.getContentText());
-        binding.setButton(instruction.getAccessText());
+        binding.vpButton.setText(instruction.getAccessText());
 
         navigate();
     }
@@ -63,15 +64,15 @@ public class NotWorkingFragmentViewPager extends DaggerFragment {
         switch (binding.vpButton.getText().toString()) {
             case "Notification Access":
                 binding.vpButton.setOnClickListener(v ->
-                        Bubble.message(requireContext(), "Notification Access"));
+                        Bubble.message(requireActivity(), "Notification Access"));
                 break;
             case "Settings":
                 binding.vpButton.setOnClickListener(v ->
-                        Bubble.message(requireContext(), "Settings"));
+                        Bubble.message(requireActivity(), "Settings"));
                 break;
             case "Contact":
                 binding.vpButton.setOnClickListener(v ->
-                        Bubble.message(requireContext(), "Contact"));
+                        Bubble.message(requireActivity(), "Contact"));
                 break;
         }
     }
