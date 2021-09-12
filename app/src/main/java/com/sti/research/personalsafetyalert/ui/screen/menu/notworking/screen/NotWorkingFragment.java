@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -65,25 +66,33 @@ public class NotWorkingFragment extends DaggerFragment {
 
     private void subscribeObservers() {
         viewModel.observedSelectedTabPosition().removeObservers(getViewLifecycleOwner());
-        viewModel.observedSelectedTabPosition().observe(getViewLifecycleOwner(), selectedTabPosition -> {
-            if (selectedTabPosition == 0) {
-                binding.previousInstruction.setVisibility(View.INVISIBLE);
-                binding.nextInstruction.setVisibility(View.VISIBLE);
-            } else if (selectedTabPosition > 0 && selectedTabPosition != (binding.tabLayout.getTabCount() - 1)) {
-                binding.previousInstruction.setVisibility(View.VISIBLE);
-                binding.nextInstruction.setVisibility(View.VISIBLE);
-            } else if (selectedTabPosition > 0 && selectedTabPosition == (binding.tabLayout.getTabCount() - 1)) {
-                binding.previousInstruction.setVisibility(View.VISIBLE);
-                binding.nextInstruction.setVisibility(View.INVISIBLE);
-            }
-        });
+        viewModel.observedSelectedTabPosition().observe(getViewLifecycleOwner(), this::setBehaviourInstructionButtons);
     }
+
 
     private void viewPagerAnimation() {
         binding.viewPager.setPageTransformer(true, new CubeInScalingTransformation());
     }
 
     private void navigate() {
+
+        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                setBehaviourInstructionButtons(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         binding.previousInstruction.setOnClickListener(v -> {
             int position = binding.tabLayout.getSelectedTabPosition();
             if (position > 0) {
@@ -102,5 +111,18 @@ public class NotWorkingFragment extends DaggerFragment {
                 viewModel.setSelectedTabPosition(selected);
             }
         });
+    }
+
+    private void setBehaviourInstructionButtons(Integer position) {
+        if (position == 0) {
+            binding.previousInstruction.setVisibility(View.INVISIBLE);
+            binding.nextInstruction.setVisibility(View.VISIBLE);
+        } else if (position > 0 && position != (binding.tabLayout.getTabCount() - 1)) {
+            binding.previousInstruction.setVisibility(View.VISIBLE);
+            binding.nextInstruction.setVisibility(View.VISIBLE);
+        } else if (position > 0 && position == (binding.tabLayout.getTabCount() - 1)) {
+            binding.previousInstruction.setVisibility(View.VISIBLE);
+            binding.nextInstruction.setVisibility(View.INVISIBLE);
+        }
     }
 }
