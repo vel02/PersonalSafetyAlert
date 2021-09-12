@@ -26,6 +26,8 @@ import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActi
 import com.sti.research.personalsafetyalert.util.Constants;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;

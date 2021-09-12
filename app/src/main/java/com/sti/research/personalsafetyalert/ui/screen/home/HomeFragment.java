@@ -42,10 +42,14 @@ public class HomeFragment extends DaggerFragment {
     private Hostable hostable;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater);
-
         return binding.getRoot();
     }
 
