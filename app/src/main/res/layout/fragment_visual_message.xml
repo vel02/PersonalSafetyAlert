@@ -1,21 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background_default_screen"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
         tools:context=".ui.screen.visual.VisualMessageFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
+        <LinearLayout
+            android:id="@+id/layout_visual_message"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/home_switch_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+
+                app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/lightGrey"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_custom_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_sample_text_00" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:autoLink="web"
+                        android:linksClickable="false"
+                        android:text="@string/txt_sample_location"
+                        android:textColorLink="@android:color/holo_blue_light" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/txt_sample_time"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:contentDescription="@string/desc_sim_logo"
+                    android:src="@drawable/ic_sim" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="?attr/dividerHorizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_visual_message" />
+
+        <EditText
+            android:id="@+id/edt_custom_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:drawableStart="@drawable/ic_quote"
+            android:drawablePadding="8dp"
+            android:hint="@string/txt_message_text"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:maxLength="70"
+            android:maxLines="2"
+            android:padding="16dp"
+            android:textCursorDrawable="@drawable/edt_cursor_color_black_800"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_sample_custom_message"
+            app:layout_constraintEnd_toEndOf="@+id/edt_custom_message"
+            app:layout_constraintStart_toStartOf="@+id/edt_custom_message"
+            app:layout_constraintTop_toBottomOf="@+id/edt_custom_message" />
+
+
+        <Button
+            android:id="@+id/btn_done"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="@string/txt_done"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="UnusedAttribute"
+            tools:targetApi="m" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

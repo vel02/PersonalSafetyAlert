@@ -41,6 +41,11 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_nav_home_to_nav_visual_message">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
                         </option>
                       </LayoutPositions>
@@ -55,15 +60,24 @@
                             <option name="y" value="10" />
                           </Point>
                         </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_nav_message_to_nav_visual_message2">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="visualMessageFragment">
+                  <entry key="nav_visual_message">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="331" />
+                            <option name="x" value="494" />
                             <option name="y" value="328" />
                           </Point>
                         </option>

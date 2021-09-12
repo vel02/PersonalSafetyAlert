@@ -23,6 +23,8 @@ import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragmentDirection
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.notworking.NotWorkingActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
+import com.sti.research.personalsafetyalert.ui.screen.message.MessageFragmentDirections;
+import com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragmentDirections;
 import com.sti.research.personalsafetyalert.util.Constants;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
@@ -130,6 +132,18 @@ public class MainActivity extends DaggerAppCompatActivity implements Hostable {
 
             case "tag_fragment_visual_message":
                 directions = HomeFragmentDirections.actionNavHomeToNavVisualMessage();
+                break;
+
+            case "tag_fragment_message_to_visual":
+                directions = MessageFragmentDirections.actionNavMessageToNavVisualMessage();
+                break;
+
+            case "tag_fragment_message_to_home":
+                directions = MessageFragmentDirections.actionNavMessageToNavHome();
+                break;
+
+            case "tag_fragment_visual_to_home":
+                directions = VisualMessageFragmentDirections.actionNavVisualMessageToNavHome();
                 break;
 
             default:

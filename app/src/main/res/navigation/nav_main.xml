@@ -43,12 +43,39 @@
         android:id="@+id/nav_message"
         android:name="com.sti.research.personalsafetyalert.ui.screen.message.MessageFragment"
         android:label="Message"
-        tools:layout="@layout/fragment_message" />
+        tools:layout="@layout/fragment_message">
+        <action
+            android:id="@+id/action_nav_message_to_nav_visual_message"
+            app:destination="@id/nav_visual_message"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_nav_message_to_nav_home"
+            app:destination="@id/nav_home"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_visual_message"
         android:name="com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragment"
         android:label="Visual Message"
-        tools:layout="@layout/fragment_visual_message" />
+        tools:layout="@layout/fragment_visual_message">
+        <action
+            android:id="@+id/action_nav_visual_message_to_nav_home"
+            app:destination="@id/nav_home"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

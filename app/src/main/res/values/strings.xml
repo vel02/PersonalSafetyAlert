@@ -52,5 +52,17 @@
     <string name="title_contact">Contact</string>
     <string name="title_custom_message">Custom message text</string>
     <string name="title_visual_message">Visual message text</string>
+    <string name="hint_message_here">Message here</string>
+    <string name="desc_information_logo">Information logo</string>
+    <string name="desc_custom_message">Customize your short message that you want to be received indicating you\'re in an emergency and be read by your guardian.</string>
+    <string name="desc_message_logo">Message logo</string>
+    <string name="txt_done">Done</string>
+    <string name="tag_fragment_message_to_visual">tag_fragment_message_to_visual</string>
+    <string name="tag_fragment_message_to_home">tag_fragment_message_to_home</string>
+    <string name="txt_sample_location"><![CDATA[Google Map Loction https://www.google.com/map/search/?api=1&query=14.55054,121059591]]></string>
+    <string name="txt_sample_time">10:50 pm</string>
+    <string name="desc_sim_logo">Sim logo</string>
+    <string name="txt_sample_custom_message">Example: I am in need, do reach me ASAP!</string>
+    <string name="tag_fragment_visual_to_home">tag_fragment_visual_to_home</string>
 
 </resources>

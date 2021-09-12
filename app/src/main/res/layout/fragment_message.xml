@@ -1,21 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background_default_screen"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
         tools:context=".ui.screen.message.MessageFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+        <EditText
+            android:id="@+id/edt_custom_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/primary"
+            android:drawableStart="@drawable/ic_quote"
+            android:drawablePadding="8dp"
+            android:hint="@string/hint_message_here"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:maxLength="70"
+            android:maxLines="2"
+            android:padding="16dp"
+            android:textCursorDrawable="@drawable/edt_cursor_color_primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </FrameLayout>
+        <ImageView
+            android:id="@+id/imv_information"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/desc_information_logo"
+            android:src="@drawable/ic_info"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edt_custom_message" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:bottom="@+id/edt_custom_message"
+            android:text="@string/desc_custom_message"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imv_information"
+            app:layout_constraintTop_toBottomOf="@+id/edt_custom_message" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_visual_message"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginTop="32dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="vertical"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_description">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/lightGrey"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:weightSum="100">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="10"
+                    android:contentDescription="@string/desc_message_logo"
+                    android:src="@drawable/ic_visual_message" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="80"
+                    android:text="@string/title_visual_message" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="10"
+                    android:contentDescription="@string/desc_information_logo"
+                    android:src="@drawable/ic_arrow_right" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btn_done"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="@string/txt_done"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="UnusedAttribute"
+            tools:targetApi="m" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

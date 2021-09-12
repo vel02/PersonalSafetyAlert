@@ -1,5 +1,6 @@
 package com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,16 @@ public class SettingsFragment extends DaggerFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+        binding.layoutShare.setOnClickListener(v -> {
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            String shareBody = "Hi, did you know?" +
+                    "\n\nThere is an app that can send emergency message to your friends and love ones with less effort, when you're not busy, try use Personal Safety Alert for free." +
+                    "\n\nCheck this out!" +
+                    "\n" +
+                    "\nhttps://github.com/vel02/PersonalSafetyAlert";
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+            startActivity(Intent.createChooser(sharingIntent, "Share using"));
+        });
     }
 }

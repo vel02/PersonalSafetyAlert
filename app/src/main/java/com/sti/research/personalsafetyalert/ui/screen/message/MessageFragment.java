@@ -1,5 +1,7 @@
 package com.sti.research.personalsafetyalert.ui.screen.message;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentMessageBinding;
+import com.sti.research.personalsafetyalert.ui.Hostable;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import java.util.Objects;
@@ -30,6 +33,8 @@ public class MessageFragment extends DaggerFragment {
 
     private FragmentMessageBinding binding;
     private MessageFragmentViewModel viewModel;
+
+    private Hostable hostable;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +53,17 @@ public class MessageFragment extends DaggerFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         configureActionBarTitle();
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(MessageFragmentViewModel.class);
+        navigate();
+
+    }
+
+    private void navigate() {
+        binding.cardVisualMessage.setOnClickListener(v ->
+                hostable.onInflate(v, getString(R.string.tag_fragment_message_to_visual)));
+
+        binding.btnDone.setOnClickListener(v -> {
+                hostable.onInflate(v, getString(R.string.tag_fragment_message_to_home));
+        });
     }
 
     @Override
@@ -59,6 +75,24 @@ public class MessageFragment extends DaggerFragment {
     private void configureActionBarTitle() {
         Objects.requireNonNull(((AppCompatActivity) requireActivity())
                 .getSupportActionBar()).setTitle(R.string.title_custom_message);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity = getActivity();
+        if (!(activity instanceof Hostable)) {
+            assert activity != null;
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement Hostable interface.");
+        }
+        hostable = (Hostable) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        hostable = null;
     }
 
 }
