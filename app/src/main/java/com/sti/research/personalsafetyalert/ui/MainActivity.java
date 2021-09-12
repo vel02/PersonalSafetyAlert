@@ -1,13 +1,12 @@
 package com.sti.research.personalsafetyalert.ui;
 
-import static com.sti.research.personalsafetyalert.util.Utility.*;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.app.ActivityOptions;
@@ -16,9 +15,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.ActivityMainBinding;
+import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.notworking.NotWorkingActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
@@ -44,6 +45,8 @@ public class MainActivity extends DaggerAppCompatActivity implements Hostable {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
         viewModel = new ViewModelProvider(MainActivity.this, providerFactory).get(MainViewModel.class);
+        launchAnimation();
+
 
         /*
             Permission Logic
@@ -58,6 +61,13 @@ public class MainActivity extends DaggerAppCompatActivity implements Hostable {
 
         initController();
 
+    }
+
+    private void launchAnimation() {
+        AlphaAnimation animation = new AlphaAnimation(0.0f, 1.0f);
+        animation.setFillAfter(true);
+        animation.setDuration(getResources().getInteger(R.integer.anim_duration_long));
+        binding.layout.startAnimation(animation);
     }
 
     private void initController() {
@@ -105,5 +115,26 @@ public class MainActivity extends DaggerAppCompatActivity implements Hostable {
     @Override
     public void onInflate(View view, String screen) {
 
+        NavDirections directions;
+
+        switch (screen) {
+            case "tag_fragment_contact":
+                directions = HomeFragmentDirections.actionNavHomeToNavContact();
+                break;
+
+            case "tag_fragment_message":
+                directions = HomeFragmentDirections.actionNavHomeToNavMessage();
+                break;
+
+            case "tag_fragment_visual_message":
+                directions = HomeFragmentDirections.actionNavHomeToNavVisualMessage();
+                break;
+
+            default:
+                throw new IllegalStateException("Unexpected value: " + screen);
+        }
+
+        Navigation.findNavController(view).navigate(directions);
     }
+
 }

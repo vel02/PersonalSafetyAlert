@@ -32,7 +32,6 @@ public class NotWorkingFragment extends DaggerFragment {
     ViewModelProviderFactory providerFactory;
 
     private FragmentNotWorkingBinding binding;
-    private static final String TAG = "test";
 
     private NotWorkingFragmentViewModel viewModel;
 
@@ -47,7 +46,6 @@ public class NotWorkingFragment extends DaggerFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         ArrayList<Fragment> fragments = new ArrayList<>();
         Instruction[] instructions = Instructions.getInstructions();
         for (Instruction instruction : instructions) {
@@ -62,6 +60,23 @@ public class NotWorkingFragment extends DaggerFragment {
 
         navigate();
 
+        subscribeObservers();
+    }
+
+    private void subscribeObservers() {
+        viewModel.observedSelectedTabPosition().removeObservers(getViewLifecycleOwner());
+        viewModel.observedSelectedTabPosition().observe(getViewLifecycleOwner(), selectedTabPosition -> {
+            if (selectedTabPosition == 0) {
+                binding.previousInstruction.setVisibility(View.INVISIBLE);
+                binding.nextInstruction.setVisibility(View.VISIBLE);
+            } else if (selectedTabPosition > 0 && selectedTabPosition != (binding.tabLayout.getTabCount() - 1)) {
+                binding.previousInstruction.setVisibility(View.VISIBLE);
+                binding.nextInstruction.setVisibility(View.VISIBLE);
+            } else if (selectedTabPosition > 0 && selectedTabPosition == (binding.tabLayout.getTabCount() - 1)) {
+                binding.previousInstruction.setVisibility(View.VISIBLE);
+                binding.nextInstruction.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     private void viewPagerAnimation() {
@@ -69,24 +84,22 @@ public class NotWorkingFragment extends DaggerFragment {
     }
 
     private void navigate() {
-
-        Log.d(TAG, "position: " + binding.tabLayout.getSelectedTabPosition());
-        Log.d(TAG, "count: " + binding.tabLayout.getTabCount());
-
         binding.previousInstruction.setOnClickListener(v -> {
             int position = binding.tabLayout.getSelectedTabPosition();
-
             if (position > 0) {
-                binding.viewPager.setCurrentItem(position - 1);
+                int selected = position - 1;
+                binding.viewPager.setCurrentItem(selected);
+                viewModel.setSelectedTabPosition(selected);
             }
 
         });
 
         binding.nextInstruction.setOnClickListener(v -> {
             int position = binding.tabLayout.getSelectedTabPosition();
-
             if (position < binding.tabLayout.getTabCount()) {
-                binding.viewPager.setCurrentItem(position + 1);
+                int selected = position + 1;
+                binding.viewPager.setCurrentItem(selected);
+                viewModel.setSelectedTabPosition(selected);
             }
         });
     }

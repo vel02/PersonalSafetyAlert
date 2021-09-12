@@ -1,6 +1,5 @@
 package com.sti.research.personalsafetyalert.ui.screen.home;
 
-import static com.sti.research.personalsafetyalert.util.Support.rippleEffect;
 import static com.sti.research.personalsafetyalert.util.Utility.*;
 
 import android.annotation.SuppressLint;
@@ -10,25 +9,23 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentHomeBinding;
 import com.sti.research.personalsafetyalert.ui.Hostable;
 import com.sti.research.personalsafetyalert.util.Support;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -48,12 +45,13 @@ public class HomeFragment extends DaggerFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater);
+
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        setHasOptionsMenu(true);
+        configureActionBarTitle();
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(HomeFragmentViewModel.class);
         binding.setPopupListener(this::clearAllPopup);
         navigate();
@@ -61,9 +59,8 @@ public class HomeFragment extends DaggerFragment {
     }
 
     private void navigate() {
-        binding.homeEditMessageView.setOnClickListener(v -> {
-            Bubble.message(requireActivity(), "Edit message");
-        });
+        binding.homeEditMessageView.setOnClickListener(v ->
+                hostable.onInflate(requireView(), getString(R.string.tag_fragment_message)));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -74,7 +71,7 @@ public class HomeFragment extends DaggerFragment {
 
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
-                        Bubble.message(requireActivity(), "Contact");
+                        hostable.onInflate(requireView(), getString(R.string.tag_fragment_contact));
                         return true;
                     }
 
@@ -90,7 +87,7 @@ public class HomeFragment extends DaggerFragment {
 
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
-                        Bubble.message(requireActivity(), "Edit message");
+                        hostable.onInflate(requireView(), getString(R.string.tag_fragment_message));
                         return true;
                     }
 
@@ -106,7 +103,7 @@ public class HomeFragment extends DaggerFragment {
 
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
-                        Bubble.message(requireActivity(), "Visualize message");
+                        hostable.onInflate(requireView(), getString(R.string.tag_fragment_visual_message));
                         return true;
                     }
 
@@ -149,28 +146,10 @@ public class HomeFragment extends DaggerFragment {
         popup.show();
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-//        requireActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
-//    }
-//
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        if (item.getItemId() == R.id.action_settings) {
-//            Bubble.message(requireActivity(), "Settings");
-//            hostable.onInflate(requireView(), "tag_fragment_settings");
-//            return true;
-//        } else if (item.getItemId() == R.id.action_not_working) {
-//            Bubble.message(requireActivity(), "Not Working ?");
-//            return true;
-//        } else if (item.getItemId() == R.id.action_help) {
-//            Bubble.message(requireActivity(), "Help");
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+    private void configureActionBarTitle() {
+        Objects.requireNonNull(((AppCompatActivity) requireActivity())
+                .getSupportActionBar()).setTitle(getString(R.string.app_name));
+    }
 
     @Override
     public void onAttach(Context context) {

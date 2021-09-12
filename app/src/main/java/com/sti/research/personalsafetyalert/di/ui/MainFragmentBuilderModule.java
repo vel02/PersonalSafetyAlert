@@ -1,8 +1,17 @@
 package com.sti.research.personalsafetyalert.di.ui;
 
+import com.sti.research.personalsafetyalert.di.ui.screen.contact.ContactScreenScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.contact.ContactScreenViewModelModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.home.HomeScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.home.HomeScreenViewModelModule;
+import com.sti.research.personalsafetyalert.di.ui.screen.message.MessageScreenScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.message.MessageScreenViewModelModule;
+import com.sti.research.personalsafetyalert.di.ui.screen.visual.VisualMessageScreenScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.visual.VisualMessageScreenViewModelModule;
+import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragment;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
+import com.sti.research.personalsafetyalert.ui.screen.message.MessageFragment;
+import com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -13,5 +22,17 @@ public abstract class MainFragmentBuilderModule {
     @HomeScreenScope
     @ContributesAndroidInjector(modules = {HomeScreenViewModelModule.class})
     abstract HomeFragment contributeHomeFragment();
+
+    @ContactScreenScope
+    @ContributesAndroidInjector(modules = {ContactScreenViewModelModule.class})
+    abstract ContactFragment contributeContactFragment();
+
+    @MessageScreenScope
+    @ContributesAndroidInjector(modules = {MessageScreenViewModelModule.class})
+    abstract MessageFragment contributeMessageFragment();
+
+    @VisualMessageScreenScope
+    @ContributesAndroidInjector(modules = {VisualMessageScreenViewModelModule.class})
+    abstract VisualMessageFragment contributeVisualMessageFragment();
 
 }
