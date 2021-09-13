@@ -64,5 +64,12 @@
     <string name="desc_sim_logo">Sim logo</string>
     <string name="txt_sample_custom_message">Example: I am in need, do reach me ASAP!</string>
     <string name="tag_fragment_visual_to_home">tag_fragment_visual_to_home</string>
+    <string name="desc_add_contact">Add contact from contact list</string>
+    <string name="txt_single_person">Single person</string>
+    <string name="txt_contact_list">Contact list</string>
+    <string name="txt_message_to">Message to</string>
+    <string name="txt_confirm">Confirm</string>
+    <string name="txt_mobile_number">Mobile number</string>
+    <string name="txt_email">Email</string>
 
 </resources>

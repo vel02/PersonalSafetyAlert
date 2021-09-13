@@ -39,7 +39,6 @@ public class MessageFragment extends DaggerFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -51,7 +50,6 @@ public class MessageFragment extends DaggerFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        configureActionBarTitle();
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(MessageFragmentViewModel.class);
         navigate();
 
@@ -64,17 +62,6 @@ public class MessageFragment extends DaggerFragment {
         binding.btnDone.setOnClickListener(v -> {
                 hostable.onInflate(v, getString(R.string.tag_fragment_message_to_home));
         });
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-    }
-
-    private void configureActionBarTitle() {
-        Objects.requireNonNull(((AppCompatActivity) requireActivity())
-                .getSupportActionBar()).setTitle(R.string.title_custom_message);
     }
 
     @Override

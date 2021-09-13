@@ -1,12 +1,33 @@
 package com.sti.research.personalsafetyalert.ui.screen.contact;
 
+import android.app.Application;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.sti.research.personalsafetyalert.util.screen.contact.ContactMessageToPreference;
 
 import javax.inject.Inject;
 
 public class ContactFragmentViewModel extends ViewModel {
 
+    private final MutableLiveData<String> radioSelected;
+
+    private final Application application;
+
     @Inject
-    public ContactFragmentViewModel() {
+    public ContactFragmentViewModel(Application application) {
+        this.application = application;
+        this.radioSelected = new MutableLiveData<>();
+    }
+
+    public void setRadioSelected(String selected) {
+        this.radioSelected.setValue(selected);
+        ContactMessageToPreference.getInstance().setMessageToRadioSelectState(application, selected);
+    }
+
+    public LiveData<String> observedRadioSelected() {
+        return this.radioSelected;
     }
 }

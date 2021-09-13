@@ -54,7 +54,9 @@
                         android:layout_weight="4.48"
                         android:text="@string/txt_start_safety"
                         android:textStyle="bold"
-                        app:switchPadding="8dp" />
+                        app:switchPadding="8dp"
+                        app:thumbTint="@color/switch_thumb_selector"
+                        app:trackTint="@color/switch_track_selector" />
 
                     <View
                         android:layout_width="0dp"

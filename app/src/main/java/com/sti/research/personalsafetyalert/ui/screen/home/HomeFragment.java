@@ -23,6 +23,7 @@ import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentHomeBinding;
 import com.sti.research.personalsafetyalert.ui.Hostable;
 import com.sti.research.personalsafetyalert.util.Support;
+import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import java.util.Objects;
@@ -55,11 +56,29 @@ public class HomeFragment extends DaggerFragment {
         binding.setPopupListener(this::clearAllPopup);
         navigate();
         navigateWithGestureDetector();
+        initAlertCheckedBehaviour();
+        subscribeObservers();
+    }
+
+    private void initAlertCheckedBehaviour() {
+        binding.homeSwitch.setChecked(HomeSwitchPreference.getInstance().getSwitchStateState(requireActivity()));
+    }
+
+    private void subscribeObservers() {
+        viewModel.observedAlertChecked().removeObservers(getViewLifecycleOwner());
+        viewModel.observedAlertChecked().observe(getViewLifecycleOwner(), isChecked -> {
+            if (isChecked) binding.homeSwitch.setText(R.string.txt_stop_safety);
+            else binding.homeSwitch.setText(R.string.txt_start_safety);
+        });
     }
 
     private void navigate() {
+
         binding.homeEditMessageView.setOnClickListener(v ->
                 hostable.onInflate(requireView(), getString(R.string.tag_fragment_message)));
+
+        binding.homeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.setAlertChecked(isChecked));
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
