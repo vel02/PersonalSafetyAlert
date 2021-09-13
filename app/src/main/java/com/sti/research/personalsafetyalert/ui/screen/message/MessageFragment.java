@@ -59,8 +59,8 @@ public class MessageFragment extends DaggerFragment {
         binding.cardVisualMessage.setOnClickListener(v ->
                 hostable.onInflate(v, getString(R.string.tag_fragment_message_to_visual)));
 
-        binding.btnDone.setOnClickListener(v -> {
-                hostable.onInflate(v, getString(R.string.tag_fragment_message_to_home));
+        binding.messageDone.setOnClickListener(v -> {
+            hostable.onInflate(v, getString(R.string.tag_fragment_message_to_home));
         });
     }
 

@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +24,7 @@ import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentVisualMessageBinding;
 import com.sti.research.personalsafetyalert.ui.Hostable;
 import com.sti.research.personalsafetyalert.util.Utility;
+import com.sti.research.personalsafetyalert.util.screen.visual.EditTextTextWatcher;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import java.util.Objects;
@@ -59,8 +62,10 @@ public class VisualMessageFragment extends DaggerFragment {
     }
 
     private void navigate() {
-        binding.btnDone.setOnClickListener(v ->
+        binding.visualDone.setOnClickListener(v ->
                 hostable.onInflate(requireView(), getString(R.string.tag_fragment_visual_to_home)));
+
+        binding.visualEditCustomMessage.addTextChangedListener(new EditTextTextWatcher(binding.visualDisplayCustomMessage));
     }
 
     @Override
