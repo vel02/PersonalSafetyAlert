@@ -31,6 +31,13 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_permission"
+            app:destination="@id/nav_permission"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
 
     <fragment
@@ -69,6 +76,22 @@
         tools:layout="@layout/fragment_visual_message">
         <action
             android:id="@+id/action_nav_visual_message_to_nav_home"
+            app:destination="@id/nav_home"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_permission"
+        android:name="com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragment"
+        android:label="Permission"
+        tools:layout="@layout/fragment_permission">
+        <action
+            android:id="@+id/action_nav_permission_to_nav_home"
             app:destination="@id/nav_home"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"

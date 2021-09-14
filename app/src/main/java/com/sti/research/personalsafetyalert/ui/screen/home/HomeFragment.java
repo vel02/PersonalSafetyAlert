@@ -5,6 +5,7 @@ import static com.sti.research.personalsafetyalert.util.Utility.*;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,7 +22,7 @@ import android.view.ViewGroup;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentHomeBinding;
-import com.sti.research.personalsafetyalert.ui.Hostable;
+import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.util.Support;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
@@ -34,13 +35,16 @@ import dagger.android.support.DaggerFragment;
 
 public class HomeFragment extends DaggerFragment {
 
+    private static final String TAG = "test";
+
     @Inject
     ViewModelProviderFactory providerFactory;
 
     private FragmentHomeBinding binding;
     private HomeFragmentViewModel viewModel;
 
-    private Hostable hostable;
+    private HostScreen hostScreen;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -53,6 +57,20 @@ public class HomeFragment extends DaggerFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         configureActionBarTitle();
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(HomeFragmentViewModel.class);
+
+        /*
+            if permission is not permitted
+                prompt UI permission
+                if user chose to deny permitting it
+                    let them use the app without it
+                else if user chooses to accept permission
+                    let them use the app
+
+            NOTE
+            1.
+
+         */
+
         binding.setPopupListener(this::clearAllPopup);
         navigate();
         navigateWithGestureDetector();
@@ -70,12 +88,18 @@ public class HomeFragment extends DaggerFragment {
             if (isChecked) binding.homeSwitch.setText(R.string.txt_stop_safety);
             else binding.homeSwitch.setText(R.string.txt_start_safety);
         });
+
+        viewModel.observedPermissionLocationState().removeObservers(getViewLifecycleOwner());
+        viewModel.observedPermissionLocationState().observe(getViewLifecycleOwner(), permission -> {
+            if (permission == PackageManager.PERMISSION_DENIED)
+                hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_home_to_permission));
+        });
     }
 
     private void navigate() {
 
         binding.homeEditMessageView.setOnClickListener(v ->
-                hostable.onInflate(requireView(), getString(R.string.tag_fragment_message)));
+                hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_message)));
 
         binding.homeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.setAlertChecked(isChecked));
 
@@ -89,7 +113,7 @@ public class HomeFragment extends DaggerFragment {
 
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
-                        hostable.onInflate(requireView(), getString(R.string.tag_fragment_contact));
+                        hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_contact));
                         return true;
                     }
 
@@ -105,7 +129,7 @@ public class HomeFragment extends DaggerFragment {
 
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
-                        hostable.onInflate(requireView(), getString(R.string.tag_fragment_message));
+                        hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_message));
                         return true;
                     }
 
@@ -121,7 +145,7 @@ public class HomeFragment extends DaggerFragment {
 
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
-                        hostable.onInflate(requireView(), getString(R.string.tag_fragment_visual_message));
+                        hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_visual_message));
                         return true;
                     }
 
@@ -173,18 +197,18 @@ public class HomeFragment extends DaggerFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         Activity activity = getActivity();
-        if (!(activity instanceof Hostable)) {
+        if (!(activity instanceof HostScreen)) {
             assert activity != null;
             throw new ClassCastException(activity.getClass().getSimpleName()
-                    + " must implement Hostable interface.");
+                    + " must implement HostScreen interface.");
         }
-        hostable = (Hostable) activity;
+        hostScreen = (HostScreen) activity;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        hostable = null;
+        hostScreen = null;
     }
 
 }

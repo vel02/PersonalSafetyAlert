@@ -6,11 +6,14 @@ import com.sti.research.personalsafetyalert.di.ui.screen.home.HomeScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.home.HomeScreenViewModelModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.message.MessageScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.message.MessageScreenViewModelModule;
+import com.sti.research.personalsafetyalert.di.ui.screen.permission.PermissionScreenScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.permission.PermissionScreenViewModelModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.visual.VisualMessageScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.visual.VisualMessageScreenViewModelModule;
 import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragment;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
 import com.sti.research.personalsafetyalert.ui.screen.message.MessageFragment;
+import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragment;
 import com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragment;
 
 import dagger.Module;
@@ -34,5 +37,9 @@ public abstract class MainFragmentBuilderModule {
     @VisualMessageScreenScope
     @ContributesAndroidInjector(modules = {VisualMessageScreenViewModelModule.class})
     abstract VisualMessageFragment contributeVisualMessageFragment();
+
+    @PermissionScreenScope
+    @ContributesAndroidInjector(modules = {PermissionScreenViewModelModule.class})
+    abstract PermissionFragment contributePermissionFragment();
 
 }

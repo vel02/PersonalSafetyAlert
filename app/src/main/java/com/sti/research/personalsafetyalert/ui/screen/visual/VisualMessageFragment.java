@@ -1,33 +1,22 @@
 package com.sti.research.personalsafetyalert.ui.screen.visual;
 
-import static com.sti.research.personalsafetyalert.util.Utility.*;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentVisualMessageBinding;
-import com.sti.research.personalsafetyalert.ui.Hostable;
-import com.sti.research.personalsafetyalert.util.Utility;
+import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.util.screen.visual.EditTextTextWatcher;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -41,7 +30,7 @@ public class VisualMessageFragment extends DaggerFragment {
     private FragmentVisualMessageBinding binding;
     private VisualMessageFragmentViewModel viewModel;
 
-    private Hostable hostable;
+    private HostScreen hostScreen;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,7 +52,7 @@ public class VisualMessageFragment extends DaggerFragment {
 
     private void navigate() {
         binding.visualDone.setOnClickListener(v ->
-                hostable.onInflate(requireView(), getString(R.string.tag_fragment_visual_to_home)));
+                hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_visual_to_home)));
 
         binding.visualEditCustomMessage.addTextChangedListener(new EditTextTextWatcher(binding.visualDisplayCustomMessage));
     }
@@ -72,17 +61,17 @@ public class VisualMessageFragment extends DaggerFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         Activity activity = getActivity();
-        if (!(activity instanceof Hostable)) {
+        if (!(activity instanceof HostScreen)) {
             assert activity != null;
             throw new ClassCastException(activity.getClass().getSimpleName()
                     + " must implement Hostable interface.");
         }
-        hostable = (Hostable) activity;
+        hostScreen = (HostScreen) activity;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        hostable = null;
+        hostScreen = null;
     }
 }

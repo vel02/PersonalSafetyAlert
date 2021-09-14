@@ -6,21 +6,16 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentMessageBinding;
-import com.sti.research.personalsafetyalert.ui.Hostable;
+import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -34,7 +29,7 @@ public class MessageFragment extends DaggerFragment {
     private FragmentMessageBinding binding;
     private MessageFragmentViewModel viewModel;
 
-    private Hostable hostable;
+    private HostScreen hostScreen;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,10 +52,10 @@ public class MessageFragment extends DaggerFragment {
 
     private void navigate() {
         binding.cardVisualMessage.setOnClickListener(v ->
-                hostable.onInflate(v, getString(R.string.tag_fragment_message_to_visual)));
+                hostScreen.onInflate(v, getString(R.string.tag_fragment_message_to_visual)));
 
         binding.messageDone.setOnClickListener(v -> {
-            hostable.onInflate(v, getString(R.string.tag_fragment_message_to_home));
+            hostScreen.onInflate(v, getString(R.string.tag_fragment_message_to_home));
         });
     }
 
@@ -68,18 +63,18 @@ public class MessageFragment extends DaggerFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         Activity activity = getActivity();
-        if (!(activity instanceof Hostable)) {
+        if (!(activity instanceof HostScreen)) {
             assert activity != null;
             throw new ClassCastException(activity.getClass().getSimpleName()
-                    + " must implement Hostable interface.");
+                    + " must implement HostScreen interface.");
         }
-        hostable = (Hostable) activity;
+        hostScreen = (HostScreen) activity;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        hostable = null;
+        hostScreen = null;
     }
 
 }

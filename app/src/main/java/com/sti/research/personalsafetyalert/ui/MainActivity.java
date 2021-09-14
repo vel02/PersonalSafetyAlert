@@ -1,7 +1,10 @@
 package com.sti.research.personalsafetyalert.ui;
 
+import static com.sti.research.personalsafetyalert.util.Constants.*;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -9,14 +12,21 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.Manifest;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.sti.research.personalsafetyalert.BuildConfig;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.ActivityMainBinding;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragmentDirections;
@@ -24,17 +34,15 @@ import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.notworking.NotWorkingActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
 import com.sti.research.personalsafetyalert.ui.screen.message.MessageFragmentDirections;
+import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragmentDirections;
-import com.sti.research.personalsafetyalert.util.Constants;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class MainActivity extends DaggerAppCompatActivity implements Hostable {
+public class MainActivity extends DaggerAppCompatActivity implements HostScreen, NavigatePermission {
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -50,7 +58,7 @@ public class MainActivity extends DaggerAppCompatActivity implements Hostable {
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
         viewModel = new ViewModelProvider(MainActivity.this, providerFactory).get(MainViewModel.class);
         launchAnimation();
-
+        initController();
 
         /*
             Permission Logic
@@ -63,7 +71,6 @@ public class MainActivity extends DaggerAppCompatActivity implements Hostable {
             - then return to main activity
          */
 
-        initController();
 
     }
 
@@ -94,21 +101,21 @@ public class MainActivity extends DaggerAppCompatActivity implements Hostable {
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra(Constants.KEY_ANIM_TYPE, Constants.TransitionType.Fade);
+            intent.putExtra(KEY_ANIM_TYPE, TransitionType.Fade);
             startActivity(intent, options.toBundle());
             return true;
         } else if (item.getItemId() == R.id.action_not_working) {
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             Intent intent = new Intent(MainActivity.this, NotWorkingActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra(Constants.KEY_ANIM_TYPE, Constants.TransitionType.Fade);
+            intent.putExtra(KEY_ANIM_TYPE, TransitionType.Fade);
             startActivity(intent, options.toBundle());
             return true;
         } else if (item.getItemId() == R.id.action_help) {
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             Intent intent = new Intent(MainActivity.this, HelpActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra(Constants.KEY_ANIM_TYPE, Constants.TransitionType.Fade);
+            intent.putExtra(KEY_ANIM_TYPE, TransitionType.Fade);
             startActivity(intent, options.toBundle());
             return true;
         }
@@ -146,11 +153,73 @@ public class MainActivity extends DaggerAppCompatActivity implements Hostable {
                 directions = VisualMessageFragmentDirections.actionNavVisualMessageToNavHome();
                 break;
 
+            case "tag_fragment_home_to_permission":
+                directions = HomeFragmentDirections.actionNavHomeToNavPermission();
+                break;
+
+            case "tag_fragment_permission_to_home":
+                directions = PermissionFragmentDirections.actionNavPermissionToNavHome();
+                break;
+
             default:
                 throw new IllegalStateException("Unexpected value: " + screen);
         }
 
         Navigation.findNavController(view).navigate(directions);
+    }
+
+    @Override
+    public boolean checkLocationPermission() {
+        int hasReadPermission = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        return hasReadPermission == PackageManager.PERMISSION_DENIED;
+    }
+
+    @Override
+    public void requestLocationPermission() {
+        boolean shouldProvideRational = ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if (shouldProvideRational) {
+            Snackbar.make(
+                    binding.getRoot(), R.string.txt_permission_rational,
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.action_ok, v ->
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    PermissionManager.PERMISSION_REQUEST_CODE)).show();
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PermissionManager.PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PermissionManager.PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "PERMISSION GRANTED: Location updates started", Toast.LENGTH_SHORT).show();
+                viewModel.setPermissionLocationState(PackageManager.PERMISSION_GRANTED);
+            } else {
+                Snackbar.make(
+                        binding.getRoot(),
+                        R.string.txt_permission_denied_explanation,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.action_settings, view -> {
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package",
+                                    BuildConfig.APPLICATION_ID, null);
+                            intent.setData(uri);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }).show();
+            }
+        } else {
+            throw new IllegalStateException("Unexpected value: " + requestCode);
+        }
     }
 
 }

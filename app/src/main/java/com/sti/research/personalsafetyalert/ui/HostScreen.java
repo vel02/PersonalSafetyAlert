@@ -2,7 +2,7 @@ package com.sti.research.personalsafetyalert.ui;
 
 import android.view.View;
 
-public interface Hostable {
+public interface HostScreen {
 
     void onInflate(View view, String screen);
 

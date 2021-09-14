@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.sti.research.personalsafetyalert.repository.PermissionRepository;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
 
 import javax.inject.Inject;
@@ -15,11 +16,17 @@ public class HomeFragmentViewModel extends ViewModel {
     private final MutableLiveData<Boolean> alertChecked;
 
     private final Application application;
+    private final PermissionRepository repository;
 
     @Inject
-    public HomeFragmentViewModel(Application application) {
+    public HomeFragmentViewModel(Application application, PermissionRepository repository) {
         this.application = application;
+        this.repository = repository;
         this.alertChecked = new MutableLiveData<>();
+    }
+
+    public LiveData<Integer> observedPermissionLocationState() {
+        return this.repository.observedPermissionLocationState();
     }
 
     public void setAlertChecked(boolean checked) {
