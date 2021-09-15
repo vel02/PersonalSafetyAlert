@@ -5,12 +5,21 @@
       <map>
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_check.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_help.xml" value="0.2203125" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_holder.xml" value="0.1814814814814815" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_location.xml" value="0.1814814814814815" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_location_holder.xml" value="0.215625" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_navigate_next.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_navigate_previous.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_settings.xml" value="0.2203125" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_sms.xml" value="0.1814814814814815" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_sms_holder.xml" value="0.1814814814814815" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-v24/edt_cursor_color_black_800.xml" value="0.2203125" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-xhdpi/button_round_corner_white.xml" value="0.1814814814814815" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-xhdpi/button_round_corner_white_disabled.xml" value="0.1" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-xhdpi/button_round_corner_white_enabled.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-xxhdpi/button_round_corner.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-xxhdpi/round_corner.xml" value="0.2203125" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/button_round_corner_selector.xml" value="0.18518518518518517" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/edt_border_color.xml" value="0.21481481481481482" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/edt_cursor_color.xml" value="0.21481481481481482" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/logo_location.xml" value="0.2203125" />
@@ -19,6 +28,7 @@
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/tab_indicator_default.xml" value="0.1" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/tab_indicator_selected.xml" value="0.1" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/tab_selector.xml" value="0.1" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/text_color.xml" value="0.18518518518518517" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/activity_help.xml" value="0.20416666666666666" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/activity_not_working.xml" value="0.19010416666666666" />

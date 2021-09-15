@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;
+import com.sti.research.personalsafetyalert.repository.PermissionRepository.RequiredPermissionsState;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
 
 import javax.inject.Inject;
@@ -25,8 +26,14 @@ public class HomeFragmentViewModel extends ViewModel {
         this.alertChecked = new MutableLiveData<>();
     }
 
-    public LiveData<Integer> observedPermissionLocationState() {
-        return this.repository.observedPermissionLocationState();
+    //############# Permission Required State #############
+
+    public void setPermissionRequiredState(RequiredPermissionsState state) {
+        this.repository.setPermissionsRequiredStatus(state);
+    }
+
+    public LiveData<RequiredPermissionsState> observedPermissionRequiredState() {
+        return this.repository.observedPermissionRequiredState();
     }
 
     public void setAlertChecked(boolean checked) {

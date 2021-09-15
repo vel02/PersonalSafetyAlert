@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,7 +23,9 @@ import android.view.ViewGroup;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentHomeBinding;
+import com.sti.research.personalsafetyalert.repository.PermissionRepository;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
+import com.sti.research.personalsafetyalert.ui.NavigatePermission;
 import com.sti.research.personalsafetyalert.util.Support;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
@@ -44,7 +47,7 @@ public class HomeFragment extends DaggerFragment {
     private HomeFragmentViewModel viewModel;
 
     private HostScreen hostScreen;
-
+    private NavigatePermission navigate;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -58,24 +61,10 @@ public class HomeFragment extends DaggerFragment {
         configureActionBarTitle();
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(HomeFragmentViewModel.class);
 
-        /*
-            if permission is not permitted
-                prompt UI permission
-                if user chose to deny permitting it
-                    let them use the app without it
-                else if user chooses to accept permission
-                    let them use the app
-
-            NOTE
-            1.
-
-         */
-
         binding.setPopupListener(this::clearAllPopup);
         navigate();
         navigateWithGestureDetector();
         initAlertCheckedBehaviour();
-        subscribeObservers();
     }
 
     private void initAlertCheckedBehaviour() {
@@ -89,11 +78,27 @@ public class HomeFragment extends DaggerFragment {
             else binding.homeSwitch.setText(R.string.txt_start_safety);
         });
 
-        viewModel.observedPermissionLocationState().removeObservers(getViewLifecycleOwner());
-        viewModel.observedPermissionLocationState().observe(getViewLifecycleOwner(), permission -> {
-            if (permission == PackageManager.PERMISSION_DENIED)
-                hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_home_to_permission));
+        viewModel.observedPermissionRequiredState().removeObservers(getViewLifecycleOwner());
+        viewModel.observedPermissionRequiredState().observe(getViewLifecycleOwner(), status -> {
+            Log.d(TAG, "subscribeObservers: status " + status);
+            switch (status) {
+                case NONE:
+                case PARTIAL:
+                    hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_home_to_permission));
+                    break;
+            }
         });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!navigate.checkLocationPermission() && !navigate.checkSendSMSPermission()) {
+            Log.d(TAG, "home completed called");
+            viewModel.setPermissionRequiredState(PermissionRepository.RequiredPermissionsState.COMPLETED);
+        }
+        subscribeObservers();
     }
 
     private void navigate() {
@@ -203,12 +208,19 @@ public class HomeFragment extends DaggerFragment {
                     + " must implement HostScreen interface.");
         }
         hostScreen = (HostScreen) activity;
+
+        if (!(activity instanceof NavigatePermission)) {
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement NavigatePermission interface.");
+        }
+        navigate = (NavigatePermission) activity;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         hostScreen = null;
+        navigate = null;
     }
 
 }

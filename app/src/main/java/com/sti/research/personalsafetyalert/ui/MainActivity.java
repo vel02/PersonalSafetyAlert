@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
@@ -19,6 +20,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,15 +36,20 @@ import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.notworking.NotWorkingActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
 import com.sti.research.personalsafetyalert.ui.screen.message.MessageFragmentDirections;
+import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragment;
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragmentDirections;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
 public class MainActivity extends DaggerAppCompatActivity implements HostScreen, NavigatePermission {
+
+    private static final String TAG = "test";
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -87,6 +94,11 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
         navController = navHostFragment.getNavController();
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
+
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.nav_permission)
+                binding.appBarLayout.setTargetElevation(0F);
+        });
     }
 
     @Override
@@ -176,6 +188,13 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
     }
 
     @Override
+    public boolean checkSendSMSPermission() {
+        int hasReadPermission = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS);
+        return hasReadPermission == PackageManager.PERMISSION_DENIED;
+    }
+
+    @Override
     public void requestLocationPermission() {
         boolean shouldProvideRational = ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
@@ -184,29 +203,74 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
             Snackbar.make(
                     binding.getRoot(), R.string.txt_permission_rational,
                     Snackbar.LENGTH_INDEFINITE)
+                    .setBackgroundTint(getResources().getColor(R.color.primaryLight))
+                    .setActionTextColor(getResources().getColor(R.color.primaryDark))
                     .setAction(R.string.action_ok, v ->
                             ActivityCompat.requestPermissions(MainActivity.this,
                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                    PermissionManager.PERMISSION_REQUEST_CODE)).show();
+                                    PermissionManager.PERMISSION_LOCATION_REQUEST_CODE)).show();
         } else {
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PermissionManager.PERMISSION_REQUEST_CODE);
+                    PermissionManager.PERMISSION_LOCATION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void requestSendSMSPermission() {
+        boolean shouldProvideRational = ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.SEND_SMS);
+
+        if (shouldProvideRational) {
+            Snackbar.make(
+                    binding.getRoot(), R.string.txt_permission_rational,
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setBackgroundTint(getResources().getColor(R.color.primaryLight))
+                    .setActionTextColor(getResources().getColor(R.color.primaryDark))
+                    .setAction(R.string.action_ok, v ->
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{Manifest.permission.SEND_SMS},
+                                    PermissionManager.PERMISSION_SEND_SMS_REQUEST_CODE)).show();
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.SEND_SMS},
+                    PermissionManager.PERMISSION_SEND_SMS_REQUEST_CODE);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PermissionManager.PERMISSION_REQUEST_CODE) {
+        if (requestCode == PermissionManager.PERMISSION_LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "PERMISSION GRANTED: Location updates started", Toast.LENGTH_SHORT).show();
                 viewModel.setPermissionLocationState(PackageManager.PERMISSION_GRANTED);
             } else {
                 Snackbar.make(
                         binding.getRoot(),
                         R.string.txt_permission_denied_explanation,
                         Snackbar.LENGTH_INDEFINITE)
+                        .setBackgroundTint(getResources().getColor(R.color.primaryLight))
+                        .setActionTextColor(getResources().getColor(R.color.primaryDark))
+                        .setAction(R.string.action_settings, view -> {
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package",
+                                    BuildConfig.APPLICATION_ID, null);
+                            intent.setData(uri);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }).show();
+            }
+        } else if (requestCode == PermissionManager.PERMISSION_SEND_SMS_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                viewModel.setPermissionSendSMS(PackageManager.PERMISSION_GRANTED);
+            } else {
+                Snackbar.make(
+                        binding.getRoot(),
+                        R.string.txt_permission_denied_explanation,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setBackgroundTint(getResources().getColor(R.color.primaryLight))
+                        .setActionTextColor(getResources().getColor(R.color.primaryDark))
                         .setAction(R.string.action_settings, view -> {
                             Intent intent = new Intent();
                             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -222,4 +286,12 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
+        if (!(navHostFragment.getChildFragmentManager().getFragments().get(0) instanceof PermissionFragment)) {
+            super.onBackPressed();
+        }
+    }
 }

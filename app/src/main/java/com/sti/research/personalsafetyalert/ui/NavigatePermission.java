@@ -4,6 +4,10 @@ public interface NavigatePermission {
 
     boolean checkLocationPermission();
 
+    boolean checkSendSMSPermission();
+
     void requestLocationPermission();
+
+    void requestSendSMSPermission();
 
 }

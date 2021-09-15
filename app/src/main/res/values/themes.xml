@@ -31,5 +31,4 @@
     <!--  DIALOG STYLES  -->
     <style name="PersonalSafetyAlertRoundedCornersDialog" parent="@style/ThemeOverlay.MaterialComponents.Dialog" />
 
-
 </resources>

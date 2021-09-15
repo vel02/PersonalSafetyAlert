@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentPermissionBinding;
+import com.sti.research.personalsafetyalert.repository.PermissionRepository.RequiredPermissionsState;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.NavigatePermission;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
@@ -29,6 +32,8 @@ import javax.inject.Inject;
 import dagger.android.support.DaggerFragment;
 
 public class PermissionFragment extends DaggerFragment {
+
+    private static final String TAG = "test";
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -61,28 +66,57 @@ public class PermissionFragment extends DaggerFragment {
     }
 
     private void subscribeObservers() {
-        viewModel.observedPermissionState().removeObservers(getViewLifecycleOwner());
-        viewModel.observedPermissionState().observe(getViewLifecycleOwner(), permission -> {
+        viewModel.observedPermissionLocationState().removeObservers(getViewLifecycleOwner());
+        viewModel.observedPermissionLocationState().observe(getViewLifecycleOwner(), permission -> {
             if (permission == PackageManager.PERMISSION_GRANTED) {
-                hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_permission_to_home));
+                binding.permissionLocationDone.setVisibility(View.VISIBLE);
             }
         });
+
+        viewModel.observedPermissionSendSMSState().removeObservers(getViewLifecycleOwner());
+        viewModel.observedPermissionSendSMSState().observe(getViewLifecycleOwner(), permission -> {
+            if (permission == PackageManager.PERMISSION_GRANTED) {
+                binding.permissionSendSmsDone.setVisibility(View.VISIBLE);
+            }
+        });
+
+        viewModel.observedPermissionRequiredState().removeObservers(getViewLifecycleOwner());
+        viewModel.observedPermissionRequiredState().observe(getViewLifecycleOwner(), status -> {
+            if (status == RequiredPermissionsState.COMPLETED) {
+                binding.permissionProceed.setEnabled(true);
+            }
+        });
+
     }
 
     private void navigate() {
-        binding.permissionChoosesToAccept.setOnClickListener(v -> {
-            navigate.requestLocationPermission();
-        });
+        binding.permissionLocation.setOnClickListener(v -> navigate.requestLocationPermission());
 
-        // TODO: 15/09/2021: make function available of this button.
-        binding.permissionChoosesToDenied.setOnClickListener(v -> hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_permission_to_home)));
+        binding.permissionSendSms.setOnClickListener(v -> navigate.requestSendSMSPermission());
+
+        binding.permissionProceed.setOnClickListener(v -> {
+            hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_permission_to_home));
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (!navigate.checkLocationPermission())// not denied (means granted already)
-            viewModel.setPermissionState(PackageManager.PERMISSION_GRANTED);
+        if (!navigate.checkLocationPermission() && !navigate.checkSendSMSPermission()) {
+            Log.d(TAG, "completed called");
+            viewModel.setPermissionLocationState(PackageManager.PERMISSION_GRANTED);
+            viewModel.setPermissionSendSMSState(PackageManager.PERMISSION_GRANTED);
+
+            viewModel.setPermissionRequiredState(RequiredPermissionsState.COMPLETED);
+        } else if (!navigate.checkLocationPermission() || !navigate.checkSendSMSPermission()) {// not denied (means granted already)
+            Log.d(TAG, "partial called");
+            if (!navigate.checkLocationPermission())
+                viewModel.setPermissionLocationState(PackageManager.PERMISSION_GRANTED);
+            if (!navigate.checkSendSMSPermission())
+                viewModel.setPermissionSendSMSState(PackageManager.PERMISSION_GRANTED);
+
+            viewModel.setPermissionRequiredState(RequiredPermissionsState.PARTIAL);
+        }
     }
 
     @Override
@@ -93,7 +127,7 @@ public class PermissionFragment extends DaggerFragment {
 
     private void configureActionBarTitle() {
         Objects.requireNonNull(((AppCompatActivity) requireActivity())
-                .getSupportActionBar()).setTitle("Permission");
+                .getSupportActionBar()).setTitle("");
     }
 
     @Override
@@ -120,4 +154,5 @@ public class PermissionFragment extends DaggerFragment {
         hostScreen = null;
         navigate = null;
     }
+
 }

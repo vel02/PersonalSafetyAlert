@@ -19,4 +19,8 @@ public class MainViewModel extends ViewModel {
         this.repository.setPermissionLocationState(permission);
     }
 
+    public void setPermissionSendSMS(int permission) {
+        this.repository.setPermissionSendSMS(permission);
+    }
+
 }

@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Personal Safety Alert</string>
 
-    <!-- Home Fragment -->
     <string name="txt_start_safety">Safety Alert OFF</string>
     <string name="txt_stop_safety">Safety Alert ON</string>
 
@@ -77,6 +76,15 @@
     <string name="action_settings">Settings</string>
     <string name="tag_fragment_home_to_permission">tag_fragment_home_to_permission</string>
     <string name="tag_fragment_permission_to_home">tag_fragment_permission_to_home</string>
+    <string name="desc_location_permission_logo">Location permission logo</string>
+    <string name="desc_location_permission_check">Location permission check</string>
+    <string name="txt_location_permission_title">Location Access</string>
+    <string name="txt_location_permission_desc">Read your location in real time</string>
+    <string name="txt_allow_access">Allow Access</string>
+    <string name="txt_send_sms_permission_title">Send SMS Access</string>
+    <string name="txt_send_sms_permission_desc">Send emergency text to your love-ones</string>
+    <string name="text_permission_reminder">This app needs permission access which is required to work correctly. If you don\'t feel comfortable with these permissions you can go to settings and modify it at any time.</string>
+    <string name="txt_proceed">Proceed</string>
 
 
 </resources>

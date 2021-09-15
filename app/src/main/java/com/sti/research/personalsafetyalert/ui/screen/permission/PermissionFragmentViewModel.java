@@ -1,9 +1,11 @@
 package com.sti.research.personalsafetyalert.ui.screen.permission;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;
+import com.sti.research.personalsafetyalert.repository.PermissionRepository.RequiredPermissionsState;
 
 import javax.inject.Inject;
 
@@ -16,11 +18,33 @@ public class PermissionFragmentViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    public void setPermissionState(int permission) {
+    //############# Permission Required State #############
+
+    public void setPermissionRequiredState(RequiredPermissionsState state) {
+        this.repository.setPermissionsRequiredStatus(state);
+    }
+
+    public LiveData<RequiredPermissionsState> observedPermissionRequiredState() {
+        return this.repository.observedPermissionRequiredState();
+    }
+
+    //############# Permission Send SMS State #############
+
+    public void setPermissionSendSMSState(int permission) {
+        this.repository.setPermissionSendSMS(permission);
+    }
+
+    public LiveData<Integer> observedPermissionSendSMSState() {
+        return this.repository.observedPermissionSendSMSState();
+    }
+
+    //############# Permission Location State #############
+
+    public void setPermissionLocationState(int permission) {
         this.repository.setPermissionLocationState(permission);
     }
 
-    public LiveData<Integer> observedPermissionState() {
+    public LiveData<Integer> observedPermissionLocationState() {
         return this.repository.observedPermissionLocationState();
     }
 
