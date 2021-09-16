@@ -94,7 +94,10 @@ public class HomeFragment extends DaggerFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!navigate.checkLocationPermission() && !navigate.checkSendSMSPermission()) {
+        if (!navigate.checkLocationPermission()
+                && !navigate.checkSendSMSPermission()
+                && !navigate.checkRecordAudioPermission()
+                && !navigate.checkStoragePermission()) {
             Log.d(TAG, "home completed called");
             viewModel.setPermissionRequiredState(PermissionRepository.RequiredPermissionsState.COMPLETED);
         }

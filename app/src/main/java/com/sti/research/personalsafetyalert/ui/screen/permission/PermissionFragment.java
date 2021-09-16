@@ -80,6 +80,20 @@ public class PermissionFragment extends DaggerFragment {
             }
         });
 
+        viewModel.observedRecordAudioState().removeObservers(getViewLifecycleOwner());
+        viewModel.observedRecordAudioState().observe(getViewLifecycleOwner(), permission -> {
+            if (permission == PackageManager.PERMISSION_GRANTED) {
+                binding.permissionRecordAudioDone.setVisibility(View.VISIBLE);
+            }
+        });
+
+        viewModel.observedPermissionStorageState().removeObservers(getViewLifecycleOwner());
+        viewModel.observedPermissionStorageState().observe(getViewLifecycleOwner(), permission -> {
+            if (permission == PackageManager.PERMISSION_GRANTED) {
+                binding.permissionStorageDone.setVisibility(View.VISIBLE);
+            }
+        });
+
         viewModel.observedPermissionRequiredState().removeObservers(getViewLifecycleOwner());
         viewModel.observedPermissionRequiredState().observe(getViewLifecycleOwner(), status -> {
             if (status == RequiredPermissionsState.COMPLETED) {
@@ -94,6 +108,10 @@ public class PermissionFragment extends DaggerFragment {
 
         binding.permissionSendSms.setOnClickListener(v -> navigate.requestSendSMSPermission());
 
+        binding.permissionRecordAudio.setOnClickListener(v -> navigate.requestRecordAudioPermission());
+
+        binding.permissionStorage.setOnClickListener(v -> navigate.requestStoragePermission());
+
         binding.permissionProceed.setOnClickListener(v -> {
             hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_permission_to_home));
         });
@@ -102,18 +120,30 @@ public class PermissionFragment extends DaggerFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!navigate.checkLocationPermission() && !navigate.checkSendSMSPermission()) {
+        if (!navigate.checkLocationPermission()
+                && !navigate.checkSendSMSPermission()
+                && !navigate.checkRecordAudioPermission()
+                && !navigate.checkStoragePermission()) {
             Log.d(TAG, "completed called");
             viewModel.setPermissionLocationState(PackageManager.PERMISSION_GRANTED);
             viewModel.setPermissionSendSMSState(PackageManager.PERMISSION_GRANTED);
+            viewModel.setPermissionRecordAudioState(PackageManager.PERMISSION_GRANTED);
+            viewModel.setPermissionStorageState(PackageManager.PERMISSION_GRANTED);
 
             viewModel.setPermissionRequiredState(RequiredPermissionsState.COMPLETED);
-        } else if (!navigate.checkLocationPermission() || !navigate.checkSendSMSPermission()) {// not denied (means granted already)
+        } else if (!navigate.checkLocationPermission()
+                || !navigate.checkSendSMSPermission()
+                || !navigate.checkRecordAudioPermission()
+                || !navigate.checkStoragePermission()) {// not denied (means granted already)
             Log.d(TAG, "partial called");
             if (!navigate.checkLocationPermission())
                 viewModel.setPermissionLocationState(PackageManager.PERMISSION_GRANTED);
             if (!navigate.checkSendSMSPermission())
                 viewModel.setPermissionSendSMSState(PackageManager.PERMISSION_GRANTED);
+            if (!navigate.checkRecordAudioPermission())
+                viewModel.setPermissionRecordAudioState(PackageManager.PERMISSION_GRANTED);
+            if (!navigate.checkStoragePermission())
+                viewModel.setPermissionStorageState(PackageManager.PERMISSION_GRANTED);
 
             viewModel.setPermissionRequiredState(RequiredPermissionsState.PARTIAL);
         }

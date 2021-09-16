@@ -10,6 +10,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow_900">#F57F17</color>
     <color name="green_900">#1B5E20</color>
+    <color name="deep_purple_900">#311B92</color>
+    <color name="red_900">#B71C1C</color>
 
     <color name="grey">#c3c3c3</color>
     <color name="lightGrey">#f2f2f2</color>

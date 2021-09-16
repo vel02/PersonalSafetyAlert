@@ -70,7 +70,10 @@
     <string name="txt_confirm">Confirm</string>
     <string name="txt_mobile_number">Mobile number</string>
     <string name="txt_email">Email</string>
-    <string name="txt_permission_rational">Location permission is needed for core functionality</string>
+    <string name="txt_location_permission_rational">Location permission is needed for core functionality</string>
+    <string name="txt_send_sms_permission_rational">Send SMS permission is needed for core functionality</string>
+    <string name="txt_audio_record_permission_rational">Audio Record permission is needed for core functionality</string>
+    <string name="txt_storage_permission_rational">Storage permission is needed for core functionality</string>
     <string name="txt_permission_denied_explanation">Permission is denied, but is needed for core functionality</string>
     <string name="action_ok">OK</string>
     <string name="action_settings">Settings</string>
@@ -85,6 +88,10 @@
     <string name="txt_send_sms_permission_desc">Send emergency text to your love-ones</string>
     <string name="text_permission_reminder">This app needs permission access which is required to work correctly. If you don\'t feel comfortable with these permissions you can go to settings and modify it at any time.</string>
     <string name="txt_proceed">Proceed</string>
+    <string name="txt_record_audio_permission_title">Record Audio Access</string>
+    <string name="txt_record_audio_permission_desc">Record audio that you will send</string>
+    <string name="txt_storage_permission_title">Storage Access</string>
+    <string name="txt_storage_permission_desc">Select recorded audio on your device</string>
 
 
 </resources>

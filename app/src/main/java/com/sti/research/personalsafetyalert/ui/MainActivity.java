@@ -20,12 +20,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.sti.research.personalsafetyalert.BuildConfig;
@@ -40,8 +38,6 @@ import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragm
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragmentDirections;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -195,23 +191,39 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
     }
 
     @Override
+    public boolean checkRecordAudioPermission() {
+        int hasReadPermission = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO);
+        return hasReadPermission == PackageManager.PERMISSION_DENIED;
+    }
+
+    @Override
+    public boolean checkStoragePermission() {
+        int hasReadPermission = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return hasReadPermission == PackageManager.PERMISSION_DENIED;
+    }
+
+    @Override
     public void requestLocationPermission() {
         boolean shouldProvideRational = ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
 
         if (shouldProvideRational) {
             Snackbar.make(
-                    binding.getRoot(), R.string.txt_permission_rational,
+                    binding.getRoot(), R.string.txt_location_permission_rational,
                     Snackbar.LENGTH_INDEFINITE)
                     .setBackgroundTint(getResources().getColor(R.color.primaryLight))
                     .setActionTextColor(getResources().getColor(R.color.primaryDark))
                     .setAction(R.string.action_ok, v ->
                             ActivityCompat.requestPermissions(MainActivity.this,
-                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                            Manifest.permission.ACCESS_COARSE_LOCATION},
                                     PermissionManager.PERMISSION_LOCATION_REQUEST_CODE)).show();
         } else {
             ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
                     PermissionManager.PERMISSION_LOCATION_REQUEST_CODE);
         }
     }
@@ -223,7 +235,7 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
 
         if (shouldProvideRational) {
             Snackbar.make(
-                    binding.getRoot(), R.string.txt_permission_rational,
+                    binding.getRoot(), R.string.txt_send_sms_permission_rational,
                     Snackbar.LENGTH_INDEFINITE)
                     .setBackgroundTint(getResources().getColor(R.color.primaryLight))
                     .setActionTextColor(getResources().getColor(R.color.primaryDark))
@@ -239,10 +251,55 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
     }
 
     @Override
+    public void requestRecordAudioPermission() {
+        boolean shouldProvideRational = ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.RECORD_AUDIO);
+
+        if (shouldProvideRational) {
+            Snackbar.make(
+                    binding.getRoot(), R.string.txt_audio_record_permission_rational,
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setBackgroundTint(getResources().getColor(R.color.primaryLight))
+                    .setActionTextColor(getResources().getColor(R.color.primaryDark))
+                    .setAction(R.string.action_ok, v ->
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{Manifest.permission.RECORD_AUDIO},
+                                    PermissionManager.PERMISSION_RECORD_AUDIO_REQUEST_CODE)).show();
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.RECORD_AUDIO},
+                    PermissionManager.PERMISSION_RECORD_AUDIO_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void requestStoragePermission() {
+        boolean shouldProvideRational = ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (shouldProvideRational) {
+            Snackbar.make(
+                    binding.getRoot(), R.string.txt_storage_permission_rational,
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setBackgroundTint(getResources().getColor(R.color.primaryLight))
+                    .setActionTextColor(getResources().getColor(R.color.primaryDark))
+                    .setAction(R.string.action_ok, v ->
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    PermissionManager.PERMISSION_STORAGE_REQUEST_CODE)).show();
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PermissionManager.PERMISSION_STORAGE_REQUEST_CODE);
+        }
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PermissionManager.PERMISSION_LOCATION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && (grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                 viewModel.setPermissionLocationState(PackageManager.PERMISSION_GRANTED);
             } else {
                 Snackbar.make(
@@ -263,7 +320,47 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
             }
         } else if (requestCode == PermissionManager.PERMISSION_SEND_SMS_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                viewModel.setPermissionSendSMS(PackageManager.PERMISSION_GRANTED);
+                viewModel.setPermissionSendSMSState(PackageManager.PERMISSION_GRANTED);
+            } else {
+                Snackbar.make(
+                        binding.getRoot(),
+                        R.string.txt_permission_denied_explanation,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setBackgroundTint(getResources().getColor(R.color.primaryLight))
+                        .setActionTextColor(getResources().getColor(R.color.primaryDark))
+                        .setAction(R.string.action_settings, view -> {
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package",
+                                    BuildConfig.APPLICATION_ID, null);
+                            intent.setData(uri);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }).show();
+            }
+        } else if (requestCode == PermissionManager.PERMISSION_RECORD_AUDIO_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                viewModel.setPermissionRecordAudioState(PackageManager.PERMISSION_GRANTED);
+            } else {
+                Snackbar.make(
+                        binding.getRoot(),
+                        R.string.txt_permission_denied_explanation,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setBackgroundTint(getResources().getColor(R.color.primaryLight))
+                        .setActionTextColor(getResources().getColor(R.color.primaryDark))
+                        .setAction(R.string.action_settings, view -> {
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package",
+                                    BuildConfig.APPLICATION_ID, null);
+                            intent.setData(uri);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }).show();
+            }
+        } else if (requestCode == PermissionManager.PERMISSION_STORAGE_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                viewModel.setPermissionStorageState(PackageManager.PERMISSION_GRANTED);
             } else {
                 Snackbar.make(
                         binding.getRoot(),

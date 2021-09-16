@@ -193,6 +193,152 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/permission_record_audio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingStart="24dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/permission_send_sms">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/permission_record_audio_circle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_record_voice_holder"
+                    app:civ_circle_background_color="@color/deep_purple_900"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="@string/desc_location_permission_logo"
+                    android:src="@drawable/ic_record_voice"
+                    app:layout_constraintBottom_toBottomOf="@+id/permission_record_audio_circle"
+                    app:layout_constraintEnd_toEndOf="@+id/permission_record_audio_circle"
+                    app:layout_constraintStart_toStartOf="@+id/permission_record_audio_circle"
+                    app:layout_constraintTop_toTopOf="@+id/permission_record_audio_circle" />
+
+                <TextView
+                    android:id="@+id/permission_record_audio_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="@string/txt_record_audio_permission_title"
+                    android:textColor="@color/background_default_screen"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/permission_record_audio_circle"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/permission_record_audio_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="@string/txt_record_audio_permission_desc"
+                    android:textColor="@color/background_default_screen"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/permission_record_audio_circle"
+                    app:layout_constraintTop_toBottomOf="@+id/permission_record_audio_title" />
+
+                <ImageView
+                    android:id="@+id/permission_record_audio_done"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/desc_location_permission_check"
+                    android:src="@drawable/ic_check"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/permission_storage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingStart="24dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/permission_record_audio">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/permission_storage_circle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_storage_holder"
+                    app:civ_circle_background_color="@color/red_900"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="@string/desc_location_permission_logo"
+                    android:src="@drawable/ic_storage"
+                    app:layout_constraintBottom_toBottomOf="@+id/permission_storage_circle"
+                    app:layout_constraintEnd_toEndOf="@+id/permission_storage_circle"
+                    app:layout_constraintStart_toStartOf="@+id/permission_storage_circle"
+                    app:layout_constraintTop_toTopOf="@+id/permission_storage_circle" />
+
+                <TextView
+                    android:id="@+id/permission_storage_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="@string/txt_storage_permission_title"
+                    android:textColor="@color/background_default_screen"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/permission_storage_circle"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/permission_storage_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="@string/txt_storage_permission_desc"
+                    android:textColor="@color/background_default_screen"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/permission_storage_circle"
+                    app:layout_constraintTop_toBottomOf="@+id/permission_storage_title" />
+
+                <ImageView
+                    android:id="@+id/permission_storage_done"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/desc_location_permission_check"
+                    android:src="@drawable/ic_check"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <TextView
                 android:id="@+id/permission_reminder"
                 android:layout_width="0dp"
@@ -207,7 +353,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/permission_send_sms" />
+                app:layout_constraintTop_toBottomOf="@+id/permission_storage" />
 
             <Button
                 android:id="@+id/permission_proceed"
