@@ -92,6 +92,7 @@
     <string name="txt_record_audio_permission_desc">Record audio that you will send</string>
     <string name="txt_storage_permission_title">Storage Access</string>
     <string name="txt_storage_permission_desc">Select recorded audio on your device</string>
+    <string name="desc_welcome_logo">Welcome logo</string>
 
 
 </resources>

@@ -13,7 +13,7 @@ public class Constants {
 
 
     public enum TransitionType {
-        Fade
+        Fade, Slide
     }
 
 }

@@ -12,16 +12,33 @@ import com.sti.research.personalsafetyalert.di.ui.screen.menu.notworking.NotWork
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.SettingsFragmentBuilderModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.SettingsScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.SettingsViewModelModule;
+import com.sti.research.personalsafetyalert.di.ui.splash.SplashScope;
+import com.sti.research.personalsafetyalert.di.ui.welcome.WelcomeFragmentBuilderModule;
+import com.sti.research.personalsafetyalert.di.ui.welcome.WelcomeScope;
+import com.sti.research.personalsafetyalert.di.ui.welcome.WelcomeViewModelModule;
 import com.sti.research.personalsafetyalert.ui.MainActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.notworking.NotWorkingActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
+import com.sti.research.personalsafetyalert.ui.splash.SplashActivity;
+import com.sti.research.personalsafetyalert.ui.welcome.WelcomeActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class ActivityBuilderModule {
+
+    @SplashScope
+    @ContributesAndroidInjector
+    abstract SplashActivity contributeSplashActivity();
+
+    @WelcomeScope
+    @ContributesAndroidInjector(modules = {
+            WelcomeFragmentBuilderModule.class,
+            WelcomeViewModelModule.class
+    })
+    abstract WelcomeActivity contributeWelcomeActivity();
 
     @MainScope
     @ContributesAndroidInjector(modules = {
