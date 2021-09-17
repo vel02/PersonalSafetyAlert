@@ -1,6 +1,5 @@
 package com.sti.research.personalsafetyalert.ui.screen.menu.help;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -72,10 +71,15 @@ public class HelpActivity extends DaggerAppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        finishAfterTransition();
         if (!(navController.navigateUp() || super.onSupportNavigateUp())) {
             onBackPressed();
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAfterTransition();
     }
 }

@@ -24,7 +24,7 @@ public class SplashActivity extends DaggerAppCompatActivity {
 
     private ActivitySplashBinding binding;
 
-    private static final int SPLASH_DISPLAY_LENGTH = 1000;
+    private static final int SPLASH_DISPLAY_LENGTH = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class SplashActivity extends DaggerAppCompatActivity {
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
                 Intent intent = new Intent(SplashActivity.this, WelcomeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(KEY_ANIM_TYPE, Constants.TransitionType.Slide);
+                intent.putExtra(KEY_ANIM_TYPE, Constants.TransitionType.Fade);
                 startActivity(intent, options.toBundle());
                 finishAfterTransition();
             }, SPLASH_DISPLAY_LENGTH);

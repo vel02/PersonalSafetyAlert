@@ -15,9 +15,8 @@
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="90">
-
-        </androidx.viewpager.widget.ViewPager>
+            android:layout_weight="90"
+            android:overScrollMode="never" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -27,7 +26,7 @@
 
             <TextView
                 android:id="@+id/skip_welcome"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
@@ -59,7 +58,7 @@
 
             <TextView
                 android:id="@+id/next_welcome"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"

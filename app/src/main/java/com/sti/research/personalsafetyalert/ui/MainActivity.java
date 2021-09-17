@@ -22,13 +22,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.transition.Fade;
-import android.transition.Slide;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.AlphaAnimation;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.sti.research.personalsafetyalert.BuildConfig;
@@ -98,6 +95,7 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.nav_permission)
+                //noinspection deprecation
                 binding.appBarLayout.setTargetElevation(0F);
         });
     }

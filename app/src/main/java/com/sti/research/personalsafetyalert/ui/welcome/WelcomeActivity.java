@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.Fade;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.View;
@@ -66,6 +67,10 @@ public class WelcomeActivity extends DaggerAppCompatActivity implements HostScre
             if (transitionType == Constants.TransitionType.Slide) {
                 Slide enterTransition = new Slide();
                 enterTransition.setSlideEdge(Gravity.RIGHT);
+                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
+                getWindow().setEnterTransition(enterTransition);
+            } else if (transitionType == Constants.TransitionType.Fade) {
+                Fade enterTransition = new Fade();
                 enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
                 getWindow().setEnterTransition(enterTransition);
             }
