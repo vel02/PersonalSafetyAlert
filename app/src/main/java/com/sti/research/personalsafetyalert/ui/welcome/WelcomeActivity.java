@@ -1,9 +1,14 @@
 package com.sti.research.personalsafetyalert.ui.welcome;
 
+import static com.sti.research.personalsafetyalert.util.Constants.KEY_ANIM_TYPE;
+
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.transition.Slide;
 import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 
 import androidx.appcompat.widget.Toolbar;
@@ -16,14 +21,18 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.ActivityWelcomeBinding;
+import com.sti.research.personalsafetyalert.ui.HostScreen;
+import com.sti.research.personalsafetyalert.ui.MainActivity;
+import com.sti.research.personalsafetyalert.ui.splash.SplashActivity;
 import com.sti.research.personalsafetyalert.util.Constants;
+import com.sti.research.personalsafetyalert.util.screen.splash.SplashNavigationPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class WelcomeActivity extends DaggerAppCompatActivity {
+public class WelcomeActivity extends DaggerAppCompatActivity implements HostScreen {
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -69,4 +78,16 @@ public class WelcomeActivity extends DaggerAppCompatActivity {
         navController = navHostFragment.getNavController();
     }
 
+    @Override
+    public void onInflate(View view, String screen) {
+        if (screen.equals(getString(R.string.tag_activity_welcome_to_main))) {
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+            Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(KEY_ANIM_TYPE, Constants.TransitionType.Fade);
+            startActivity(intent, options.toBundle());
+            finishAfterTransition();
+            SplashNavigationPreference.getInstance().setSplashNavigationStateState(this, true);
+        }
+    }
 }

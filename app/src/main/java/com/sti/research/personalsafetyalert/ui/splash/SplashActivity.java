@@ -6,6 +6,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.animation.AlphaAnimation;
 
 import androidx.databinding.DataBindingUtil;
 
@@ -15,15 +16,14 @@ import com.sti.research.personalsafetyalert.ui.MainActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
 import com.sti.research.personalsafetyalert.ui.welcome.WelcomeActivity;
 import com.sti.research.personalsafetyalert.util.Constants;
+import com.sti.research.personalsafetyalert.util.screen.splash.SplashNavigationPreference;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
 public class SplashActivity extends DaggerAppCompatActivity {
 
     private ActivitySplashBinding binding;
-    /**
-     * Duration of wait
-     **/
+
     private static final int SPLASH_DISPLAY_LENGTH = 1000;
 
     @Override
@@ -31,22 +31,26 @@ public class SplashActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(SplashActivity.this, R.layout.activity_splash);
 
-        /* New Handler to start the Menu-Activity
-         * and close this Splash-Screen after some seconds.*/
-        new Handler().postDelayed(() -> {
-            /* Create an Intent that will start the Menu-Activity. */
-//            Intent mainIntent = new Intent(SplashActivity.this, WelcomeActivity.class);
-//            SplashActivity.this.startActivity(mainIntent);
-//            SplashActivity.this.finish();
+        if (SplashNavigationPreference.getInstance().getSplashNavigationStateState(this)) {
+            new Handler().postDelayed(() -> {
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(KEY_ANIM_TYPE, Constants.TransitionType.Fade);
+                startActivity(intent, options.toBundle());
+                finishAfterTransition();
+            }, SPLASH_DISPLAY_LENGTH);
 
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
-            Intent intent = new Intent(SplashActivity.this, WelcomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra(KEY_ANIM_TYPE, Constants.TransitionType.Slide);
-            startActivity(intent, options.toBundle());
-            finish();
-
-        }, SPLASH_DISPLAY_LENGTH);
-
+        } else {
+            new Handler().postDelayed(() -> {
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+                Intent intent = new Intent(SplashActivity.this, WelcomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(KEY_ANIM_TYPE, Constants.TransitionType.Slide);
+                startActivity(intent, options.toBundle());
+                finishAfterTransition();
+            }, SPLASH_DISPLAY_LENGTH);
+        }
     }
+
 }

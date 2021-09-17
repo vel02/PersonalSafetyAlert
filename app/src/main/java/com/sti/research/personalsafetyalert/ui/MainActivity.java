@@ -14,15 +14,20 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.AlphaAnimation;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -37,6 +42,7 @@ import com.sti.research.personalsafetyalert.ui.screen.message.MessageFragmentDir
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragment;
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragmentDirections;
+import com.sti.research.personalsafetyalert.util.Constants;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import javax.inject.Inject;
@@ -55,33 +61,32 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
 
     private NavController navController;
 
+    private void getIntentObject() {
+        Constants.TransitionType type = (Constants.TransitionType) getIntent().getSerializableExtra(Constants.KEY_ANIM_TYPE);
+        if (this.viewModel.observedTransitionType().getValue() == null)
+            this.viewModel.setTransitionType(type);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS); //permission to use fade transition
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
         viewModel = new ViewModelProvider(MainActivity.this, providerFactory).get(MainViewModel.class);
-        launchAnimation();
+        getIntentObject();
         initController();
-
-        /*
-            Permission Logic
-            - after starting main activity
-            - start permission fragment
-            - user will accept to apply all permission needed
-            - will be triggered in main activity
-            - after all permission are accepted
-            - proceed button enabled in permission fragment
-            - then return to main activity
-         */
-
-
+        subscribeObservers();
     }
 
-    private void launchAnimation() {
-        AlphaAnimation animation = new AlphaAnimation(0.0f, 1.0f);
-        animation.setFillAfter(true);
-        animation.setDuration(getResources().getInteger(R.integer.anim_duration_long));
-        binding.layout.startAnimation(animation);
+    @SuppressLint("RtlHardcoded")
+    private void subscribeObservers() {
+        viewModel.observedTransitionType().observe(this, transitionType -> {
+            if (transitionType == TransitionType.Fade) {
+                Fade enterTransition = new Fade();
+                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
+                getWindow().setEnterTransition(enterTransition);
+            }
+        });
     }
 
     private void initController() {

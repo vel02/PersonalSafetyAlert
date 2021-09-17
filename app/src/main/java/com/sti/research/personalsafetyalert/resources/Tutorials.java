@@ -9,16 +9,13 @@ public class Tutorials {
         return TUTORIALS;
     }
 
-    public static final Tutorial TUTORIAL_ONE = new Tutorial("Notification Access", "1. Click Notification Access button." +
-            "\n2. Turn OFF and ON Personal Safety App in the Notification Access screen." +
-            "\n3. Update location will work now." +
-            "\nIf it doesn't work please swipe left to try next method.",
+    public static final Tutorial TUTORIAL_ONE = new Tutorial("Lorem Ipsum", "Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.",
             R.drawable.ic_location_holder);
-    public static final Tutorial TUTORIAL_TWO = new Tutorial("App Notification",
-            "Please make sure you are getting a notification. Click Settings button and go to Notifications and turn on notification of Personal Safety Alert app.",
+    public static final Tutorial TUTORIAL_TWO = new Tutorial("Lorem Ipsum",
+            "Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.",
             R.drawable.ic_sms_holder);
-    public static final Tutorial TUTORIAL_THREE = new Tutorial("Restart Phone",
-            "Please restart your phone and check it again. If none of these methods works, please contact us.",
+    public static final Tutorial TUTORIAL_THREE = new Tutorial("Lorem Ipsum",
+            "Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.",
             R.drawable.ic_storage_holder);
 
     public static final Tutorial[] TUTORIALS = {TUTORIAL_ONE, TUTORIAL_TWO, TUTORIAL_THREE};

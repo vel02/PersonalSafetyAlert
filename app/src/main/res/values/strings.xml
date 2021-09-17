@@ -93,6 +93,7 @@
     <string name="txt_storage_permission_title">Storage Access</string>
     <string name="txt_storage_permission_desc">Select recorded audio on your device</string>
     <string name="desc_welcome_logo">Welcome logo</string>
+    <string name="tag_activity_welcome_to_main">tag_activity_welcome_to_main</string>
 
 
 </resources>

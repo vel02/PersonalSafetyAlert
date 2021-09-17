@@ -64,7 +64,7 @@ public class VisualMessageFragment extends DaggerFragment {
         if (!(activity instanceof HostScreen)) {
             assert activity != null;
             throw new ClassCastException(activity.getClass().getSimpleName()
-                    + " must implement Hostable interface.");
+                    + " must implement HostScreen interface.");
         }
         hostScreen = (HostScreen) activity;
     }

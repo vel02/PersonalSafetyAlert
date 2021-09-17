@@ -1,18 +1,24 @@
 package com.sti.research.personalsafetyalert.ui;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;
+import com.sti.research.personalsafetyalert.util.Constants;
 
 import javax.inject.Inject;
 
 public class MainViewModel extends ViewModel {
+
+    private final MutableLiveData<Constants.TransitionType> transitionType;
 
     private final PermissionRepository repository;
 
     @Inject
     public MainViewModel(PermissionRepository repository) {
         this.repository = repository;
+        this.transitionType = new MutableLiveData<>();
     }
 
     public void setPermissionLocationState(int permission) {
@@ -29,6 +35,14 @@ public class MainViewModel extends ViewModel {
 
     public void setPermissionStorageState(int permission) {
         this.repository.setPermissionStorageState(permission);
+    }
+
+    public void setTransitionType(Constants.TransitionType type) {
+        this.transitionType.setValue(type);
+    }
+
+    public LiveData<Constants.TransitionType> observedTransitionType() {
+        return this.transitionType;
     }
 
 }
