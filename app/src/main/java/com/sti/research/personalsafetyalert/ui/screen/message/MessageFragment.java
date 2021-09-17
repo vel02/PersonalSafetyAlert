@@ -51,8 +51,10 @@ public class MessageFragment extends DaggerFragment {
     }
 
     private void navigate() {
-        binding.cardVisualMessage.setOnClickListener(v ->
-                hostScreen.onInflate(v, getString(R.string.tag_fragment_message_to_visual)));
+        binding.cardVisualMessage.setOnClickListener(v -> {
+            hostScreen.onInflate(v, getString(R.string.tag_fragment_message_to_visual));
+            binding.messageEditCustomMessage.clearFocus();
+        });
 
         binding.messageDone.setOnClickListener(v -> {
             hostScreen.onInflate(v, getString(R.string.tag_fragment_message_to_home));

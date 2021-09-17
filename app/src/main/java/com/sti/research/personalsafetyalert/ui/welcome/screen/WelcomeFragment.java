@@ -111,9 +111,9 @@ public class WelcomeFragment extends DaggerFragment {
     private void setBehaviourInstructionButtons(Integer selected) {
         if (selected == binding.tabLayout.getTabCount() - 1) {
             binding.gotItWelcome.setVisibility(View.VISIBLE);
-            binding.nextWelcome.setVisibility(View.GONE);
+            binding.nextWelcome.setVisibility(View.INVISIBLE);
         } else {
-            binding.gotItWelcome.setVisibility(View.GONE);
+            binding.gotItWelcome.setVisibility(View.INVISIBLE);
             binding.nextWelcome.setVisibility(View.VISIBLE);
         }
     }
