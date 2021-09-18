@@ -9,6 +9,67 @@
         android:id="@+id/nav_help"
         android:name="com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.HelpFragment"
         android:label="Help"
-        tools:layout="@layout/fragment_help" />
+        tools:layout="@layout/fragment_help">
+        <action
+            android:id="@+id/action_nav_help_to_nav_how_to"
+            app:destination="@id/nav_how_to"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_nav_help_to_nav_not_working"
+            app:destination="@id/nav_not_working"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_nav_help_to_nav_contact_us"
+            app:destination="@id/nav_contact_us"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_how_to"
+        android:name="com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.howto.HowToFragment"
+        android:label="How to use"
+        tools:layout="@layout/fragment_how_to">
+        <action
+            android:id="@+id/action_nav_how_to_to_nav_help"
+            app:destination="@id/nav_help"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/nav_help"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_not_working"
+        android:name="com.sti.research.personalsafetyalert.ui.screen.menu.notworking.screen.NotWorkingFragment"
+        android:label="Not Working ?"
+        tools:layout="@layout/fragment_not_working" />
+
+    <fragment
+        android:id="@+id/nav_contact_us"
+        android:name="com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.contactus.ContactUsFragment"
+        android:label="Contact Us"
+        tools:layout="@layout/fragment_contact_us">
+        <action
+            android:id="@+id/action_nav_contact_us_to_nav_help"
+            app:destination="@id/nav_help"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/nav_help"
+            app:popUpToInclusive="true" />
+    </fragment>
+
 
 </navigation>

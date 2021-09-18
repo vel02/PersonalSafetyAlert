@@ -95,8 +95,29 @@
     <string name="desc_welcome_logo">Welcome logo</string>
     <string name="tag_activity_welcome_to_main">tag_activity_welcome_to_main</string>
     <string name="txt_skip">SKIP</string>
-    <string name="txt_next">NEXT</string>
+    <string name="txt_next_cap">NEXT</string>
     <string name="txt_got_it">GOT IT</string>
+    <string name="tag_fragment_help_to_how_to">tag_fragment_help_to_how_to</string>
+    <string name="tag_fragment_help_to_not_working">tag_fragment_help_to_not_working</string>
+    <string name="tag_fragment_help_to_contact_us">tag_fragment_help_to_contact_us</string>
+    <string name="txt_step_1">Step 1</string>
+    <string name="desc_step_one">Turn ON Safety Alert.</string>
+    <string name="txt_next_small">Next</string>
+    <string name="txt_step_2">Step 2</string>
+    <string name="desc_dummy_medium">Lorem ipsum, or lipsum as it is sometimes known, is dummy text.</string>
+    <string name="txt_step_3">Step 3</string>
+    <string name="txt_step_4">Step 4</string>
+    <string name="tag_fragment_how_to_to_help">tag_fragment_how_to_to_help</string>
+    <string name="desc_email_logo">Email logo</string>
+    <string name="hint_describe_problem">Please describe your problem/suggestion</string>
+    <string name="desc_add_ss_logo_click">Add ss logo click</string>
+    <string name="desc_display_ss">Display image here.</string>
+    <string name="txt_add_screenshot_optional">Add screenshot (Optional)</string>
+    <string name="desc_add_screenshot">Attach screenshot of Personal Safety Alert screen.</string>
+    <string name="txt_send">Send</string>
+    <string name="tag_fragment_contact_us_to_help">tag_fragment_contact_us_to_help</string>
+    <string name="txt_user_tried">I have tried all the methods in \"Not working ? screen, still it is not working.</string>
+    <string name="txt_user_suggest">I have a suggestion.</string>
 
 
 </resources>

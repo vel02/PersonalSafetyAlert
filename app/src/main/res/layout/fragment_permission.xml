@@ -362,7 +362,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="32dp"
-                android:background="@drawable/button_round_corner_white"
+                android:background="@drawable/button_round_corner_medium"
                 android:enabled="false"
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"

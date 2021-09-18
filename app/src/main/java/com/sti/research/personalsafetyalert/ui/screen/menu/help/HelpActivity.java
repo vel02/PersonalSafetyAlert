@@ -4,16 +4,23 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.transition.Fade;
+import android.view.View;
 import android.view.Window;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.ActivityHelpBinding;
+import com.sti.research.personalsafetyalert.ui.HostScreen;
+import com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.HelpFragmentDirections;
+import com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.contactus.ContactUsFragmentDirections;
+import com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.howto.HowToFragmentDirections;
 import com.sti.research.personalsafetyalert.util.Constants;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
@@ -21,7 +28,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class HelpActivity extends DaggerAppCompatActivity {
+public class HelpActivity extends DaggerAppCompatActivity implements HostScreen {
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -64,6 +71,7 @@ public class HelpActivity extends DaggerAppCompatActivity {
         navController = navHostFragment.getNavController();
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
+        binding.appBarLayout.setTargetElevation(0);
 
         AppBarConfiguration configuration = new AppBarConfiguration.Builder().build();
         NavigationUI.setupActionBarWithNavController(this, navController, configuration);
@@ -78,8 +86,30 @@ public class HelpActivity extends DaggerAppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finishAfterTransition();
+    public void onInflate(View view, String screen) {
+
+        NavDirections directions;
+
+        switch (screen) {
+            case "tag_fragment_help_to_how_to":
+                directions = HelpFragmentDirections.actionNavHelpToNavHowTo();
+                break;
+            case "tag_fragment_help_to_not_working":
+                directions = HelpFragmentDirections.actionNavHelpToNavNotWorking();
+                break;
+            case "tag_fragment_help_to_contact_us":
+                directions = HelpFragmentDirections.actionNavHelpToNavContactUs();
+                break;
+            case "tag_fragment_how_to_to_help":
+                directions = HowToFragmentDirections.actionNavHowToToNavHelp();
+                break;
+            case "tag_fragment_contact_us_to_help":
+                directions = ContactUsFragmentDirections.actionNavContactUsToNavHelp();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + screen);
+        }
+
+        Navigation.findNavController(view).navigate(directions);
     }
 }

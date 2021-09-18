@@ -1,9 +1,8 @@
-package com.sti.research.personalsafetyalert.di.ui.screen.menu.help;
+package com.sti.research.personalsafetyalert.di.ui.screen.menu.help.screen.howto;
 
 import androidx.lifecycle.ViewModel;
 
 import com.sti.research.personalsafetyalert.di.ViewModelKey;
-import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpViewModel;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.howto.HowToViewModel;
 
 import dagger.Binds;
@@ -11,11 +10,11 @@ import dagger.Module;
 import dagger.multibindings.IntoMap;
 
 @Module
-public abstract class HelpViewModelModule {
+public abstract class HowToFragmentViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(HelpViewModel.class)
-    abstract ViewModel bindHelpViewModel(HelpViewModel viewModel);
+    @ViewModelKey(HowToViewModel.class)
+    abstract ViewModel bindHowToViewModel(HowToViewModel viewModel);
 
 }

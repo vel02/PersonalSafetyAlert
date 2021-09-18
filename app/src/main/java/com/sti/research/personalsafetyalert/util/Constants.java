@@ -11,6 +11,15 @@ public class Constants {
         public static final int PERMISSION_STORAGE_REQUEST_CODE = 104;
     }
 
+    public static class GalleryManager {
+        public static final int PICK_GALLERY_REQUEST = 201;
+    }
+
+    public static class MessagingManager {
+        public static final String EMAIL_HOST = "personal.safety.alert.bot@gmail.com";
+        public static final String EMAIL_SUBJECT_WITHOUT_SUGGESTION = "CUSTOMER PROBLEM REPORT";
+        public static final String EMAIL_SUBJECT_WITH_SUGGESTION = "CUSTOMER PROBLEM/SUGGESTION REPORT";
+    }
 
     public enum TransitionType {
         Fade, Slide

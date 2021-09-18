@@ -23,6 +23,7 @@
             android:textColor="@color/primary" />
 
         <LinearLayout
+            android:id="@+id/help_how_to"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/selectableItemBackground"
@@ -47,6 +48,7 @@
             android:background="?attr/dividerHorizontal" />
 
         <LinearLayout
+            android:id="@+id/help_not_working"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/selectableItemBackground"
@@ -75,6 +77,7 @@
             android:textColor="@color/primary" />
 
         <LinearLayout
+            android:id="@+id/help_contact_us"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/selectableItemBackground"
