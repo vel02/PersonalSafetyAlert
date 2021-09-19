@@ -30,6 +30,12 @@ android {
     buildFeatures {
         dataBinding = true
     }
+
+    //javamail 1.6.6 (required)
+    packagingOptions {
+        exclude 'META-INF/NOTICE.md'
+        exclude 'META-INF/LICENSE.md'
+    }
 }
 
 dependencies {
@@ -76,7 +82,7 @@ dependencies {
     def broadcast_manager = "1.0.0"
     implementation "androidx.localbroadcastmanager:localbroadcastmanager:$broadcast_manager"
 
-    def java_mail = '1.6.5'
+    def java_mail = '1.6.6'
     implementation "com.sun.mail:android-mail:$java_mail"
     implementation "com.sun.mail:android-activation:$java_mail"
     //reference: https://javaee.github.io/javamail/

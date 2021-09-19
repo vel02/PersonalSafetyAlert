@@ -38,7 +38,7 @@ import javax.mail.internet.MimeMultipart;
 public class EmailManager {
 
     private static final String email = "personal.safety.alert.bot@gmail.com";
-    private static final String password = "jpflvwtjeawbmfeo";
+    private static final String password = "sphhknjqkmtyvzcm";//"jpflvwtjeawbmfeo";
 
     private MimeMessage message;
     private MimeBodyPart bodyPart;
@@ -60,7 +60,7 @@ public class EmailManager {
         CommandMap.setDefaultCommandMap(mc);
     }
 
-    private Properties getProperties() {//465
+    private Properties getProperties() {//465,587,25
         Properties properties = System.getProperties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");

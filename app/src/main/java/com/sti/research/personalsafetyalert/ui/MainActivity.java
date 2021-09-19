@@ -234,12 +234,14 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
                     .setAction(R.string.action_ok, v ->
                             ActivityCompat.requestPermissions(MainActivity.this,
                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                                            Manifest.permission.ACCESS_NETWORK_STATE},
                                     PermissionManager.PERMISSION_LOCATION_REQUEST_CODE)).show();
         } else {
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_NETWORK_STATE},
                     PermissionManager.PERMISSION_LOCATION_REQUEST_CODE);
         }
     }
