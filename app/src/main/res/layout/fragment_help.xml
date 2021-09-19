@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_default_screen"
+        android:background="@color/background_default"
         android:orientation="vertical"
         tools:context=".ui.screen.menu.help.screen.HelpFragment">
 
@@ -18,27 +18,29 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
             android:text="@string/txt_help"
-            android:textAppearance="?attr/textAppearanceBody1"
-            android:textColor="@color/primary" />
+            android:textColor="@color/text_color_black_900"
+            android:textSize="@dimen/text_size_large" />
 
         <LinearLayout
             android:id="@+id/help_how_to"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="24dp"
                 android:text="@string/txt_how_to_use"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/black_800" />
+                android:textColor="@color/text_color_black_800" />
 
         </LinearLayout>
 
@@ -50,56 +52,59 @@
         <LinearLayout
             android:id="@+id/help_not_working"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="24dp"
                 android:text="@string/txt_not_working"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/black_800" />
+                android:textColor="@color/text_color_black_800" />
 
         </LinearLayout>
-
+        
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
             android:text="@string/txt_contact"
-            android:textAppearance="?attr/textAppearanceBody1"
-            android:textColor="@color/primary" />
+            android:textColor="@color/text_color_black_900"
+            android:textSize="@dimen/text_size_large" />
 
         <LinearLayout
             android:id="@+id/help_contact_us"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="24dp"
                 android:text="@string/txt_contact_us"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/black_800" />
+                android:textColor="@color/black_800"
+                android:textSize="@dimen/text_size_large" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/desc_contact_us"
-                android:textSize="@dimen/text_size_small" />
+                android:layout_marginStart="24dp"
+                android:text="@string/desc_contact_us" />
 
         </LinearLayout>
 
@@ -111,23 +116,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="12dp"
                 android:text="@string/txt_app_version"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/primary" />
+                android:textColor="@color/text_color_black_900" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/desc_version" />
+                android:layout_marginStart="24dp"
+                android:text="@string/desc_version"
+                android:textColor="@color/primarySecondary" />
 
         </LinearLayout>
 
@@ -136,8 +141,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/desc_licensed" />
+            android:layout_marginEnd="24dp"
+            android:text="@string/desc_licensed"
+            android:textColor="@color/text_color_black_800" />
 
     </LinearLayout>
 </layout>

@@ -19,6 +19,8 @@ import com.sti.research.personalsafetyalert.model.Instruction;
 import com.sti.research.personalsafetyalert.resources.Instructions;
 import com.sti.research.personalsafetyalert.ui.screen.menu.notworking.screen.pager.NotWorkingFragmentViewPager;
 import com.sti.research.personalsafetyalert.util.animation.CubeInScalingTransformation;
+import com.sti.research.personalsafetyalert.util.animation.PopTransformation;
+import com.sti.research.personalsafetyalert.util.animation.ZoomOutTransformation;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import java.util.ArrayList;
@@ -71,7 +73,7 @@ public class NotWorkingFragment extends DaggerFragment {
 
 
     private void viewPagerAnimation() {
-        binding.viewPager.setPageTransformer(true, new CubeInScalingTransformation());
+        binding.viewPager.setPageTransformer(true, new ZoomOutTransformation());
     }
 
     private void navigate() {

@@ -94,9 +94,22 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
         setSupportActionBar(toolbar);
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.nav_permission)
+            if (destination.getId() == R.id.nav_permission
+                    || destination.getId() == R.id.nav_message
+                    || destination.getId() == R.id.nav_visual_message
+                    || destination.getId() == R.id.nav_contact
+            ) {
                 //noinspection deprecation
                 binding.appBarLayout.setTargetElevation(0F);
+                if (destination.getId() == R.id.nav_message
+                        || destination.getId() == R.id.nav_visual_message
+                        || destination.getId() == R.id.nav_contact
+                ) {
+                    binding.toolbar.setTitle("");
+                } else if (destination.getId() == R.id.nav_home) {
+                    binding.toolbar.setTitle(R.string.app_name);
+                }
+            }
         });
     }
 

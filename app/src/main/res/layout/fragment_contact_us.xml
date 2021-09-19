@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background_default_screen"
+            android:background="@color/background_default"
             android:orientation="vertical"
             android:padding="16dp"
             tools:context=".ui.screen.menu.help.screen.contactus.ContactUsFragment">
@@ -64,6 +64,7 @@
                         android:id="@+id/contact_us_tried"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:buttonTint="@color/checkbox_tint"
                         android:paddingStart="8dp"
                         android:text="@string/txt_user_tried"
                         tools:ignore="RtlSymmetry" />
@@ -80,6 +81,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:buttonTint="@color/checkbox_tint"
                         android:paddingStart="8dp"
                         android:text="@string/txt_user_suggest"
                         tools:ignore="RtlSymmetry" />
@@ -111,7 +113,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/txt_add_screenshot_optional"
-                        android:textColor="@color/primary" />
+                        android:textColor="@color/text_color_black_900" />
 
                     <View
                         android:layout_width="match_parent"

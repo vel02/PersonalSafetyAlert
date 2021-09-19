@@ -118,6 +118,13 @@
     <string name="tag_fragment_contact_us_to_help">tag_fragment_contact_us_to_help</string>
     <string name="txt_user_tried">I have tried all the methods in \"Not working ? screen, still it is not working.</string>
     <string name="txt_user_suggest">I have a suggestion.</string>
+    <string name="txt_message">Message</string>
+    <string name="desc_message">Add or customize your short message.</string>
+    <string name="txt_visual_message">Visual Message</string>
+    <string name="desc_visual_message">Where you can visualize your message.</string>
+    <string name="desc_contact">Your contact preference that can be use to send emergency message.</string>
+    <string name="txt_dummy_title">Lorem Ipsum</string>
+    <string name="desc_dummy_large">Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</string>
 
 
 </resources>

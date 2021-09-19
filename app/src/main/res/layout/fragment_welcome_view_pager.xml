@@ -34,7 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="TITLE"
+                    android:text="@string/txt_dummy_title"
                     android:textColor="@color/black_800"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -46,7 +46,7 @@
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:lineSpacingMultiplier="1.2"
-                    android:text="Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups." />
+                    android:text="@string/desc_dummy_large" />
 
                 <ImageView
                     android:id="@+id/welcome_logo"
@@ -58,7 +58,6 @@
                     android:src="@drawable/ic_location_holder" />
 
             </LinearLayout>
-
 
         </androidx.cardview.widget.CardView>
 

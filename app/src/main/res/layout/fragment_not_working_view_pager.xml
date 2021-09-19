@@ -47,10 +47,10 @@
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:text="@{title}"
-                    android:textColor="@color/primary"
+                    android:textColor="@color/text_color_black_900"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    tools:text="Notification Access" />
+                    tools:text="@string/txt_dummy_title" />
 
                 <TextView
                     android:id="@+id/vp_message"
@@ -60,7 +60,7 @@
                     android:gravity="center"
                     android:lineSpacingMultiplier="1.5"
                     android:text="@{message}"
-                    tools:text="Sample text!" />
+                    tools:text="@string/desc_dummy_medium" />
 
                 <Button
                     android:id="@+id/vp_button"
@@ -68,7 +68,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="24dp"
-                    tools:text="Button Access" />
+                    android:background="@drawable/button_round_corner"
+                    android:text="@string/txt_next_small"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_color_white"
+                    app:backgroundTint="@null"
+                    tools:text="@string/txt_dummy_title" />
 
             </LinearLayout>
 

@@ -10,18 +10,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_default_screen"
+        android:background="@color/background_default"
         android:orientation="vertical"
         tools:context=".ui.screen.menu.settings.screen.SettingsFragment">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:text="@string/txt_share"
-            android:textAppearance="?attr/textAppearanceBody1"
-            android:textColor="@color/primary" />
+            android:textColor="@color/text_color_black_900"
+            android:textSize="@dimen/text_size_large" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_share"
@@ -59,8 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/txt_invite_a_friend"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    android:textColor="@color/black_800" />
+                    android:textColor="@color/text_color_black_900" />
 
                 <TextView
                     android:layout_width="match_parent"
