@@ -1,7 +1,13 @@
 package com.sti.research.personalsafetyalert.di;
 
+import android.app.Application;
+
+import androidx.room.Room;
+
+import com.sti.research.personalsafetyalert.persistence.MessageDatabase;
 import com.sti.research.personalsafetyalert.repository.MessagingRepository;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;
+import com.sti.research.personalsafetyalert.repository.database.MessageRepository;
 
 import javax.inject.Singleton;
 
@@ -21,6 +27,21 @@ public class AppModule {
     @Provides
     static MessagingRepository provideMessagingRepository() {
         return new MessagingRepository();
+    }
+
+    @Singleton
+    @Provides
+    static MessageDatabase provideDatabase(Application application) {
+        return Room.databaseBuilder(
+                application, MessageDatabase.class,
+                MessageDatabase.DATABASE_NAME
+        ).build();
+    }
+
+    @Singleton
+    @Provides
+    static MessageRepository provideMessageRepository(MessageDatabase database) {
+        return new MessageRepository(database);
     }
 
 }

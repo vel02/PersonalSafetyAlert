@@ -125,6 +125,8 @@
     <string name="desc_contact">Your contact preference that can be use to send emergency message.</string>
     <string name="txt_dummy_title">Lorem Ipsum</string>
     <string name="desc_dummy_large">Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</string>
+    <string name="desc_permission_sub_title">Needs your permission to work</string>
+    <string name="tag_fragment_contact_us_to_not_working">tag_fragment_contact_us_to_not_working</string>
 
 
 </resources>

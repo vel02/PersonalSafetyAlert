@@ -17,6 +17,7 @@ public class Constants {
 
     public static class MessagingManager {
         public static final String EMAIL_HOST = "personal.safety.alert.bot@gmail.com";
+        public static final String EMAIL_PASSWORD = "sphhknjqkmtyvzcm";
         public static final String EMAIL_SUBJECT_WITHOUT_SUGGESTION = "CUSTOMER PROBLEM REPORT";
         public static final String EMAIL_SUBJECT_WITH_SUGGESTION = "CUSTOMER PROBLEM/SUGGESTION REPORT";
     }

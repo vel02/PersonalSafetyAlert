@@ -41,7 +41,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="Needs your permission to work"
+                android:text="@string/desc_permission_sub_title"
                 android:textColor="@color/text_color_black_800"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -92,7 +92,7 @@
                     android:text="@string/txt_location_permission_title"
                     android:textColor="@color/text_color_black_900"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/permission_location_done"
                     app:layout_constraintStart_toEndOf="@+id/permission_location_circle"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -104,7 +104,7 @@
                     android:text="@string/txt_location_permission_desc"
                     android:textColor="@color/text_color_black_800"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/permission_location_done"
                     app:layout_constraintStart_toEndOf="@+id/permission_location_circle"
                     app:layout_constraintTop_toBottomOf="@+id/permission_location_title" />
 
@@ -166,7 +166,7 @@
                     android:text="@string/txt_send_sms_permission_title"
                     android:textColor="@color/text_color_black_900"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/permission_send_sms_done"
                     app:layout_constraintStart_toEndOf="@+id/permission_send_sms_circle"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -178,7 +178,7 @@
                     android:text="@string/txt_send_sms_permission_desc"
                     android:textColor="@color/text_color_black_800"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/permission_send_sms_done"
                     app:layout_constraintStart_toEndOf="@+id/permission_send_sms_circle"
                     app:layout_constraintTop_toBottomOf="@+id/permission_send_sms_title" />
 
@@ -239,7 +239,7 @@
                     android:text="@string/txt_record_audio_permission_title"
                     android:textColor="@color/text_color_black_900"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/permission_record_audio_done"
                     app:layout_constraintStart_toEndOf="@+id/permission_record_audio_circle"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -251,7 +251,7 @@
                     android:text="@string/txt_record_audio_permission_desc"
                     android:textColor="@color/text_color_black_800"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/permission_record_audio_done"
                     app:layout_constraintStart_toEndOf="@+id/permission_record_audio_circle"
                     app:layout_constraintTop_toBottomOf="@+id/permission_record_audio_title" />
 
@@ -312,7 +312,7 @@
                     android:text="@string/txt_storage_permission_title"
                     android:textColor="@color/text_color_black_900"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/permission_storage_done"
                     app:layout_constraintStart_toEndOf="@+id/permission_storage_circle"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -324,7 +324,7 @@
                     android:text="@string/txt_storage_permission_desc"
                     android:textColor="@color/text_color_black_800"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/permission_storage_done"
                     app:layout_constraintStart_toEndOf="@+id/permission_storage_circle"
                     app:layout_constraintTop_toBottomOf="@+id/permission_storage_title" />
 

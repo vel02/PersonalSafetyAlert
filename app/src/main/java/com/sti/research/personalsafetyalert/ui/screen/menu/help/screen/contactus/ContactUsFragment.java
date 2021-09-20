@@ -92,6 +92,10 @@ public class ContactUsFragment extends DaggerFragment {
             viewModel.setScreenshotSlot(ScreenshotSlot.SLOT_THREE);
         });
 
+        binding.contactUsNotWorking.setOnClickListener(v -> {
+            hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_contact_us_to_not_working));
+        });
+
     }
 
     @SuppressWarnings("deprecation")

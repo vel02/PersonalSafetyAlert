@@ -15,6 +15,10 @@
 
 package com.sti.research.personalsafetyalert.util.api;
 
+import static com.sti.research.personalsafetyalert.util.Constants.*;
+
+import com.sti.research.personalsafetyalert.util.Constants;
+
 import java.util.List;
 import java.util.Properties;
 
@@ -37,8 +41,8 @@ import javax.mail.internet.MimeMultipart;
 
 public class EmailManager {
 
-    private static final String email = "personal.safety.alert.bot@gmail.com";
-    private static final String password = "sphhknjqkmtyvzcm";//"jpflvwtjeawbmfeo";
+//    private static final String email = "personal.safety.alert.bot@gmail.com";
+//    private static final String password = "sphhknjqkmtyvzcm";//"jpflvwtjeawbmfeo";
 
     private MimeMessage message;
     private MimeBodyPart bodyPart;
@@ -76,7 +80,9 @@ public class EmailManager {
         return Session.getDefaultInstance(getProperties(), new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(email, password);
+                return new PasswordAuthentication(
+                        MessagingManager.EMAIL_HOST,
+                        MessagingManager.EMAIL_PASSWORD);
             }
         });
     }
@@ -84,7 +90,7 @@ public class EmailManager {
     public void from() throws MessagingException {
         Session session = getSessionDefaultInstance();
         message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(email));
+        message.setFrom(new InternetAddress(MessagingManager.EMAIL_HOST));
     }
 
     public void recipients(String recipients) throws MessagingException {

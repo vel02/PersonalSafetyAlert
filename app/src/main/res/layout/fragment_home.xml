@@ -125,12 +125,13 @@
                             android:textColor="@color/text_color_black_900" />
 
                         <TextView
-                            android:id="@+id/home_message_text"
+                            android:id="@+id/home_message_display"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
+                            android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="@string/txt_sample_text_02" />
+                            android:text="@string/txt_sample_text_00" />
 
                     </LinearLayout>
 
@@ -223,13 +224,15 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="16dp"
                         android:background="?attr/selectableItemBackground"
+                        android:descendantFocusability="beforeDescendants"
+                        android:focusableInTouchMode="true"
                         android:overScrollMode="never"
                         android:scrollbars="none"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView"
-                        tools:listitem="@layout/item_message_text" />
+                        tools:listitem="@layout/item_message" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -238,4 +241,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+
 </layout>

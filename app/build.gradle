@@ -14,6 +14,15 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation":"$projectDir/schemas".toString(),
+                        "room.incremental":"true",
+                        "room.expandProjection":"true"]
+            }
+        }
     }
 
     buildTypes {
@@ -90,5 +99,15 @@ dependencies {
     def circle_imv = "3.1.0"
     implementation "de.hdodenhof:circleimageview:$circle_imv"
     //reference: https://github.com/hdodenhof/CircleImageView
+
+    def room_version = "2.3.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    //reference: https://developer.android.com/jetpack/androidx/releases/room#java
+
+    def rx_version = "3.0.0"
+    implementation "io.reactivex.rxjava3:rxandroid:$rx_version"
+    implementation "io.reactivex.rxjava3:rxjava:3.0.4"
+    //reference: https://github.com/ReactiveX/rxandroid
 
 }

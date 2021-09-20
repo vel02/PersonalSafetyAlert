@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
@@ -22,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +30,10 @@ import android.view.Window;
 import com.google.android.material.snackbar.Snackbar;
 import com.sti.research.personalsafetyalert.BuildConfig;
 import com.sti.research.personalsafetyalert.R;
+import com.sti.research.personalsafetyalert.adapter.view.MessageRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.ActivityMainBinding;
+import com.sti.research.personalsafetyalert.model.Message;
+import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.notworking.NotWorkingActivity;
@@ -46,9 +49,19 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class MainActivity extends DaggerAppCompatActivity implements HostScreen, NavigatePermission {
+public class MainActivity extends DaggerAppCompatActivity implements HostScreen, NavigatePermission,
+        MessageRecyclerAdapter.OnMessageClickListener {
 
     private static final String TAG = "test";
+
+    @Override
+    public void onMessageResult(Message message) {
+        assert navHostFragment != null;
+        if ((navHostFragment.getChildFragmentManager().getFragments().get(0) instanceof HomeFragment)) {
+            HomeFragment fragment = (HomeFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+            fragment.onMessageDataReceiver(message);
+        }
+    }
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -56,6 +69,7 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
     private ActivityMainBinding binding;
     private MainViewModel viewModel;
 
+    private NavHostFragment navHostFragment;
     private NavController navController;
 
     private void getIntentObject() {
@@ -87,7 +101,7 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
     }
 
     private void initController() {
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
         Toolbar toolbar = binding.toolbar;
@@ -403,7 +417,6 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
 
     @Override
     public void onBackPressed() {
-        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         if (!(navHostFragment.getChildFragmentManager().getFragments().get(0) instanceof PermissionFragment)) {
             super.onBackPressed();

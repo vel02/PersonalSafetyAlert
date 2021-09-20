@@ -106,6 +106,9 @@ public class HelpActivity extends DaggerAppCompatActivity implements HostScreen 
             case "tag_fragment_contact_us_to_help":
                 directions = ContactUsFragmentDirections.actionNavContactUsToNavHelp();
                 break;
+            case "tag_fragment_contact_us_to_not_working":
+                directions = ContactUsFragmentDirections.actionNavContactUsToNavNotWorking();
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + screen);
         }

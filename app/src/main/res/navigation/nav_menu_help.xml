@@ -69,6 +69,13 @@
             app:popExitAnim="@anim/fade_out"
             app:popUpTo="@id/nav_help"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_nav_contact_us_to_nav_not_working"
+            app:destination="@id/nav_not_working"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
 
 

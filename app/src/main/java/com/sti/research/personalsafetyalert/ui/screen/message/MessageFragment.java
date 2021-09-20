@@ -1,5 +1,7 @@
 package com.sti.research.personalsafetyalert.ui.screen.message;
 
+import static com.sti.research.personalsafetyalert.util.Utility.*;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,7 +16,9 @@ import android.view.ViewGroup;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentMessageBinding;
+import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
+import com.sti.research.personalsafetyalert.util.Utility;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import javax.inject.Inject;
@@ -57,6 +61,12 @@ public class MessageFragment extends DaggerFragment {
         });
 
         binding.messageDone.setOnClickListener(v -> {
+            final String content = binding.messageEditCustomMessage.getText().toString();
+            if (isNotEmpty(content)) {
+                Message message = new Message();
+                message.setMessage(content);
+                viewModel.insertMessageDatabase(message);
+            }
             hostScreen.onInflate(v, getString(R.string.tag_fragment_message_to_home));
         });
     }

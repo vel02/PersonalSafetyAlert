@@ -26,6 +26,7 @@ import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.MainActivity;
 import com.sti.research.personalsafetyalert.ui.splash.SplashActivity;
 import com.sti.research.personalsafetyalert.util.Constants;
+import com.sti.research.personalsafetyalert.util.screen.home.HomeInitialMessage;
 import com.sti.research.personalsafetyalert.util.screen.splash.SplashNavigationPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
@@ -93,6 +94,7 @@ public class WelcomeActivity extends DaggerAppCompatActivity implements HostScre
             startActivity(intent, options.toBundle());
             finishAfterTransition();
             SplashNavigationPreference.getInstance().setSplashNavigationStateState(this, true);
+            HomeInitialMessage.getInstance().setInitializeMessagesState(this, true);
         }
     }
 }
