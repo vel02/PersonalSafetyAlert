@@ -42,14 +42,24 @@ public class Utility {
         private Popup() {
         }
 
-        public static void message(View view, CharSequence message) {
+        public static void messageWithAction(View view, CharSequence message) {
             Resources resources = view.getResources();
             Snackbar.make(view, message,
                     Snackbar.LENGTH_INDEFINITE)
-                    .setBackgroundTint(resources.getColor(R.color.primaryLight))
-                    .setActionTextColor(resources.getColor(R.color.primaryDark))
+                    .setBackgroundTint(resources.getColor(R.color.primarySecondary))
+                    .setTextColor(resources.getColor(R.color.text_color_white))
+                    .setActionTextColor(resources.getColor(R.color.text_color_white))
                     .setAction(R.string.txt_hide, v -> {
                     }).show();
+        }
+
+        public static void message(View view, CharSequence message) {
+            Resources resources = view.getResources();
+            Snackbar.make(view, message,
+                    Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(resources.getColor(R.color.primarySecondary))
+                    .setTextColor(resources.getColor(R.color.text_color_white))
+                    .show();
         }
     }
 

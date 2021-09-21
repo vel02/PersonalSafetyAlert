@@ -1,5 +1,7 @@
 package com.sti.research.personalsafetyalert.ui.screen.visual;
 
+import static com.sti.research.personalsafetyalert.util.Utility.*;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentVisualMessageBinding;
+import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.util.screen.visual.EditTextTextWatcher;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
@@ -32,6 +35,8 @@ public class VisualMessageFragment extends DaggerFragment {
 
     private HostScreen hostScreen;
 
+    private String message;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,13 +53,29 @@ public class VisualMessageFragment extends DaggerFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(VisualMessageFragmentViewModel.class);
         navigate();
+
+        if (message != null && isNotEmpty(message))
+            binding.visualEditCustomMessage.setText(message);
     }
 
     private void navigate() {
-        binding.visualDone.setOnClickListener(v ->
-                hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_visual_to_home)));
+        binding.visualDone.setOnClickListener(v -> {
+            String content = binding.visualEditCustomMessage.getText().toString();
+            saveNewMessage(content);
+            hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_visual_to_home));
+        });
 
         binding.visualEditCustomMessage.addTextChangedListener(new EditTextTextWatcher(binding.visualDisplayCustomMessage));
+    }
+
+    private void saveNewMessage(String content) {
+        if (isNotEmpty(content) && !content.equals(viewModel.getCurrentSelectedMessage())) {
+            Message message = new Message();
+            message.setMessage(content);
+            message.setTimestamp(String.valueOf(getCurrentTimeAndDateInMillis()));
+            Popup.message(requireView(), "Message Saved!");
+            viewModel.insertMessage(message);
+        }
     }
 
     @Override
@@ -67,6 +88,8 @@ public class VisualMessageFragment extends DaggerFragment {
                     + " must implement HostScreen interface.");
         }
         hostScreen = (HostScreen) activity;
+
+        message = VisualMessageFragmentArgs.fromBundle(getArguments()).getMessage();
     }
 
     @Override

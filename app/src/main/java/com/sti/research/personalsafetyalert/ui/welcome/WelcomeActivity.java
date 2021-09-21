@@ -92,7 +92,6 @@ public class WelcomeActivity extends DaggerAppCompatActivity implements HostScre
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(KEY_ANIM_TYPE, Constants.TransitionType.Fade);
             startActivity(intent, options.toBundle());
-            finishAfterTransition();
             SplashNavigationPreference.getInstance().setSplashNavigationStateState(this, true);
             HomeInitialMessage.getInstance().setInitializeMessagesState(this, true);
         }

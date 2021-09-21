@@ -56,6 +56,8 @@ public class MessageFragment extends DaggerFragment {
 
     private void navigate() {
         binding.cardVisualMessage.setOnClickListener(v -> {
+            String content = binding.messageEditCustomMessage.getText().toString();
+            viewModel.setAddMessage(content);
             hostScreen.onInflate(v, getString(R.string.tag_fragment_message_to_visual));
             binding.messageEditCustomMessage.clearFocus();
         });
@@ -65,6 +67,8 @@ public class MessageFragment extends DaggerFragment {
             if (isNotEmpty(content)) {
                 Message message = new Message();
                 message.setMessage(content);
+                message.setTimestamp(String.valueOf(Utility.getCurrentTimeAndDateInMillis()));
+                Popup.message(requireView(), "Message Saved!");
                 viewModel.insertMessageDatabase(message);
             }
             hostScreen.onInflate(v, getString(R.string.tag_fragment_message_to_home));

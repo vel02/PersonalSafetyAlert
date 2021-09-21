@@ -38,7 +38,7 @@ public class SplashActivity extends DaggerAppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(KEY_ANIM_TYPE, Constants.TransitionType.Fade);
                 startActivity(intent, options.toBundle());
-                finishAfterTransition();
+
             }, SPLASH_DISPLAY_LENGTH);
 
         } else {
@@ -48,7 +48,7 @@ public class SplashActivity extends DaggerAppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(KEY_ANIM_TYPE, Constants.TransitionType.Fade);
                 startActivity(intent, options.toBundle());
-                finishAfterTransition();
+
             }, SPLASH_DISPLAY_LENGTH);
         }
     }

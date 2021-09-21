@@ -2,8 +2,6 @@ package com.sti.research.personalsafetyalert.ui.screen.home;
 
 import static com.sti.research.personalsafetyalert.util.Utility.*;
 
-import static java.util.Comparator.comparing;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -32,6 +30,7 @@ import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.NavigatePermission;
 import com.sti.research.personalsafetyalert.util.MessageComparator;
 import com.sti.research.personalsafetyalert.util.Support;
+import com.sti.research.personalsafetyalert.util.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeInitialMessage;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
@@ -77,7 +76,6 @@ public class HomeFragment extends DaggerFragment {
         configureActionBarTitle();
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(HomeFragmentViewModel.class);
         binding.setPopupListener(this::clearAllPopup);
-        viewModel.loadMessagesDatabase();
 
         navigate();
         navigateWithGestureDetector();
@@ -109,18 +107,11 @@ public class HomeFragment extends DaggerFragment {
         viewModel.observedMessages().observe(getViewLifecycleOwner(), messages -> {
             if (messages != null) {
                 adapter.refresh(messages);
-
-                for (int i = 0; i < messages.size(); i++) {
-                    Message message = messages.get(i);
-                    Log.d(TAG, "message: " + message.getMessage() + " " + message.getTimestamp());
-                }
-
                 Collections.sort(messages, new MessageComparator());
                 if (messages.size() > 0) {
                     Message message = messages.get(messages.size() - 1);
                     binding.homeMessageDisplay.setText(message.getMessage());
                 }
-
             }
         });
 
@@ -144,6 +135,12 @@ public class HomeFragment extends DaggerFragment {
                     break;
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.loadMessagesDatabase();
     }
 
     @Override
@@ -184,7 +181,7 @@ public class HomeFragment extends DaggerFragment {
                     @Override
                     public void onLongPress(MotionEvent e) {
                         super.onLongPress(e);
-                        Popup.message(requireView(), getString(R.string.desc_long_press_contact));
+                        Popup.messageWithAction(requireView(), getString(R.string.desc_long_press_contact));
                     }
                 });
 
@@ -200,7 +197,7 @@ public class HomeFragment extends DaggerFragment {
                     @Override
                     public void onLongPress(MotionEvent e) {
                         super.onLongPress(e);
-                        Popup.message(requireView(), getString(R.string.desc_long_press_edit_message));
+                        Popup.messageWithAction(requireView(), getString(R.string.desc_long_press_edit_message));
                     }
                 });
 
@@ -209,6 +206,7 @@ public class HomeFragment extends DaggerFragment {
 
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
+                        viewModel.setSelectedMessage(binding.homeMessageDisplay.getText().toString());
                         hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_visual_message));
                         return true;
                     }
@@ -216,7 +214,7 @@ public class HomeFragment extends DaggerFragment {
                     @Override
                     public void onLongPress(MotionEvent e) {
                         super.onLongPress(e);
-                        Popup.message(requireView(), getString(R.string.desc_long_press_visual_message));
+                        Popup.messageWithAction(requireView(), getString(R.string.desc_long_press_visual_message));
                     }
                 });
 
@@ -245,9 +243,14 @@ public class HomeFragment extends DaggerFragment {
         popup.inflate(R.menu.menu_popup_more);
         popup.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_clear_all) {
-                Bubble.message(requireActivity(), "Clear All");
                 viewModel.deleteAll();
-                viewModel.loadMessagesDatabase();
+                new WaitResultManager(
+                        WaitResultManager.WAIT_LONG,
+                        WaitResultManager.WAIT_INTERVAL, () -> {
+                    binding.homeMessageDisplay.setText(R.string.txt_sample_text_00);
+                    viewModel.setSelectedMessage("");
+                    viewModel.loadMessagesDatabase();
+                }).start();
                 return true;
             }
             return false;

@@ -10,6 +10,7 @@ import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository.RequiredPermissionsState;
 import com.sti.research.personalsafetyalert.repository.database.MessageRepository;
+import com.sti.research.personalsafetyalert.repository.share.MainSharedRepository;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
 
 import java.util.List;
@@ -22,16 +23,28 @@ public class HomeFragmentViewModel extends ViewModel {
     private final MutableLiveData<Message> message;
 
     private final Application application;
-    private final PermissionRepository repository;
-    private final MessageRepository databaseRepo;
+    private final PermissionRepository permissionRepository;
+    private final MessageRepository messageRepository;
+    private final MainSharedRepository sharedRepository;
+
 
     @Inject
-    public HomeFragmentViewModel(Application application, PermissionRepository repository, MessageRepository databaseRepo) {
+    public HomeFragmentViewModel(Application application,
+                                 PermissionRepository permissionRepository,
+                                 MessageRepository messageRepository,
+                                 MainSharedRepository sharedRepository) {
         this.application = application;
-        this.repository = repository;
-        this.databaseRepo = databaseRepo;
+        this.permissionRepository = permissionRepository;
+        this.messageRepository = messageRepository;
+        this.sharedRepository = sharedRepository;
         this.alertChecked = new MutableLiveData<>();
         this.message = new MutableLiveData<>();
+    }
+
+    //############# Main Shared Repository #############
+
+    public void setSelectedMessage(String message) {
+        this.sharedRepository.setSelectedMessage(message);
     }
 
     //############# Message Database Repository #############
@@ -47,37 +60,37 @@ public class HomeFragmentViewModel extends ViewModel {
     //############# Message Database Repository #############
 
     public void loadMessagesDatabase() {
-        this.databaseRepo.select();
+        this.messageRepository.select();
     }
 
     public void insert(Message message) {
-        this.databaseRepo.insert(message);
+        this.messageRepository.insert(message);
     }
 
     public void insert(List<Message> messages) {
-        this.databaseRepo.insert(messages);
+        this.messageRepository.insert(messages);
     }
 
     public void update(Message message) {
-        this.databaseRepo.update(message);
+        this.messageRepository.update(message);
     }
 
     public void deleteAll() {
-        this.databaseRepo.deleteAll();
+        this.messageRepository.deleteAll();
     }
 
     public LiveData<List<Message>> observedMessages() {
-        return this.databaseRepo.observedMessages();
+        return this.messageRepository.observedMessages();
     }
 
     //############# Permission Required State #############
 
     public void setPermissionRequiredState(RequiredPermissionsState state) {
-        this.repository.setPermissionsRequiredStatus(state);
+        this.permissionRepository.setPermissionsRequiredStatus(state);
     }
 
     public LiveData<RequiredPermissionsState> observedPermissionRequiredState() {
-        return this.repository.observedPermissionRequiredState();
+        return this.permissionRepository.observedPermissionRequiredState();
     }
 
     public void setAlertChecked(boolean checked) {

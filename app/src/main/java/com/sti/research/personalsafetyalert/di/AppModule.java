@@ -8,6 +8,7 @@ import com.sti.research.personalsafetyalert.persistence.MessageDatabase;
 import com.sti.research.personalsafetyalert.repository.MessagingRepository;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;
 import com.sti.research.personalsafetyalert.repository.database.MessageRepository;
+import com.sti.research.personalsafetyalert.repository.share.MainSharedRepository;
 
 import javax.inject.Singleton;
 
@@ -27,6 +28,12 @@ public class AppModule {
     @Provides
     static MessagingRepository provideMessagingRepository() {
         return new MessagingRepository();
+    }
+
+    @Singleton
+    @Provides
+    static MainSharedRepository provideMainSharedRepository() {
+        return new MainSharedRepository();
     }
 
     @Singleton

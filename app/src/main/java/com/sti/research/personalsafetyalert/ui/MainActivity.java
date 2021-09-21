@@ -165,6 +165,7 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
     public void onInflate(View view, String screen) {
 
         NavDirections directions;
+        final String content;
 
         switch (screen) {
             case "tag_fragment_contact":
@@ -176,11 +177,13 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
                 break;
 
             case "tag_fragment_visual_message":
-                directions = HomeFragmentDirections.actionNavHomeToNavVisualMessage();
+                content = viewModel.getSelectedMessage();
+                directions = HomeFragmentDirections.actionNavHomeToNavVisualMessage(content);
                 break;
 
             case "tag_fragment_message_to_visual":
-                directions = MessageFragmentDirections.actionNavMessageToNavVisualMessage();
+                content = viewModel.getAddMessage();
+                directions = MessageFragmentDirections.actionNavMessageToNavVisualMessage(content);
                 break;
 
             case "tag_fragment_message_to_home":
