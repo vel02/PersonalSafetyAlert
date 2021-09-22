@@ -110,4 +110,7 @@ dependencies {
     implementation "io.reactivex.rxjava3:rxjava:3.0.4"
     //reference: https://github.com/ReactiveX/rxandroid
 
+    implementation 'com.google.code.gson:gson:2.8.8'
+    //reference: https://github.com/google/gson
+
 }

@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.sti.research.personalsafetyalert.model.Contact;
+import com.sti.research.personalsafetyalert.repository.share.MainSharedRepository;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactMessageToPreference;
 
 import javax.inject.Inject;
@@ -13,13 +15,27 @@ import javax.inject.Inject;
 public class ContactFragmentViewModel extends ViewModel {
 
     private final MutableLiveData<String> radioSelected;
+    private final MainSharedRepository sharedRepository;
 
     private final Application application;
 
     @Inject
-    public ContactFragmentViewModel(Application application) {
+    public ContactFragmentViewModel(Application application, MainSharedRepository sharedRepository) {
         this.application = application;
+        this.sharedRepository = sharedRepository;
         this.radioSelected = new MutableLiveData<>();
+    }
+
+    public void setContactSinglePerson(Contact contact) {
+        this.sharedRepository.setContactSinglePerson(contact);
+    }
+
+    public Contact getContactSinglePerson() {
+        return this.sharedRepository.getContactSinglePerson();
+    }
+
+    public LiveData<Contact> observedContactSinglePerson() {
+        return this.sharedRepository.observedContactSinglePerson();
     }
 
     public void setRadioSelected(String selected) {
