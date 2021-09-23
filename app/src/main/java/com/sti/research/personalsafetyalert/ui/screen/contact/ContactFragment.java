@@ -3,10 +3,13 @@ package com.sti.research.personalsafetyalert.ui.screen.contact;
 import static com.sti.research.personalsafetyalert.util.Utility.*;
 import static com.sti.research.personalsafetyalert.util.Utility.isNotEmpty;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Patterns;
@@ -18,7 +21,9 @@ import android.widget.RadioButton;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentContactBinding;
 import com.sti.research.personalsafetyalert.model.Contact;
+import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.util.Utility;
+import com.sti.research.personalsafetyalert.util.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactMessageToPreference;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
@@ -35,6 +40,8 @@ public class ContactFragment extends DaggerFragment {
     private FragmentContactBinding binding;
     private ContactFragmentViewModel viewModel;
 
+    private HostScreen hostScreen;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +57,7 @@ public class ContactFragment extends DaggerFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(ContactFragmentViewModel.class);
+        binding.setPopupListener(this::clearAllPopup);
         navigate();
         initRadioButtonBehavior();
         subscribeObservers();
@@ -69,11 +77,11 @@ public class ContactFragment extends DaggerFragment {
         viewModel.observedRadioSelected().removeObservers(getViewLifecycleOwner());
         viewModel.observedRadioSelected().observe(getViewLifecycleOwner(), selected -> {
             switch (selected) {
-                case "Single person":
+                case "Send to one specific contact":
                     binding.contactSinglePerson.setVisibility(View.VISIBLE);
                     binding.contactContactListCard.setVisibility(View.GONE);
                     break;
-                case "Contact list":
+                case "Send to list of contacts":
                     binding.contactSinglePerson.setVisibility(View.GONE);
                     binding.contactContactListCard.setVisibility(View.VISIBLE);
                     break;
@@ -125,8 +133,11 @@ public class ContactFragment extends DaggerFragment {
         binding.contactEdit.setOnClickListener(v -> {
             if (binding.contactConfirm.getVisibility() == View.GONE) {
                 this.editBehavior();
-                viewModel.setContactSinglePerson(new Contact());
             }
+        });
+
+        binding.contactAddContact.setOnClickListener(v -> {
+            hostScreen.onInflate(v, getString(R.string.tag_fragment_contact_to_add_contact));
         });
     }
 
@@ -140,6 +151,37 @@ public class ContactFragment extends DaggerFragment {
         } else if (binding.contactRadioContactList.isSelected()) {
             viewModel.setRadioSelected(getString(R.string.txt_contact_list));
         }
+    }
+
+    private void clearAllPopup(View view) {
+        PopupMenu popup = new PopupMenu(requireActivity(), view);
+        popup.inflate(R.menu.menu_popup_more);
+        popup.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_clear_all) {
+                Bubble.message(requireActivity(), "Clear All!");
+                return true;
+            }
+            return false;
+        });
+        popup.show();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity = getActivity();
+        if (!(activity instanceof HostScreen)) {
+            assert activity != null;
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement HostScreen interface.");
+        }
+        hostScreen = (HostScreen) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        hostScreen = null;
     }
 
     public String formatPhoneNumber(String number) {

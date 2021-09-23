@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="popupListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <LinearLayout
@@ -288,6 +292,7 @@
                             android:layout_height="wrap_content">
 
                             <TextView
+                                android:id="@+id/textView2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/txt_contact_list"
@@ -298,17 +303,33 @@
                                 tools:ignore="RelativeOverlap" />
 
                             <ImageView
-                                android:id="@+id/imv_add_contact"
+                                android:id="@+id/contact_popup_menu"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
                                 android:contentDescription="@string/desc_add_contact"
                                 android:focusable="true"
-                                android:src="@drawable/ic_add"
+                                android:onClick="@{(v) -> popupListener.onClick(v)}"
+                                android:src="@drawable/ic_menu_more"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/contact_add_contact"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:clickable="true"
+                                android:contentDescription="@string/desc_add_contact"
+                                android:focusable="true"
+                                android:src="@drawable/ic_add_contact"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/contact_popup_menu"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="1.0" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 

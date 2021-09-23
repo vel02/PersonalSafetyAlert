@@ -4,13 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_add.xml" value="0.2203125" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_add_contact.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_check.xml" value="0.2203125" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_clear.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_email.xml" value="0.20833333333333334" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_help.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_holder.xml" value="0.1814814814814815" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_info.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_location.xml" value="0.1814814814814815" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_location_holder.xml" value="0.215625" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_menu_more.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_mobile_phone.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_navigate_next.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_navigate_previous.xml" value="0.2203125" />
@@ -56,6 +59,7 @@
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/activity_settings.xml" value="0.1" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/activity_splash.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/activity_welcome.xml" value="0.18" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_add_contact.xml" value="0.20416666666666666" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_contact.xml" value="0.33" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_contact_us.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_help.xml" value="0.33" />

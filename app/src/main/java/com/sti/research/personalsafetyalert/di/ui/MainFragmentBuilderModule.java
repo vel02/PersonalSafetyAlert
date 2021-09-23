@@ -2,6 +2,8 @@ package com.sti.research.personalsafetyalert.di.ui;
 
 import com.sti.research.personalsafetyalert.di.ui.screen.contact.ContactScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.contact.ContactScreenViewModelModule;
+import com.sti.research.personalsafetyalert.di.ui.screen.contact.add.AddContactScreenScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.contact.add.AddContactScreenViewModelModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.home.HomeScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.home.HomeScreenViewModelModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.message.MessageScreenScope;
@@ -11,6 +13,8 @@ import com.sti.research.personalsafetyalert.di.ui.screen.permission.PermissionSc
 import com.sti.research.personalsafetyalert.di.ui.screen.visual.VisualMessageScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.visual.VisualMessageScreenViewModelModule;
 import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragment;
+import com.sti.research.personalsafetyalert.ui.screen.contact.add.AddContactFragment;
+import com.sti.research.personalsafetyalert.ui.screen.contact.add.AddContactFragmentViewModel;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
 import com.sti.research.personalsafetyalert.ui.screen.message.MessageFragment;
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragment;
@@ -29,6 +33,10 @@ public abstract class MainFragmentBuilderModule {
     @ContactScreenScope
     @ContributesAndroidInjector(modules = {ContactScreenViewModelModule.class})
     abstract ContactFragment contributeContactFragment();
+
+    @AddContactScreenScope
+    @ContributesAndroidInjector(modules = {AddContactScreenViewModelModule.class})
+    abstract AddContactFragment contributeAddContactFragment();
 
     @MessageScreenScope
     @ContributesAndroidInjector(modules = {MessageScreenViewModelModule.class})

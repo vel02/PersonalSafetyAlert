@@ -44,7 +44,15 @@
         android:id="@+id/nav_contact"
         android:name="com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragment"
         android:label="Contact"
-        tools:layout="@layout/fragment_contact" />
+        tools:layout="@layout/fragment_contact">
+        <action
+            android:id="@+id/action_nav_contact_to_addContactFragment"
+            app:destination="@id/nav_add_contact"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_message"
@@ -103,5 +111,11 @@
             app:popUpTo="@id/nav_home"
             app:popUpToInclusive="true" />
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_add_contact"
+        android:name="com.sti.research.personalsafetyalert.ui.screen.contact.add.AddContactFragment"
+        android:label="Add Contact"
+        tools:layout="@layout/fragment_add_contact" />
 
 </navigation>

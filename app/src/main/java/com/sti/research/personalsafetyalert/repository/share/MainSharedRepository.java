@@ -13,25 +13,11 @@ public class MainSharedRepository {
 
     private final MutableLiveData<String> selectedMessage;
     private final MutableLiveData<String> addMessage;
-    private final MutableLiveData<Contact> contactSinglePerson;
 
     @Inject
     public MainSharedRepository() {
         this.selectedMessage = new MutableLiveData<>();
         this.addMessage = new MutableLiveData<>();
-        this.contactSinglePerson = new MutableLiveData<>();
-    }
-
-    public void setContactSinglePerson(Contact contact) {
-        this.contactSinglePerson.setValue(contact);
-    }
-
-    public Contact getContactSinglePerson() {
-        return this.contactSinglePerson.getValue();
-    }
-
-    public LiveData<Contact> observedContactSinglePerson() {
-        return this.contactSinglePerson;
     }
 
     public void setAddMessage(String message) {

@@ -26,18 +26,6 @@ public class ContactFragmentViewModel extends ViewModel {
         this.radioSelected = new MutableLiveData<>();
     }
 
-    public void setContactSinglePerson(Contact contact) {
-        this.sharedRepository.setContactSinglePerson(contact);
-    }
-
-    public Contact getContactSinglePerson() {
-        return this.sharedRepository.getContactSinglePerson();
-    }
-
-    public LiveData<Contact> observedContactSinglePerson() {
-        return this.sharedRepository.observedContactSinglePerson();
-    }
-
     public void setRadioSelected(String selected) {
         this.radioSelected.setValue(selected);
         ContactMessageToPreference.getInstance().setMessageToRadioSelectState(application, selected);
