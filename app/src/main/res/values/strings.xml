@@ -65,7 +65,7 @@
     <string name="tag_fragment_visual_to_home">tag_fragment_visual_to_home</string>
     <string name="desc_add_contact">Add contact from contact list</string>
     <string name="txt_single_person">Send to one specific contact</string>
-    <string name="txt_contact_list">Send to list of contacts</string>
+    <string name="txt_contact_list">Send to this list of contacts</string>
     <string name="txt_message_to">Message to</string>
     <string name="txt_confirm">Confirm</string>
     <string name="txt_mobile_number">Mobile number</string>
@@ -129,6 +129,15 @@
     <string name="tag_fragment_contact_us_to_not_working">tag_fragment_contact_us_to_not_working</string>
     <string name="txt_edit">Edit</string>
     <string name="tag_fragment_contact_to_add_contact">tag_fragment_contact_to_add_contact</string>
+    <string name="desc_contact_person_logo">Contact person logo</string>
+    <string name="desc_contact_phone_number_logo">Contact phone number logo</string>
+    <string name="txt_name">Name</string>
+    <string name="txt_mobile">Mobile</string>
+    <string name="txt_phone_number">Phone number</string>
+    <string name="txt_email_address">Email address</string>
+    <string name="txt_new_contact">New Contact</string>
+    <string name="desc_new_contact">This contact will be added to your list of person who\'ll received an emergency message.</string>
+    <string name="tag_fragment_add_contact_to_contact">tag_fragment_add_contact_to_contact</string>
 
 
 </resources>

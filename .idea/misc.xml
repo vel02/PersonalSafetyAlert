@@ -44,6 +44,7 @@
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/edt_border_color.xml" value="0.21481481481481482" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/edt_cursor_color.xml" value="0.21481481481481482" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/edt_cursor_color_primary.xml" value="0.2203125" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/edt_underline_color.xml" value="0.18333333333333332" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/ic_add_image.xml" value="0.20833333333333334" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/logo_location.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable/switch_thumb_selector_color.xml" value="0.1398148148148148" />
@@ -59,7 +60,7 @@
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/activity_settings.xml" value="0.1" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/activity_splash.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/activity_welcome.xml" value="0.18" />
-        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_add_contact.xml" value="0.20416666666666666" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_add_contact.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_contact.xml" value="0.33" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_contact_us.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_help.xml" value="0.33" />

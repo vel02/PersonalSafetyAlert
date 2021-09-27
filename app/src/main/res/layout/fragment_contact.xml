@@ -23,10 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/header_height_default"
             android:background="@color/background_header_default"
-            android:padding="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:padding="16dp">
 
             <TextView
                 android:layout_width="0dp"

@@ -34,6 +34,7 @@ import com.sti.research.personalsafetyalert.adapter.view.MessageRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.ActivityMainBinding;
 import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragmentDirections;
+import com.sti.research.personalsafetyalert.ui.screen.contact.add.AddContactFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
@@ -205,6 +206,10 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
 
             case "tag_fragment_contact_to_add_contact":
                 directions = ContactFragmentDirections.actionNavContactToAddContactFragment();
+                break;
+
+            case "tag_fragment_add_contact_to_contact":
+                directions = AddContactFragmentDirections.actionNavAddContactToNavContact();
                 break;
 
             default:

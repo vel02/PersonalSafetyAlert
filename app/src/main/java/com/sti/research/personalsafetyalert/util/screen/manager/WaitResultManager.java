@@ -1,4 +1,4 @@
-package com.sti.research.personalsafetyalert.util;
+package com.sti.research.personalsafetyalert.util.screen.manager;
 
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -26,10 +26,10 @@ public class WaitResultManager extends CountDownTimer {
 
     @Override
     public void onFinish() {
-        listener.onResendSms();
+        listener.onFinished();
     }
 
     public interface WaitResultReceiverListener {
-        void onResendSms();
+        void onFinished();
     }
 }

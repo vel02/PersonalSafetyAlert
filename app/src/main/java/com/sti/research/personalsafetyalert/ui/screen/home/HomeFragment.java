@@ -30,7 +30,7 @@ import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.NavigatePermission;
 import com.sti.research.personalsafetyalert.util.MessageComparator;
 import com.sti.research.personalsafetyalert.util.Support;
-import com.sti.research.personalsafetyalert.util.WaitResultManager;
+import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeInitialMessage;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;

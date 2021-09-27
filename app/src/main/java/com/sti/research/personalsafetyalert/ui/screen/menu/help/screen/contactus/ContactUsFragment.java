@@ -172,7 +172,7 @@ public class ContactUsFragment extends DaggerFragment {
             if (!TextUtils.isEmpty(binding.contactUsMessage.getText())) {
                 this.sendUserConcern();
                 hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_contact_us_to_help));
-            } else Bubble.message(requireActivity(),
+            } else Popup.message(requireView(),
                     "Please give as a clear detail of your concerns.");
             return true;
         }
