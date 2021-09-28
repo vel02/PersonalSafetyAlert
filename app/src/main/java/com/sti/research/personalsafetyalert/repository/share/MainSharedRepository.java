@@ -1,9 +1,6 @@
 package com.sti.research.personalsafetyalert.repository.share;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
-import com.sti.research.personalsafetyalert.model.Contact;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

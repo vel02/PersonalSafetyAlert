@@ -20,7 +20,7 @@ import android.widget.RadioButton;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentContactBinding;
-import com.sti.research.personalsafetyalert.model.Contact;
+import com.sti.research.personalsafetyalert.model.single.Contact;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactMessageToPreference;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
@@ -106,7 +106,7 @@ public class ContactFragment extends DaggerFragment {
                 Popup.message(requireView(), "Using SMS feature required valid number and email. " +
                         "Please, consider registering a valid contact.");
             } else {
-                if (contentNumber.isEmpty() || (!contentNumber.startsWith("0") || contentNumber.length() < 11)) {
+                if (contentNumber.isEmpty() || (!contentNumber.startsWith("09") || contentNumber.length() < 11)) {
                     Popup.message(requireView(), "Using SMS feature required valid number and email. " +
                             "Please, consider registering a valid contact.");
                 } else number = contentNumber;

@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.sti.research.personalsafetyalert.model.Contact;
 import com.sti.research.personalsafetyalert.repository.share.MainSharedRepository;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactMessageToPreference;
 

@@ -1,4 +1,4 @@
-package com.sti.research.personalsafetyalert.model;
+package com.sti.research.personalsafetyalert.model.single;
 
 import android.os.Parcel;
 import android.os.Parcelable;
