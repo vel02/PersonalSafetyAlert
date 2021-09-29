@@ -1,9 +1,9 @@
-package com.sti.research.personalsafetyalert.persistence.executor;
+package com.sti.research.personalsafetyalert.persistence.message.executor;
 
 import android.util.Log;
 
 import com.sti.research.personalsafetyalert.model.Message;
-import com.sti.research.personalsafetyalert.persistence.MessageDatabase;
+import com.sti.research.personalsafetyalert.persistence.message.MessageDatabase;
 
 import java.util.List;
 

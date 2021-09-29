@@ -1,6 +1,5 @@
-package com.sti.research.personalsafetyalert.adapter.view;
+package com.sti.research.personalsafetyalert.adapter.view.message;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;

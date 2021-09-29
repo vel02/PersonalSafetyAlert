@@ -1,4 +1,4 @@
-package com.sti.research.personalsafetyalert.persistence;
+package com.sti.research.personalsafetyalert.persistence.message;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

@@ -11,7 +11,7 @@
 
         <variable
             name="listener"
-            type="com.sti.research.personalsafetyalert.adapter.view.MessageRecyclerAdapter.OnMessageClickListener" />
+            type="com.sti.research.personalsafetyalert.adapter.view.message.MessageRecyclerAdapter.OnMessageClickListener" />
 
     </data>
 

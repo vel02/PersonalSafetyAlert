@@ -22,7 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sti.research.personalsafetyalert.R;
-import com.sti.research.personalsafetyalert.adapter.view.MessageRecyclerAdapter;
+import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.FragmentHomeBinding;
 import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;

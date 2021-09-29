@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
 import com.sti.research.personalsafetyalert.model.Message;
-import com.sti.research.personalsafetyalert.persistence.MessageDatabase;
-import com.sti.research.personalsafetyalert.persistence.executor.MessageExecutorDatabase;
+import com.sti.research.personalsafetyalert.persistence.message.MessageDatabase;
+import com.sti.research.personalsafetyalert.persistence.message.executor.MessageExecutorDatabase;
 
 import java.util.List;
 

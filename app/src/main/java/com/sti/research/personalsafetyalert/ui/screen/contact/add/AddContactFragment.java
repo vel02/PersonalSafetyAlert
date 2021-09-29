@@ -90,8 +90,8 @@ public class AddContactFragment extends DaggerFragment {
             contact.setEmail(contentEmail);
 
             //add to database
+            viewModel.insertContact(contact);
             Bubble.message(requireActivity(), contact.toString());
-
 
             resetUiBehavior();
             new WaitResultManager(WaitResultManager.WAIT_LONG, WaitResultManager.WAIT_INTERVAL, () -> {

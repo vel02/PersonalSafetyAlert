@@ -1,4 +1,4 @@
-package com.sti.research.personalsafetyalert.adapter.view;
+package com.sti.research.personalsafetyalert.adapter.view.message;
 
 import android.view.View;
 

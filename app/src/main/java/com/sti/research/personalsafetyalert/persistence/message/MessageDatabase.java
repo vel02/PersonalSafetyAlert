@@ -1,4 +1,4 @@
-package com.sti.research.personalsafetyalert.persistence;
+package com.sti.research.personalsafetyalert.persistence.message;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

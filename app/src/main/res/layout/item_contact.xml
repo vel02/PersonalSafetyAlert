@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="contact"
+            type="com.sti.research.personalsafetyalert.model.list.Contact" />
+
+        <variable
+            name="listener"
+            type="com.sti.research.personalsafetyalert.adapter.view.contact.ContactRecyclerAdapter.OnContactClickListener" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> listener.onContactResult(contact)}">
+
+        <TextView
+            android:id="@+id/item_contact_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@{contact.name}"
+            android:textColor="@color/black_800"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Ariel Namias Austria" />
+
+        <TextView
+            android:id="@+id/item_contact_network"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{contact.mobileNetwork}"
+            android:textAllCaps="true"
+            android:textColor="@color/primarySecondaryDark"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/item_contact_mobile_number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/item_contact_mobile_number"
+            tools:text="GLOBE" />
+
+        <TextView
+            android:id="@+id/item_contact_mobile_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:text="@{contact.mobileNumber}"
+            android:textColor="@color/black_800"
+            android:textStyle="italic"
+            app:layout_constraintStart_toEndOf="@+id/item_contact_network"
+            app:layout_constraintTop_toBottomOf="@id/item_contact_name"
+            tools:text="09166854596" />
+
+        <View
+            android:id="@+id/item_contact_divider_vertical"
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="8dp"
+            android:background="?android:attr/dividerVertical"
+            app:layout_constraintBottom_toBottomOf="@id/item_contact_mobile_number"
+            app:layout_constraintStart_toEndOf="@id/item_contact_mobile_number"
+            app:layout_constraintTop_toTopOf="@id/item_contact_mobile_number" />
+
+        <TextView
+            android:id="@+id/item_contact_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{contact.email}"
+            android:textColor="@color/black_800"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="@id/item_contact_mobile_number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/item_contact_divider_vertical"
+            app:layout_constraintTop_toTopOf="@id/item_contact_mobile_number"
+            tools:text="austria.dummy.email@gmail.com" />
+
+        <View
+            android:id="@+id/item_contact_divider_horizontal"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="?android:attr/dividerHorizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_contact_mobile_number" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

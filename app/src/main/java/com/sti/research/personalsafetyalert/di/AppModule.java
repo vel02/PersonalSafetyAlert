@@ -4,9 +4,11 @@ import android.app.Application;
 
 import androidx.room.Room;
 
-import com.sti.research.personalsafetyalert.persistence.MessageDatabase;
+import com.sti.research.personalsafetyalert.persistence.contact.ContactDatabase;
+import com.sti.research.personalsafetyalert.persistence.message.MessageDatabase;
 import com.sti.research.personalsafetyalert.repository.MessagingRepository;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;
+import com.sti.research.personalsafetyalert.repository.database.ContactRepository;
 import com.sti.research.personalsafetyalert.repository.database.MessageRepository;
 import com.sti.research.personalsafetyalert.repository.share.MainSharedRepository;
 
@@ -38,7 +40,7 @@ public class AppModule {
 
     @Singleton
     @Provides
-    static MessageDatabase provideDatabase(Application application) {
+    static MessageDatabase provideMessageDatabase(Application application) {
         return Room.databaseBuilder(
                 application, MessageDatabase.class,
                 MessageDatabase.DATABASE_NAME
@@ -49,6 +51,21 @@ public class AppModule {
     @Provides
     static MessageRepository provideMessageRepository(MessageDatabase database) {
         return new MessageRepository(database);
+    }
+
+    @Singleton
+    @Provides
+    static ContactDatabase provideContactDatabase(Application application) {
+        return Room.databaseBuilder(
+                application, ContactDatabase.class,
+                ContactDatabase.DATABASE_NAME
+        ).build();
+    }
+
+    @Singleton
+    @Provides
+    static ContactRepository provideContactRepository(ContactDatabase database) {
+        return new ContactRepository(database);
     }
 
 }

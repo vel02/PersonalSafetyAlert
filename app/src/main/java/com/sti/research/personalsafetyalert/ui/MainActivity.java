@@ -21,7 +21,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.transition.Fade;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,9 +29,12 @@ import android.view.Window;
 import com.google.android.material.snackbar.Snackbar;
 import com.sti.research.personalsafetyalert.BuildConfig;
 import com.sti.research.personalsafetyalert.R;
-import com.sti.research.personalsafetyalert.adapter.view.MessageRecyclerAdapter;
+import com.sti.research.personalsafetyalert.adapter.view.contact.ContactRecyclerAdapter;
+import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.ActivityMainBinding;
 import com.sti.research.personalsafetyalert.model.Message;
+import com.sti.research.personalsafetyalert.model.list.Contact;
+import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragment;
 import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.contact.add.AddContactFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
@@ -52,7 +54,8 @@ import javax.inject.Inject;
 import dagger.android.support.DaggerAppCompatActivity;
 
 public class MainActivity extends DaggerAppCompatActivity implements HostScreen, NavigatePermission,
-        MessageRecyclerAdapter.OnMessageClickListener {
+        MessageRecyclerAdapter.OnMessageClickListener,
+        ContactRecyclerAdapter.OnContactClickListener {
 
     private static final String TAG = "test";
 
@@ -62,6 +65,15 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
         if ((navHostFragment.getChildFragmentManager().getFragments().get(0) instanceof HomeFragment)) {
             HomeFragment fragment = (HomeFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
             fragment.onMessageDataReceiver(message);
+        }
+    }
+
+    @Override
+    public void onContactResult(Contact contact) {
+        assert navHostFragment != null;
+        if ((navHostFragment.getChildFragmentManager().getFragments().get(0) instanceof ContactFragment)) {
+            ContactFragment fragment = (ContactFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+            fragment.onContactDataReceiver(contact);
         }
     }
 
@@ -435,4 +447,5 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
             super.onBackPressed();
         }
     }
+
 }

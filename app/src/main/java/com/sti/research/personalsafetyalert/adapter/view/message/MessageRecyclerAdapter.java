@@ -1,7 +1,6 @@
-package com.sti.research.personalsafetyalert.adapter.view;
+package com.sti.research.personalsafetyalert.adapter.view.message;
 
 import android.annotation.SuppressLint;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 

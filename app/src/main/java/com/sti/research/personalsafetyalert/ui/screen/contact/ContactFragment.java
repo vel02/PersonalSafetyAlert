@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -19,11 +20,13 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 
 import com.sti.research.personalsafetyalert.R;
+import com.sti.research.personalsafetyalert.adapter.view.contact.ContactRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.FragmentContactBinding;
 import com.sti.research.personalsafetyalert.model.single.Contact;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactMessageToPreference;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
+import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import javax.inject.Inject;
@@ -32,6 +35,10 @@ import dagger.android.support.DaggerFragment;
 
 public class ContactFragment extends DaggerFragment {
 
+    public void onContactDataReceiver(com.sti.research.personalsafetyalert.model.list.Contact contact) {
+        Bubble.message(requireActivity(), "RECEIVED: " + contact.toString());
+    }
+
     @Inject
     ViewModelProviderFactory providerFactory;
 
@@ -39,6 +46,7 @@ public class ContactFragment extends DaggerFragment {
     private ContactFragmentViewModel viewModel;
 
     private HostScreen hostScreen;
+    private ContactRecyclerAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +68,14 @@ public class ContactFragment extends DaggerFragment {
         initRadioButtonBehavior();
         subscribeObservers();
         restoreSinglePersonContact();
+
+        initContactRecyclerAdapter();
+    }
+
+    private void initContactRecyclerAdapter() {
+        binding.rvContactList.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        adapter = new ContactRecyclerAdapter();
+        binding.rvContactList.setAdapter(adapter);
     }
 
     private void restoreSinglePersonContact() {
@@ -84,6 +100,11 @@ public class ContactFragment extends DaggerFragment {
                     binding.contactContactListCard.setVisibility(View.VISIBLE);
                     break;
             }
+        });
+
+        viewModel.observedContacts().removeObservers(getViewLifecycleOwner());
+        viewModel.observedContacts().observe(getViewLifecycleOwner(), contacts -> {
+            if (contacts != null) adapter.refresh(contacts);
         });
     }
 
@@ -156,12 +177,22 @@ public class ContactFragment extends DaggerFragment {
         popup.inflate(R.menu.menu_popup_more);
         popup.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_clear_all) {
-                Bubble.message(requireActivity(), "Clear All!");
+                viewModel.clearContactDatabase();
+
+                new WaitResultManager(WaitResultManager.WAIT_LONG,
+                        WaitResultManager.WAIT_INTERVAL, () -> viewModel.loadContactDatabase()).start();
+
                 return true;
             }
             return false;
         });
         popup.show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.loadContactDatabase();
     }
 
     @Override
