@@ -4,6 +4,8 @@ import com.sti.research.personalsafetyalert.di.ui.screen.contact.ContactScreenSc
 import com.sti.research.personalsafetyalert.di.ui.screen.contact.ContactScreenViewModelModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.contact.add.AddContactScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.contact.add.AddContactScreenViewModelModule;
+import com.sti.research.personalsafetyalert.di.ui.screen.contact.update.UpdateContactScreenScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.contact.update.UpdateContactScreenViewModelModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.home.HomeScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.home.HomeScreenViewModelModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.message.MessageScreenScope;
@@ -15,6 +17,7 @@ import com.sti.research.personalsafetyalert.di.ui.screen.visual.VisualMessageScr
 import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragment;
 import com.sti.research.personalsafetyalert.ui.screen.contact.add.AddContactFragment;
 import com.sti.research.personalsafetyalert.ui.screen.contact.add.AddContactFragmentViewModel;
+import com.sti.research.personalsafetyalert.ui.screen.contact.update.UpdateContactFragment;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
 import com.sti.research.personalsafetyalert.ui.screen.message.MessageFragment;
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragment;
@@ -37,6 +40,10 @@ public abstract class MainFragmentBuilderModule {
     @AddContactScreenScope
     @ContributesAndroidInjector(modules = {AddContactScreenViewModelModule.class})
     abstract AddContactFragment contributeAddContactFragment();
+
+    @UpdateContactScreenScope
+    @ContributesAndroidInjector(modules = {UpdateContactScreenViewModelModule.class})
+    abstract UpdateContactFragment contributeUpdateContactFragment();
 
     @MessageScreenScope
     @ContributesAndroidInjector(modules = {MessageScreenViewModelModule.class})

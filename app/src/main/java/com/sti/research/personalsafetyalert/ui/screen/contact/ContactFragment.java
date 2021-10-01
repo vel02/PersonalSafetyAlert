@@ -36,7 +36,7 @@ import dagger.android.support.DaggerFragment;
 public class ContactFragment extends DaggerFragment {
 
     public void onContactDataReceiver(com.sti.research.personalsafetyalert.model.list.Contact contact) {
-        Bubble.message(requireActivity(), "RECEIVED: " + contact.toString());
+        hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_contact_to_update_contact), contact);
     }
 
     @Inject

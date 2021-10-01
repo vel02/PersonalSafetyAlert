@@ -80,6 +80,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@{contact.email}"
             android:textColor="@color/black_800"
             android:textStyle="italic"

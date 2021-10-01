@@ -138,6 +138,9 @@
     <string name="txt_new_contact">New Contact</string>
     <string name="desc_new_contact">This contact will be added to your list of person who\'ll received an emergency message.</string>
     <string name="tag_fragment_add_contact_to_contact">tag_fragment_add_contact_to_contact</string>
+    <string name="tag_fragment_contact_to_update_contact">tag_fragment_contact_to_update_contact</string>
+    <string name="txt_update_contact">Update contact</string>
+    <string name="desc_update_contact">Make changes of contact details.</string>
 
 
 </resources>

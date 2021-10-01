@@ -115,4 +115,9 @@ public class HelpActivity extends DaggerAppCompatActivity implements HostScreen 
 
         Navigation.findNavController(view).navigate(directions);
     }
+
+    @Override
+    public void onInflate(View view, String screen, Object object) {
+        //not supported
+    }
 }

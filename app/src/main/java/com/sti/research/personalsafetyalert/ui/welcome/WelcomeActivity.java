@@ -96,4 +96,9 @@ public class WelcomeActivity extends DaggerAppCompatActivity implements HostScre
             HomeInitialMessage.getInstance().setInitializeMessagesState(this, true);
         }
     }
+
+    @Override
+    public void onInflate(View view, String screen, Object object) {
+        //not supported
+    }
 }

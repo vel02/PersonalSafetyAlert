@@ -220,15 +220,31 @@ public class MainActivity extends DaggerAppCompatActivity implements HostScreen,
                 directions = ContactFragmentDirections.actionNavContactToAddContactFragment();
                 break;
 
-            case "tag_fragment_add_contact_to_contact":
-                directions = AddContactFragmentDirections.actionNavAddContactToNavContact();
+            default:
+                throw new IllegalStateException("Unexpected value: " + screen);
+        }
+
+        Navigation.findNavController(view).navigate(directions);
+    }
+
+    @Override
+    public void onInflate(View view, String screen, Object object) {
+
+        NavDirections directions = null;
+
+        switch (screen) {
+            case "tag_fragment_contact_to_update_contact":
+                if (object instanceof Contact)
+                    directions = ContactFragmentDirections.actionNavContactToNavUpdateContact((Contact) object);
                 break;
 
             default:
                 throw new IllegalStateException("Unexpected value: " + screen);
         }
 
+        assert directions != null;
         Navigation.findNavController(view).navigate(directions);
+
     }
 
     @Override

@@ -6,4 +6,6 @@ public interface HostScreen {
 
     void onInflate(View view, String screen);
 
+    void onInflate(View view, String screen, Object object);
+
 }
