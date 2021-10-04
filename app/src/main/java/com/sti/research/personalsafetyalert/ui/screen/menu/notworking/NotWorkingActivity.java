@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.transition.Fade;
 import android.view.Window;
 
+import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.ActivityNotWorkingBinding;
 import com.sti.research.personalsafetyalert.util.Constants;
@@ -21,7 +22,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class NotWorkingActivity extends DaggerAppCompatActivity {
+public class NotWorkingActivity extends BaseActivity {
 
     @Inject
     ViewModelProviderFactory providerFactory;

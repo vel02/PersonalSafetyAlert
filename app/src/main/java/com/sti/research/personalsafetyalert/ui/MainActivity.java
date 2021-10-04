@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.Window;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.BuildConfig;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.contact.ContactRecyclerAdapter;
@@ -53,11 +54,23 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class MainActivity extends DaggerAppCompatActivity implements HostScreen, NavigatePermission,
+public class MainActivity extends BaseActivity implements HostScreen, NavigatePermission,
+        LocationServiceListener,
         MessageRecyclerAdapter.OnMessageClickListener,
         ContactRecyclerAdapter.OnContactClickListener {
 
     private static final String TAG = "test";
+
+
+    @Override
+    public void requestNotificationLocation() {
+        this.locationService.requestNotificationLocation();
+    }
+
+    @Override
+    public void removeNotificationLocation() {
+        this.locationService.removeNotificationLocation();
+    }
 
     @Override
     public void onMessageResult(Message message) {

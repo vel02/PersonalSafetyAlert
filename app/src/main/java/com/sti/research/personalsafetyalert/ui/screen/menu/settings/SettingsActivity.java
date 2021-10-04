@@ -13,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.ActivitySettingsBinding;
 import com.sti.research.personalsafetyalert.util.Constants;
@@ -22,7 +23,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class SettingsActivity extends DaggerAppCompatActivity {
+public class SettingsActivity extends BaseActivity {
 
     @Inject
     ViewModelProviderFactory providerFactory;

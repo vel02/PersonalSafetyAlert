@@ -21,6 +21,8 @@ public class HomeFragmentViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> alertChecked;
     private final MutableLiveData<Message> message;
+    private final MutableLiveData<LocationServiceState> locationServiceState;
+
 
     private final Application application;
     private final PermissionRepository permissionRepository;
@@ -39,7 +41,19 @@ public class HomeFragmentViewModel extends ViewModel {
         this.sharedRepository = sharedRepository;
         this.alertChecked = new MutableLiveData<>();
         this.message = new MutableLiveData<>();
+        this.locationServiceState = new MutableLiveData<>();
     }
+
+    //#############  Switch State #############
+
+    public void setLocationServiceState(LocationServiceState state) {
+        this.locationServiceState.setValue(state);
+    }
+
+    public LiveData<LocationServiceState> observedLocationServiceState() {
+        return this.locationServiceState;
+    }
+
 
     //############# Main Shared Repository #############
 
@@ -101,4 +115,7 @@ public class HomeFragmentViewModel extends ViewModel {
     public LiveData<Boolean> observedAlertChecked() {
         return this.alertChecked;
     }
+
+    public enum LocationServiceState {ACTIVATE_ON, ACTIVATE_OFF}
+
 }

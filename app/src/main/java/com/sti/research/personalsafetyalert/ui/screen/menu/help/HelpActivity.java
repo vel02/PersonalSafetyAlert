@@ -15,6 +15,7 @@ import android.transition.Fade;
 import android.view.View;
 import android.view.Window;
 
+import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.ActivityHelpBinding;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
@@ -28,7 +29,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class HelpActivity extends DaggerAppCompatActivity implements HostScreen {
+public class HelpActivity extends BaseActivity implements HostScreen {
 
     @Inject
     ViewModelProviderFactory providerFactory;

@@ -1,5 +1,7 @@
 package com.sti.research.personalsafetyalert.ui.screen.home;
 
+import static com.sti.research.personalsafetyalert.ui.screen.home.HomeFragmentViewModel.LocationServiceState.ACTIVATE_OFF;
+import static com.sti.research.personalsafetyalert.ui.screen.home.HomeFragmentViewModel.LocationServiceState.ACTIVATE_ON;
 import static com.sti.research.personalsafetyalert.util.Utility.*;
 
 import android.annotation.SuppressLint;
@@ -27,6 +29,7 @@ import com.sti.research.personalsafetyalert.databinding.FragmentHomeBinding;
 import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
+import com.sti.research.personalsafetyalert.ui.LocationServiceListener;
 import com.sti.research.personalsafetyalert.ui.NavigatePermission;
 import com.sti.research.personalsafetyalert.util.MessageComparator;
 import com.sti.research.personalsafetyalert.util.Support;
@@ -64,6 +67,8 @@ public class HomeFragment extends DaggerFragment {
     private NavigatePermission navigate;
     private MessageRecyclerAdapter adapter;
 
+    private LocationServiceListener locationServiceListener;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -92,11 +97,43 @@ public class HomeFragment extends DaggerFragment {
         binding.homeMessageTextList.setAdapter(adapter);
     }
 
-    private void initAlertCheckedBehaviour() {
-        binding.homeSwitch.setChecked(HomeSwitchPreference.getInstance().getSwitchStateState(requireActivity()));
+    private void subscribePermissionObserver() {
+        viewModel.observedPermissionRequiredState().removeObservers(getViewLifecycleOwner());
+        viewModel.observedPermissionRequiredState().observe(getViewLifecycleOwner(), status -> {
+            Log.d(TAG, "HOME FRAGMENT: SUBSCRIBE RESULT PERMISSION = " + status);
+            switch (status) {
+                case NONE:
+                case PARTIAL:
+                    hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_home_to_permission));
+                    break;
+            }
+        });
     }
 
     private void subscribeObservers() {
+
+        viewModel.observedLocationServiceState().removeObservers(getViewLifecycleOwner());
+        viewModel.observedLocationServiceState().observe(getViewLifecycleOwner(), state -> {
+            switch (state) {
+                case ACTIVATE_ON:
+                    Log.d(TAG, "HOME FRAGMENT: ACTIVATED");
+                    if (this.isNotificationLocationNotActivated()) {
+                        locationServiceListener.requestNotificationLocation();
+                        binding.homeSwitch.setText(getString(R.string.txt_stop_safety));
+                    }
+                    break;
+
+                case ACTIVATE_OFF:
+                    Log.d(TAG, "HOME FRAGMENT: DEACTIVATED");
+                    if (this.isNotificationLocationActivated()) {
+                        locationServiceListener.removeNotificationLocation();
+                        binding.homeSwitch.setText(getString(R.string.txt_start_safety));
+                    }
+                    break;
+
+            }
+        });
+
         viewModel.observedAlertChecked().removeObservers(getViewLifecycleOwner());
         viewModel.observedAlertChecked().observe(getViewLifecycleOwner(), isChecked -> {
             if (isChecked) binding.homeSwitch.setText(R.string.txt_stop_safety);
@@ -124,17 +161,26 @@ public class HomeFragment extends DaggerFragment {
 
     }
 
-    private void subscribePermissionObserver() {
-        viewModel.observedPermissionRequiredState().removeObservers(getViewLifecycleOwner());
-        viewModel.observedPermissionRequiredState().observe(getViewLifecycleOwner(), status -> {
-            Log.d(TAG, "subscribeObservers: status " + status);
-            switch (status) {
-                case NONE:
-                case PARTIAL:
-                    hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_home_to_permission));
-                    break;
-            }
-        });
+    private void initAlertCheckedBehaviour() {
+        this.toggleAlertBehaviour();
+        binding.homeSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                viewModel.setLocationServiceState(isChecked ? ACTIVATE_ON : ACTIVATE_OFF));
+    }
+
+    private void toggleAlertBehaviour() {
+        boolean activated = this.isNotificationLocationActivated();
+        binding.homeSwitch.setChecked(activated);
+        if (activated) {
+            binding.homeSwitch.setText(getString(R.string.txt_stop_safety));
+        } else binding.homeSwitch.setText(getString(R.string.txt_start_safety));
+    }
+
+    private boolean isNotificationLocationActivated() {
+        return HomeSwitchPreference.getInstance().getSwitchStateState(requireActivity());
+    }
+
+    private boolean isNotificationLocationNotActivated() {
+        return !HomeSwitchPreference.getInstance().getSwitchStateState(requireActivity());
     }
 
     @Override
@@ -150,7 +196,7 @@ public class HomeFragment extends DaggerFragment {
                 && !navigate.checkSendSMSPermission()
                 && !navigate.checkRecordAudioPermission()
                 && !navigate.checkStoragePermission()) {
-            Log.d(TAG, "home completed called");
+            Log.d(TAG, "HOME FRAGMENT: PERMISSION COMPLETED");
             viewModel.setPermissionRequiredState(PermissionRepository.RequiredPermissionsState.COMPLETED);
         }
 
@@ -314,6 +360,12 @@ public class HomeFragment extends DaggerFragment {
                     + " must implement NavigatePermission interface.");
         }
         navigate = (NavigatePermission) activity;
+
+        if (!(activity instanceof LocationServiceListener)) {
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement LocationServiceListener interface.");
+        }
+        locationServiceListener = (LocationServiceListener) activity;
     }
 
     @Override
@@ -321,6 +373,7 @@ public class HomeFragment extends DaggerFragment {
         super.onDetach();
         hostScreen = null;
         navigate = null;
+        locationServiceListener = null;
     }
 
 }

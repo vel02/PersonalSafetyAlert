@@ -32,6 +32,11 @@
         <!--            android:name="org.apache.http.legacy"-->
         <!--            android:required="false" />-->
 
+        <service
+            android:name=".service.LocationService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
         <activity
             android:name=".ui.screen.menu.help.HelpActivity"
             android:exported="true"
