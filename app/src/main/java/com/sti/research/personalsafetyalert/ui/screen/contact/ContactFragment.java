@@ -26,6 +26,7 @@ import com.sti.research.personalsafetyalert.model.single.Contact;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactMessageToPreference;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
+import com.sti.research.personalsafetyalert.util.screen.contact.SelectPreferredContactPreference;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
@@ -94,10 +95,16 @@ public class ContactFragment extends DaggerFragment {
                 case "Send to one specific contact":
                     binding.contactSinglePerson.setVisibility(View.VISIBLE);
                     binding.contactContactListCard.setVisibility(View.GONE);
+                    SelectPreferredContactPreference.getInstance()
+                            .setSelectPreferredContact(requireActivity(),
+                                    SelectPreferredContactPreference.SELECT_PREFERRED_CONTACT_SINGLE);
                     break;
                 case "Send to this list of contacts":
                     binding.contactSinglePerson.setVisibility(View.GONE);
                     binding.contactContactListCard.setVisibility(View.VISIBLE);
+                    SelectPreferredContactPreference.getInstance()
+                            .setSelectPreferredContact(requireActivity(),
+                                    SelectPreferredContactPreference.SELECT_PREFERRED_CONTACT_MULTIPLE);
                     break;
             }
         });

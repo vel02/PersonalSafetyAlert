@@ -7,8 +7,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.sti.research.personalsafetyalert.model.Message;
+import com.sti.research.personalsafetyalert.model.list.Contact;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository.RequiredPermissionsState;
+import com.sti.research.personalsafetyalert.repository.database.ContactRepository;
 import com.sti.research.personalsafetyalert.repository.database.MessageRepository;
 import com.sti.research.personalsafetyalert.repository.share.MainSharedRepository;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
@@ -28,20 +30,33 @@ public class HomeFragmentViewModel extends ViewModel {
     private final PermissionRepository permissionRepository;
     private final MessageRepository messageRepository;
     private final MainSharedRepository sharedRepository;
+    private final ContactRepository contactRepository;
 
 
     @Inject
     public HomeFragmentViewModel(Application application,
                                  PermissionRepository permissionRepository,
                                  MessageRepository messageRepository,
-                                 MainSharedRepository sharedRepository) {
+                                 MainSharedRepository sharedRepository,
+                                 ContactRepository contactRepository) {
         this.application = application;
         this.permissionRepository = permissionRepository;
         this.messageRepository = messageRepository;
         this.sharedRepository = sharedRepository;
+        this.contactRepository = contactRepository;
         this.alertChecked = new MutableLiveData<>();
         this.message = new MutableLiveData<>();
         this.locationServiceState = new MutableLiveData<>();
+    }
+
+    //#############  Contact Repository #############
+
+    public void loadContactList() {
+        this.contactRepository.select();
+    }
+
+    public LiveData<List<Contact>> observedContactList() {
+        return this.contactRepository.observedContacts();
     }
 
     //#############  Switch State #############

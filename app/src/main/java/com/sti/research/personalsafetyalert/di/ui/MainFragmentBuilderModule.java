@@ -8,6 +8,7 @@ import com.sti.research.personalsafetyalert.di.ui.screen.contact.update.UpdateCo
 import com.sti.research.personalsafetyalert.di.ui.screen.contact.update.UpdateContactScreenViewModelModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.home.HomeScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.home.HomeScreenViewModelModule;
+import com.sti.research.personalsafetyalert.di.ui.screen.home.dialog.HomeDialogBuilderModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.message.MessageScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.message.MessageScreenViewModelModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.permission.PermissionScreenScope;
@@ -19,6 +20,7 @@ import com.sti.research.personalsafetyalert.ui.screen.contact.add.AddContactFrag
 import com.sti.research.personalsafetyalert.ui.screen.contact.add.AddContactFragmentViewModel;
 import com.sti.research.personalsafetyalert.ui.screen.contact.update.UpdateContactFragment;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
+import com.sti.research.personalsafetyalert.ui.screen.home.dialog.DialogInvalidContactFragment;
 import com.sti.research.personalsafetyalert.ui.screen.message.MessageFragment;
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragment;
 import com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragment;

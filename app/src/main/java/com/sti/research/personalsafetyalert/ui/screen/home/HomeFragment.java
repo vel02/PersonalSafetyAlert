@@ -22,17 +22,22 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.FragmentHomeBinding;
 import com.sti.research.personalsafetyalert.model.Message;
+import com.sti.research.personalsafetyalert.model.single.Contact;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.LocationServiceListener;
 import com.sti.research.personalsafetyalert.ui.NavigatePermission;
+import com.sti.research.personalsafetyalert.ui.screen.home.dialog.DialogInvalidContactFragment;
 import com.sti.research.personalsafetyalert.util.MessageComparator;
 import com.sti.research.personalsafetyalert.util.Support;
+import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
+import com.sti.research.personalsafetyalert.util.screen.contact.SelectPreferredContactPreference;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeInitialMessage;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
@@ -68,6 +73,8 @@ public class HomeFragment extends DaggerFragment {
     private MessageRecyclerAdapter adapter;
 
     private LocationServiceListener locationServiceListener;
+
+    private List<com.sti.research.personalsafetyalert.model.list.Contact> contacts;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -111,16 +118,20 @@ public class HomeFragment extends DaggerFragment {
     }
 
     private void subscribeObservers() {
+        viewModel.observedContactList().removeObservers(getViewLifecycleOwner());
+        viewModel.observedContactList().observe(getViewLifecycleOwner(), contacts -> this.contacts = contacts);
 
         viewModel.observedLocationServiceState().removeObservers(getViewLifecycleOwner());
         viewModel.observedLocationServiceState().observe(getViewLifecycleOwner(), state -> {
             switch (state) {
                 case ACTIVATE_ON:
-                    Log.d(TAG, "HOME FRAGMENT: ACTIVATED");
-                    if (this.isNotificationLocationNotActivated()) {
-                        locationServiceListener.requestNotificationLocation();
-                        binding.homeSwitch.setText(getString(R.string.txt_stop_safety));
-                    }
+                    if (this.validation()) {
+                        Log.d(TAG, "HOME FRAGMENT: ACTIVATED");
+                        if (this.isNotificationLocationNotActivated()) {
+                            locationServiceListener.requestNotificationLocation();
+                            binding.homeSwitch.setText(getString(R.string.txt_stop_safety));
+                        }
+                    } else viewModel.setLocationServiceState(ACTIVATE_OFF);
                     break;
 
                 case ACTIVATE_OFF:
@@ -161,6 +172,32 @@ public class HomeFragment extends DaggerFragment {
 
     }
 
+    private boolean validation() {
+        switch (SelectPreferredContactPreference.getInstance().getSelectPreferredContact(requireActivity())) {
+            case SelectPreferredContactPreference.SELECT_PREFERRED_CONTACT_SINGLE:
+                Contact contact = ContactStoreSinglePerson.getInstance().restoreContactSinglePerson(requireActivity());
+                if (contact == null || contact.getNumber().isEmpty()) {
+                    if (binding.homeSwitch.isChecked()) binding.homeSwitch.setChecked(false);
+                    //dialog
+                    DialogInvalidContactFragment dialog = new DialogInvalidContactFragment();
+                    dialog.show(requireActivity().getSupportFragmentManager(), "tag_dialog_invalid_contact_fragment");
+                    return false;
+                }
+                return true;
+            case SelectPreferredContactPreference.SELECT_PREFERRED_CONTACT_MULTIPLE:
+                if (contacts == null || contacts.size() < 1) {
+                    if (binding.homeSwitch.isChecked()) binding.homeSwitch.setChecked(false);
+                    //dialog
+                    DialogInvalidContactFragment dialog = new DialogInvalidContactFragment();
+                    dialog.show(requireActivity().getSupportFragmentManager(), "tag_dialog_invalid_contact_fragment");
+                    return false;
+                }
+                return true;
+            default:
+                return false;
+        }
+    }
+
     private void initAlertCheckedBehaviour() {
         this.toggleAlertBehaviour();
         binding.homeSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
@@ -187,6 +224,7 @@ public class HomeFragment extends DaggerFragment {
     public void onStart() {
         super.onStart();
         viewModel.loadMessagesDatabase();
+        viewModel.loadContactList();
     }
 
     @Override
