@@ -1,5 +1,7 @@
 package com.sti.research.personalsafetyalert;
 
+import static com.sti.research.personalsafetyalert.util.Utility.*;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +9,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 
 import com.sti.research.personalsafetyalert.service.LocationService;
+import com.sti.research.personalsafetyalert.util.Utility;
 
 import dagger.android.support.DaggerAppCompatActivity;
 

@@ -13,6 +13,7 @@ public abstract class BaseService extends Service {
     protected static final int LOCATION_REQUEST_MAX_WAIT_TIME = LOCATION_REQUEST_UPDATE_INTERVAL * 5;
 
     protected static final int NOTIFICATION_LOCATION_UPDATE_ID = 1;
+    protected static final int NOTIFICATION_GPS_ID = 2;
 
     protected ConfigurationChangeStatus status;
 

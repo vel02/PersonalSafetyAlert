@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/desc_dialog_logo"
-            android:src="@drawable/ic_info"
+            android:src="@drawable/ic_notif_info"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,9 +32,10 @@
             android:textColor="@color/black_800"
             android:textSize="@dimen/text_size_large"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/dialog_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/dialog_logo"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/dialog_logo" />
 
         <TextView
             android:id="@+id/dialog_divider_horizontal"
@@ -61,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="?android:attr/selectableItemBackground"
+            android:background="@drawable/button_round_corner_transparent_default"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center_vertical"

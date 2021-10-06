@@ -125,7 +125,7 @@ public class HomeFragment extends DaggerFragment {
         viewModel.observedLocationServiceState().observe(getViewLifecycleOwner(), state -> {
             switch (state) {
                 case ACTIVATE_ON:
-                    if (this.validation()) {
+                    if (this.validation() && this.checkConnection()) {
                         Log.d(TAG, "HOME FRAGMENT: ACTIVATED");
                         if (this.isNotificationLocationNotActivated()) {
                             locationServiceListener.requestNotificationLocation();
@@ -170,6 +170,17 @@ public class HomeFragment extends DaggerFragment {
             }
         });
 
+    }
+
+    private boolean checkConnection() {
+        if (Connection.isWifiConnected(requireActivity()) || Connection.isMobileConnected(requireActivity())) {
+            Bubble.message(requireActivity(), "Connected");
+            return true;
+        } else {
+            if (binding.homeSwitch.isChecked()) binding.homeSwitch.setChecked(false);
+            Bubble.message(requireActivity(), "Not Connected");
+            return false;
+        }
     }
 
     private boolean validation() {

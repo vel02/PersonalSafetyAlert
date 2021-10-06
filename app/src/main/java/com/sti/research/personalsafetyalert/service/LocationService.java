@@ -1,11 +1,19 @@
 package com.sti.research.personalsafetyalert.service;
 
+import static com.sti.research.personalsafetyalert.BaseApplication.NOTIFICATION_GPS_CHANNEL_ID;
+
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.location.LocationManager;
 import android.os.Binder;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -20,9 +28,14 @@ public class LocationService extends BaseService {
 
     private static final String TAG = "Service";
 
+    private NotificationManager notificationManager;
+
+    private boolean isCheckGPSConnectionReceiverRegistered;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
     @Nullable
@@ -36,14 +49,17 @@ public class LocationService extends BaseService {
     @Override
     public void onRebind(Intent intent) {
         this.stopForeground(true);
+        unregisterCheckGPSConnectionReceiver();
         this.status.onConfigUnchanged();
         super.onRebind(intent);
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        if (this.status.isConfigRemainUnchanged())
-            this.startForeground(NOTIFICATION_LOCATION_UPDATE_ID, notifyLocation());
+        if (this.status.isConfigRemainUnchanged()) {
+            this.startForeground(NOTIFICATION_LOCATION_UPDATE_ID, notificationLocation());
+            registerCheckGPSConnectionReceiver();
+        }
         return true;
     }
 
@@ -89,7 +105,7 @@ public class LocationService extends BaseService {
 
 
     @SuppressLint("UnspecifiedImmutableFlag")
-    private Notification notifyLocation() {
+    private Notification notificationLocation() {
 
         Intent intent = new Intent(this, LocationService.class);
         intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true);
@@ -116,4 +132,80 @@ public class LocationService extends BaseService {
                 .build();
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
+    private Notification notificationConnection() {
+
+        Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+
+        PendingIntent activityPendingIntent = PendingIntent
+                .getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        return new NotificationCompat.Builder(this, NOTIFICATION_GPS_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle("Connection Interrupted")
+                .setContentText("Please check your connection, turn it on to work properly.")
+                .setPriority(Notification.PRIORITY_DEFAULT)
+                .setContentIntent(activityPendingIntent)
+                .setOnlyAlertOnce(true)
+                .setAutoCancel(true)
+                .build();
+    }
+
+    private final BroadcastReceiver checkGPSConnectionReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (LocationManager.PROVIDERS_CHANGED_ACTION.equals(intent.getAction())) {
+
+                LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+                if (!isGpsEnabled) {
+                    Log.d(TAG, "onReceive: disabled.");
+                    /*
+                        When GPS location is disabled suddenly while app is running in the foreground,
+                        it will stop the current notification update location in foreground, and
+                        replace it with location settings notification to alert user about the
+                        importance of activating GPS location to run the app properly.
+
+                        The current location updates will automatically stop with
+                        removeLocationUpdates() method.
+                     */
+                    stopForeground(true);
+                    notificationManager.notify(NOTIFICATION_GPS_ID, notificationConnection());
+
+                } else {
+                    Log.d(TAG, "onReceive: enabled.");
+                    /*
+                        While location notification settings is in a foreground to alert user
+                        about reactivating GPS location, if the user chooses to enable the
+                        location GPS in phone settings this will stop the notification, and service
+                        to restart the process.
+                     */
+                    notificationManager.cancel(NOTIFICATION_GPS_ID);
+                    startForeground(NOTIFICATION_LOCATION_UPDATE_ID, notificationLocation());
+
+                }
+            }
+        }
+    };
+
+    private void registerCheckGPSConnectionReceiver() {
+        IntentFilter filter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
+        filter.addAction(Intent.ACTION_PROVIDER_CHANGED);
+        registerReceiver(checkGPSConnectionReceiver, filter);
+        isCheckGPSConnectionReceiverRegistered = true;
+    }
+
+    private void unregisterCheckGPSConnectionReceiver() {
+        if (isCheckGPSConnectionReceiverRegistered)
+            this.unregisterReceiver(checkGPSConnectionReceiver);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterCheckGPSConnectionReceiver();
+    }
 }
