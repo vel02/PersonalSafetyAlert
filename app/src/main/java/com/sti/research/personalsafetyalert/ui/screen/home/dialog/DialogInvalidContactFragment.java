@@ -35,19 +35,6 @@ public class DialogInvalidContactFragment extends DaggerDialogFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Window window = Objects.requireNonNull(getDialog()).getWindow();
-        window.setLayout(900, 550);
-        window.setGravity(Gravity.CENTER);
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDialogInvalidContactBinding.inflate(inflater);

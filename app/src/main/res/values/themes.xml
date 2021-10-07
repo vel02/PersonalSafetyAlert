@@ -32,4 +32,17 @@
     <!--  DIALOG STYLES  -->
     <style name="PersonalSafetyAlertRoundedCornersDialog" parent="@style/ThemeOverlay.MaterialComponents.Dialog" />
 
+    <style name="PersonalSafetyAlert.AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/primarySecondaryDark</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/primarySecondaryDark</item>
+    </style>
+
 </resources>

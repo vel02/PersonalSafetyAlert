@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -105,30 +107,21 @@ public class Utility {
             return ((netInfo != null) && netInfo.isConnected());
         }
 
-        public static void createNetErrorDialog(Context context) {
+        //REFERENCE:https://stackoverflow.com/questions/44024009/how-to-check-if-gps-i-turned-on-or-not-programmatically-in-android-version-4-4-a
+        public static boolean isGPSEnabled(Context context) {
+            int locationMode;
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage("You need internet connection for this app. Please turn on mobile network or Wi-Fi in Settings.")
-                    .setTitle("Unable to connect")
-                    .setCancelable(false)
-                    .setPositiveButton("Settings",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                                    context.startActivity(i);
-                                }
-                            }
-                    )
-                    .setNegativeButton("Cancel",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-//                                    MyActivity.this.finish();
-                                }
-                            }
-                    );
-            AlertDialog alert = builder.create();
-            alert.show();
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
         }
+
     }
 
 }

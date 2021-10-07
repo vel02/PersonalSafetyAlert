@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,7 +23,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecyclerAdapter;
@@ -125,7 +125,9 @@ public class HomeFragment extends DaggerFragment {
         viewModel.observedLocationServiceState().observe(getViewLifecycleOwner(), state -> {
             switch (state) {
                 case ACTIVATE_ON:
-                    if (this.validation() && this.checkConnection()) {
+                    if (this.validation()
+                            && this.checkInternetConnection()
+                            && this.checkGPSConnection()) {
                         Log.d(TAG, "HOME FRAGMENT: ACTIVATED");
                         if (this.isNotificationLocationNotActivated()) {
                             locationServiceListener.requestNotificationLocation();
@@ -172,13 +174,36 @@ public class HomeFragment extends DaggerFragment {
 
     }
 
-    private boolean checkConnection() {
+    private boolean checkInternetConnection() {
         if (Connection.isWifiConnected(requireActivity()) || Connection.isMobileConnected(requireActivity())) {
-            Bubble.message(requireActivity(), "Connected");
             return true;
         } else {
             if (binding.homeSwitch.isChecked()) binding.homeSwitch.setChecked(false);
-            Bubble.message(requireActivity(), "Not Connected");
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.PersonalSafetyAlert_AlertDialogTheme);
+            builder.setTitle("Internet Connection");
+            builder.setMessage("Please make sure you are connected through wifi or mobile data before using the app.");
+            builder.setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                dialog.dismiss();
+            });
+            builder.setCancelable(false);
+            builder.create().show();
+            return false;
+        }
+    }
+
+    private boolean checkGPSConnection() {
+        if (Connection.isGPSEnabled(requireActivity())) {
+            return true;
+        } else {
+            if (binding.homeSwitch.isChecked()) binding.homeSwitch.setChecked(false);
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.PersonalSafetyAlert_AlertDialogTheme);
+            builder.setTitle("GPS Connection");
+            builder.setMessage("Please make sure you turn on your GPS Location before using the app.");
+            builder.setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                dialog.dismiss();
+            });
+            builder.setCancelable(false);
+            builder.create().show();
             return false;
         }
     }

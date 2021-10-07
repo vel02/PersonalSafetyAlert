@@ -22,6 +22,7 @@ import androidx.core.app.NotificationCompat;
 import com.sti.research.personalsafetyalert.BaseApplication;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.ui.splash.SplashActivity;
+import com.sti.research.personalsafetyalert.util.NetworkUtil;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
 
 public class LocationService extends BaseService {
@@ -146,23 +147,25 @@ public class LocationService extends BaseService {
                 .setContentText("Please check your connection, turn it on to work properly.")
                 .setPriority(Notification.PRIORITY_DEFAULT)
                 .setContentIntent(activityPendingIntent)
-                .setOnlyAlertOnce(true)
-                .setAutoCancel(true)
+                .setOngoing(true)
                 .build();
     }
+
 
     private final BroadcastReceiver checkGPSConnectionReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if (LocationManager.PROVIDERS_CHANGED_ACTION.equals(intent.getAction())) {
+            if (LocationManager.PROVIDERS_CHANGED_ACTION.equals(intent.getAction())
+                    || intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")) {
 
                 LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                 boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                boolean isInternetEnabled = NetworkUtil.getConnectivityStatusString(context);
 
-                if (!isGpsEnabled) {
-                    Log.d(TAG, "onReceive: disabled.");
+                if (!isGpsEnabled || !isInternetEnabled) {
+                    Log.d(TAG, "GPS AND INTERNET CONNECTION RECEIVER STATE: DISABLED.");
                     /*
                         When GPS location is disabled suddenly while app is running in the foreground,
                         it will stop the current notification update location in foreground, and
@@ -176,7 +179,7 @@ public class LocationService extends BaseService {
                     notificationManager.notify(NOTIFICATION_GPS_ID, notificationConnection());
 
                 } else {
-                    Log.d(TAG, "onReceive: enabled.");
+                    Log.d(TAG, "GPS AND INTERNET CONNECTION RECEIVER STATE: ENABLED.");
                     /*
                         While location notification settings is in a foreground to alert user
                         about reactivating GPS location, if the user chooses to enable the
@@ -194,6 +197,7 @@ public class LocationService extends BaseService {
     private void registerCheckGPSConnectionReceiver() {
         IntentFilter filter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
         filter.addAction(Intent.ACTION_PROVIDER_CHANGED);
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         registerReceiver(checkGPSConnectionReceiver, filter);
         isCheckGPSConnectionReceiverRegistered = true;
     }
