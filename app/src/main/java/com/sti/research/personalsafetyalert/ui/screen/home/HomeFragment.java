@@ -6,7 +6,9 @@ import static com.sti.research.personalsafetyalert.util.Utility.*;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,7 +25,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.FragmentHomeBinding;
@@ -179,14 +183,16 @@ public class HomeFragment extends DaggerFragment {
             return true;
         } else {
             if (binding.homeSwitch.isChecked()) binding.homeSwitch.setChecked(false);
-            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.PersonalSafetyAlert_AlertDialogTheme);
-            builder.setTitle("Internet Connection");
-            builder.setMessage("Please make sure you are connected through wifi or mobile data before using the app.");
-            builder.setPositiveButton(R.string.action_ok, (dialog, which) -> {
+            AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireActivity(), R.style.PersonalSafetyAlert_AlertDialogTheme);
+            View view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_internet_layout, null);
+            TextView positiveButton = view.findViewById(R.id.dialog_button_positive);
+            builder.setCancelable(false);
+            builder.setView(view);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            positiveButton.setOnClickListener(v -> {
                 dialog.dismiss();
             });
-            builder.setCancelable(false);
-            builder.create().show();
             return false;
         }
     }
@@ -196,14 +202,16 @@ public class HomeFragment extends DaggerFragment {
             return true;
         } else {
             if (binding.homeSwitch.isChecked()) binding.homeSwitch.setChecked(false);
-            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.PersonalSafetyAlert_AlertDialogTheme);
-            builder.setTitle("GPS Connection");
-            builder.setMessage("Please make sure you turn on your GPS Location before using the app.");
-            builder.setPositiveButton(R.string.action_ok, (dialog, which) -> {
+            AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireActivity(), R.style.PersonalSafetyAlert_AlertDialogTheme);
+            View view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_gps_layout, null);
+            TextView positiveButton = view.findViewById(R.id.dialog_button_positive);
+            builder.setCancelable(false);
+            builder.setView(view);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            positiveButton.setOnClickListener(v -> {
                 dialog.dismiss();
             });
-            builder.setCancelable(false);
-            builder.create().show();
             return false;
         }
     }
