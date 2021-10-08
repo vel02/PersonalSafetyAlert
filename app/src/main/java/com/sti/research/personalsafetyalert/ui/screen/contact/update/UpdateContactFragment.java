@@ -98,10 +98,8 @@ public class UpdateContactFragment extends DaggerFragment {
             viewModel.updateContact(contact);
 
             resetUiBehavior();
-            new WaitResultManager(WaitResultManager.WAIT_LONG, WaitResultManager.WAIT_INTERVAL, () -> {
-                Popup.message(requireView(), "Contact updated.");
-                requireActivity().onBackPressed();
-            }).start();
+            Popup.message(requireView(), "Contact updated.");
+            requireActivity().onBackPressed();
         });
     }
 

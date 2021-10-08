@@ -199,7 +199,8 @@ public class ContactFragment extends DaggerFragment {
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.loadContactDatabase();
+        new WaitResultManager(WaitResultManager.WAIT_LONG, WaitResultManager.WAIT_INTERVAL, () ->
+                viewModel.loadContactDatabase()).start();
     }
 
     @Override
