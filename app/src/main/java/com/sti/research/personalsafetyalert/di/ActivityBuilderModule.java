@@ -3,7 +3,6 @@ package com.sti.research.personalsafetyalert.di;
 import com.sti.research.personalsafetyalert.di.ui.MainFragmentBuilderModule;
 import com.sti.research.personalsafetyalert.di.ui.MainScope;
 import com.sti.research.personalsafetyalert.di.ui.MainViewModelModule;
-import com.sti.research.personalsafetyalert.di.ui.screen.home.dialog.HomeDialogBuilderModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.help.HelpFragmentBuilderModule;
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.help.HelpScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.help.HelpViewModelModule;
@@ -43,7 +42,6 @@ public abstract class ActivityBuilderModule {
 
     @MainScope
     @ContributesAndroidInjector(modules = {
-            HomeDialogBuilderModule.class,
             MainFragmentBuilderModule.class,
             MainViewModelModule.class
     })

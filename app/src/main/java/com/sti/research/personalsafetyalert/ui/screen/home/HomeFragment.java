@@ -7,17 +7,13 @@ import static com.sti.research.personalsafetyalert.util.Utility.Dialog.*;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -27,9 +23,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.FragmentHomeBinding;
@@ -39,7 +33,6 @@ import com.sti.research.personalsafetyalert.repository.PermissionRepository;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.LocationServiceListener;
 import com.sti.research.personalsafetyalert.ui.NavigatePermission;
-import com.sti.research.personalsafetyalert.ui.screen.home.dialog.DialogInvalidContactFragment;
 import com.sti.research.personalsafetyalert.util.MessageComparator;
 import com.sti.research.personalsafetyalert.util.Support;
 import com.sti.research.personalsafetyalert.util.Utility;
