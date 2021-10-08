@@ -3,6 +3,7 @@ package com.sti.research.personalsafetyalert.ui.screen.home;
 import static com.sti.research.personalsafetyalert.ui.screen.home.HomeFragmentViewModel.LocationServiceState.ACTIVATE_OFF;
 import static com.sti.research.personalsafetyalert.ui.screen.home.HomeFragmentViewModel.LocationServiceState.ACTIVATE_ON;
 import static com.sti.research.personalsafetyalert.util.Utility.*;
+import static com.sti.research.personalsafetyalert.util.Utility.Dialog.*;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -16,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -40,6 +42,7 @@ import com.sti.research.personalsafetyalert.ui.NavigatePermission;
 import com.sti.research.personalsafetyalert.ui.screen.home.dialog.DialogInvalidContactFragment;
 import com.sti.research.personalsafetyalert.util.MessageComparator;
 import com.sti.research.personalsafetyalert.util.Support;
+import com.sti.research.personalsafetyalert.util.Utility;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
 import com.sti.research.personalsafetyalert.util.screen.contact.SelectPreferredContactPreference;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
@@ -183,16 +186,7 @@ public class HomeFragment extends DaggerFragment {
             return true;
         } else {
             if (binding.homeSwitch.isChecked()) binding.homeSwitch.setChecked(false);
-            AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireActivity(), R.style.PersonalSafetyAlert_AlertDialogTheme);
-            View view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_internet_layout, null);
-            TextView positiveButton = view.findViewById(R.id.dialog_button_positive);
-            builder.setCancelable(false);
-            builder.setView(view);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            positiveButton.setOnClickListener(v -> {
-                dialog.dismiss();
-            });
+            initAlertDialogBuilder(requireActivity(), R.layout.dialog_internet_layout);
             return false;
         }
     }
@@ -202,18 +196,13 @@ public class HomeFragment extends DaggerFragment {
             return true;
         } else {
             if (binding.homeSwitch.isChecked()) binding.homeSwitch.setChecked(false);
-            AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireActivity(), R.style.PersonalSafetyAlert_AlertDialogTheme);
-            View view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_gps_layout, null);
-            TextView positiveButton = view.findViewById(R.id.dialog_button_positive);
-            builder.setCancelable(false);
-            builder.setView(view);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            positiveButton.setOnClickListener(v -> {
-                dialog.dismiss();
-            });
+            initAlertDialogBuilder(requireActivity(), R.layout.dialog_gps_layout);
             return false;
         }
+    }
+
+    private void checkRegisteredContact() {
+        initAlertDialogBuilder(requireActivity(), R.layout.dialog_register_contact_layout);
     }
 
     private boolean validation() {
@@ -223,8 +212,7 @@ public class HomeFragment extends DaggerFragment {
                 if (contact == null || contact.getNumber().isEmpty()) {
                     if (binding.homeSwitch.isChecked()) binding.homeSwitch.setChecked(false);
                     //dialog
-                    DialogInvalidContactFragment dialog = new DialogInvalidContactFragment();
-                    dialog.show(requireActivity().getSupportFragmentManager(), "tag_dialog_invalid_contact_fragment");
+                    this.checkRegisteredContact();
                     return false;
                 }
                 return true;
@@ -232,8 +220,7 @@ public class HomeFragment extends DaggerFragment {
                 if (contacts == null || contacts.size() < 1) {
                     if (binding.homeSwitch.isChecked()) binding.homeSwitch.setChecked(false);
                     //dialog
-                    DialogInvalidContactFragment dialog = new DialogInvalidContactFragment();
-                    dialog.show(requireActivity().getSupportFragmentManager(), "tag_dialog_invalid_contact_fragment");
+                    this.checkRegisteredContact();
                     return false;
                 }
                 return true;

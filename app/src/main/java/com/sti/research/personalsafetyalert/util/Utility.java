@@ -1,7 +1,6 @@
 package com.sti.research.personalsafetyalert.util;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,10 +12,14 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.sti.research.personalsafetyalert.R;
 
@@ -124,4 +127,20 @@ public class Utility {
 
     }
 
+    public static class Dialog {
+
+        private Dialog() {
+        }
+
+        public static void initAlertDialogBuilder(FragmentActivity context, int layout) {
+            androidx.appcompat.app.AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context, R.style.PersonalSafetyAlert_AlertDialogTheme);
+            View view = context.getLayoutInflater().inflate(layout, null);
+            TextView positiveButton = view.findViewById(R.id.dialog_button_positive);
+            builder.setCancelable(false);
+            builder.setView(view);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            positiveButton.setOnClickListener(v -> dialog.dismiss());
+        }
+    }
 }
