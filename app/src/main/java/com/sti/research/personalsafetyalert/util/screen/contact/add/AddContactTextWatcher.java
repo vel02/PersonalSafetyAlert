@@ -13,9 +13,9 @@ public class AddContactTextWatcher implements TextWatcher {
     private final EditText name;
     private final EditText number;
     private final EditText email;
-    private final Button done;
+    private final View done;
 
-    public AddContactTextWatcher(EditText name, EditText number, EditText email, Button done) {
+    public AddContactTextWatcher(EditText name, EditText number, EditText email, View done) {
         this.name = name;
         this.number = number;
         this.email = email;
@@ -36,12 +36,13 @@ public class AddContactTextWatcher implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
 
-        if (name != null && number != null && email != null && done != null) {
+        if (name != null && number != null && email != null) {
             String name = this.name.getText().toString();
             String number = this.number.getText().toString();
             String email = this.email.getText().toString();
 
-            done.setEnabled(isNotEmpty(name) && isNotEmpty(number) && isNotEmpty(email));
+            if (done != null)
+                done.setEnabled(isNotEmpty(name) && isNotEmpty(number) && isNotEmpty(email));
         }
 
     }

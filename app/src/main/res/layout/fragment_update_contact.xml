@@ -189,21 +189,5 @@
 
         </ScrollView>
 
-        <Button
-            android:id="@+id/update_contact_done"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/primarySecondary"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:text="@string/txt_done"
-            android:textAllCaps="false"
-            android:textColor="@color/text_color_white"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="UnusedAttribute"
-            tools:targetApi="m" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

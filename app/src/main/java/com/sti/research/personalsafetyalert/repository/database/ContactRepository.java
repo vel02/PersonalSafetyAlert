@@ -33,6 +33,10 @@ public class ContactRepository {
         ContactExecutorDatabase.update(database, contact);
     }
 
+    public void delete(Contact contact) {
+        ContactExecutorDatabase.delete(database, contact);
+    }
+
     public void deleteAll() {
         ContactExecutorDatabase.deleteAll(database);
     }

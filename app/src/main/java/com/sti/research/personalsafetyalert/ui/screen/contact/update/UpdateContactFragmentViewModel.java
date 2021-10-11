@@ -20,4 +20,8 @@ public class UpdateContactFragmentViewModel extends ViewModel {
         this.contactRepository.update(contact);
     }
 
+    public void deleteContact(Contact contact) {
+        this.contactRepository.delete(contact);
+    }
+
 }

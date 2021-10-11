@@ -79,6 +79,33 @@ public class ContactExecutorDatabase {
                 });
     }
 
+    public static void delete(ContactDatabase database, Contact contact) {
+        Observable.just(contact).subscribeOn(Schedulers.io())
+                .subscribe(new Observer<Contact>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Contact contact) {
+                        Log.d(TAG, "SUCCESSFULLY UPDATED");
+                        database.getContactDao().deleteContact(contact.getId());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e(TAG, "ERROR DELETING ", e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "DONE DELETING");
+                        disposable.clear();
+                    }
+                });
+    }
+
     public static void deleteAll(ContactDatabase database) {
         Observable.just(new Object()).subscribeOn(Schedulers.io())
                 .subscribe(new Observer<Object>() {

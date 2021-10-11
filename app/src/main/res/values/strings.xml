@@ -142,6 +142,7 @@
     <string name="txt_update_contact">Update contact</string>
     <string name="desc_update_contact">Make changes of contact details.</string>
     <string name="desc_dialog_logo">Dialog logo</string>
+    <string name="txt_delete">Delete</string>
 
 
 </resources>

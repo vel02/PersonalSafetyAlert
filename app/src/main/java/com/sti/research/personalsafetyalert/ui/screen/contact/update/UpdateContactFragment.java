@@ -13,6 +13,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Patterns;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -44,6 +47,12 @@ public class UpdateContactFragment extends DaggerFragment {
     private MobileNetworkManager mobileNetworkManager;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentUpdateContactBinding.inflate(inflater);
@@ -68,13 +77,40 @@ public class UpdateContactFragment extends DaggerFragment {
                 binding.updateContactPersonName,
                 binding.updateContactPhoneNumber,
                 binding.updateContactEmail,
-                binding.updateContactDone);
+                null);
 
         binding.updateContactPersonName.addTextChangedListener(watcher);
         binding.updateContactPhoneNumber.addTextChangedListener(watcher);
         binding.updateContactEmail.addTextChangedListener(watcher);
 
-        binding.updateContactDone.setOnClickListener(v -> {
+    }
+
+    private void resetUiBehavior() {
+        binding.updateContactPersonName.clearFocus();
+        binding.updateContactPhoneNumber.clearFocus();
+        binding.updateContactEmail.clearFocus();
+        hideSoftKeyboard(requireParentFragment());
+    }
+
+    public boolean isValidEmail(CharSequence target) {
+        return (Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_contact, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_delete) {
+            viewModel.deleteContact(contact);
+            Popup.message(requireView(), "Contact deleted.");
+            requireActivity().onBackPressed();
+            return true;
+        } else if (item.getItemId() == R.id.action_done) {
             String contentName = binding.updateContactPersonName.getText().toString();
             String contentNumber = binding.updateContactPhoneNumber.getText().toString();
             String contentEmail = binding.updateContactEmail.getText().toString();
@@ -83,7 +119,7 @@ public class UpdateContactFragment extends DaggerFragment {
                 Popup.message(requireView(), "Using SMS feature required valid number and email. " +
                         "Please, consider registering a valid contact.");
                 hideSoftKeyboard(requireParentFragment());
-                return;
+                return true;
             }
 
             mobileNetworkManager.validate(contentNumber);
@@ -100,18 +136,10 @@ public class UpdateContactFragment extends DaggerFragment {
             resetUiBehavior();
             Popup.message(requireView(), "Contact updated.");
             requireActivity().onBackPressed();
-        });
-    }
+            return true;
+        }
 
-    private void resetUiBehavior() {
-        binding.updateContactPersonName.clearFocus();
-        binding.updateContactPhoneNumber.clearFocus();
-        binding.updateContactEmail.clearFocus();
-        hideSoftKeyboard(requireParentFragment());
-    }
-
-    public boolean isValidEmail(CharSequence target) {
-        return (Patterns.EMAIL_ADDRESS.matcher(target).matches());
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

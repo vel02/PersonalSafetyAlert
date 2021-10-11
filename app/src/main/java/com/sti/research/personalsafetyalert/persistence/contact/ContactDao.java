@@ -21,6 +21,9 @@ public interface ContactDao {
     void updateContact(int id, String name, String mobileNumber,
                        String mobileNetwork, String email);
 
+    @Query("DELETE FROM Contacts WHERE id = :id")
+    void deleteContact(int id);
+
     @Query("DELETE FROM Contacts")
     void deleteContacts();
 
