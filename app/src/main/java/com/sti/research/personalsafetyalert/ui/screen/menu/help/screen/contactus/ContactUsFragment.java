@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentContactUsBinding;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
-import com.sti.research.personalsafetyalert.util.Utility;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import java.io.IOException;
