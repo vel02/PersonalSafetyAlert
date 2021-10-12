@@ -91,10 +91,8 @@ public class AddContactFragment extends DaggerFragment {
             viewModel.insertContact(contact);
 
             resetUiBehavior();
-//            new WaitResultManager(WaitResultManager.WAIT_LONG, WaitResultManager.WAIT_INTERVAL, () -> {
-                Popup.message(requireView(), "Contact added.");
-                requireActivity().onBackPressed();
-//            }).start();
+            Popup.message(requireView(), "Contact added.");
+            requireActivity().onBackPressed();
 
         });
     }
