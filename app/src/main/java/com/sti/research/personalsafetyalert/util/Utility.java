@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -23,13 +26,39 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.sti.research.personalsafetyalert.R;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class Utility {
 
     private Utility() {
+    }
+
+    public static String getLocationText(Context context, Location location) {
+
+        if (location == null) return "Please wait to retrieve your current location.";
+
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (addresses == null || addresses.isEmpty()) return "Please wait, the app is retrieving your location.";
+        Address address = addresses.get(0);
+        List<String> addressFragments = new ArrayList<>();
+        for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
+            addressFragments.add(address.getAddressLine(i));
+        }
+
+        return TextUtils.join(System.getProperty("line.separator"), addressFragments);
     }
 
     public static boolean isNotEmpty(String value) {

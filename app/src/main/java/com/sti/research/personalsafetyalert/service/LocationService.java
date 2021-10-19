@@ -2,6 +2,7 @@ package com.sti.research.personalsafetyalert.service;
 
 import static com.sti.research.personalsafetyalert.BaseApplication.NOTIFICATION_GPS_CHANNEL_ID;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -10,20 +11,34 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.sti.research.personalsafetyalert.BaseApplication;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.ui.splash.SplashActivity;
 import com.sti.research.personalsafetyalert.util.NetworkUtil;
+import com.sti.research.personalsafetyalert.util.Utility;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
+
+import java.util.concurrent.Executor;
 
 public class LocationService extends BaseService {
 
@@ -33,11 +48,36 @@ public class LocationService extends BaseService {
 
     private boolean isCheckGPSConnectionReceiverRegistered;
 
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationRequest locationRequest;
+    private Location location;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        locationRequest = LocationRequest.create();
+        locationRequest.setInterval(LOCATION_REQUEST_UPDATE_INTERVAL);
+        locationRequest.setFastestInterval(LOCATION_REQUEST_UPDATE_FAST_INTERVAL);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setMaxWaitTime(LOCATION_REQUEST_MAX_WAIT_TIME);
     }
+
+    private final LocationCallback locationCallback = new LocationCallback() {
+
+        @Override
+        public void onLocationResult(@NonNull LocationResult locationResult) {
+            if (locationResult != null) {
+                for (Location location : locationResult.getLocations()) {
+                    Log.d(TAG, "onLocationResult: called" + location.getLatitude() + " and " + location.getLongitude());
+                    LocationService.this.location = location;
+                }
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -85,6 +125,7 @@ public class LocationService extends BaseService {
     public void requestNotificationLocation() {
         try {
             startService(new Intent(this, LocationService.class));
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
             HomeSwitchPreference.getInstance().setSwitchStateState(this, true);
         } catch (SecurityException unlikely) {
             HomeSwitchPreference.getInstance().setSwitchStateState(this, false);
@@ -95,6 +136,7 @@ public class LocationService extends BaseService {
 
     public void removeNotificationLocation() {
         try {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
             this.stopSelf();
             HomeSwitchPreference.getInstance().setSwitchStateState(this, false);
         } catch (SecurityException unlikely) {
@@ -107,6 +149,9 @@ public class LocationService extends BaseService {
 
     @SuppressLint("UnspecifiedImmutableFlag")
     private Notification notificationLocation() {
+
+        CharSequence location = Utility.getLocationText(this, this.location);
+
 
         Intent intent = new Intent(this, LocationService.class);
         intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true);
@@ -125,7 +170,7 @@ public class LocationService extends BaseService {
                         servicePI)
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentTitle("Present Location")
-                .setContentText("location")
+                .setContentText(location)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setWhen(System.currentTimeMillis())
                 .setOnlyAlertOnce(true)
