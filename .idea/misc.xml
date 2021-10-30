@@ -7,6 +7,7 @@
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_add_contact.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_check.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_clear.xml" value="0.2203125" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_delete_contact.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_email.xml" value="0.20833333333333334" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_help.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_holder.xml" value="0.1814814814814815" />
@@ -91,7 +92,7 @@
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/item_message_text.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/item_not_working_view_pager.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/menu/home_popup_more.xml" value="0.20416666666666666" />
-        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/menu/menu_contact.xml" value="0.20416666666666666" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/menu/menu_contact.xml" value="0.5" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/menu/menu_contact_us.xml" value="0.20416666666666666" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/menu/menu_main.xml" value="0.22" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/menu/menu_popup_more.xml" value="0.1" />

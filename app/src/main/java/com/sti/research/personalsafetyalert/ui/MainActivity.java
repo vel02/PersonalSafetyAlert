@@ -17,15 +17,16 @@ import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.sti.research.personalsafetyalert.BaseActivity;
@@ -38,7 +39,6 @@ import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.model.list.Contact;
 import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragment;
 import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragmentDirections;
-import com.sti.research.personalsafetyalert.ui.screen.contact.add.AddContactFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
@@ -49,19 +49,60 @@ import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragm
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragmentDirections;
 import com.sti.research.personalsafetyalert.util.Constants;
+import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
+import com.sti.research.personalsafetyalert.util.screen.contact.SelectPreferredContactPreference;
+import com.sti.research.personalsafetyalert.util.screen.home.HomeCustomMessagePreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.android.support.DaggerAppCompatActivity;
-
 public class MainActivity extends BaseActivity implements HostScreen, NavigatePermission,
         LocationServiceListener,
+        BaseActivity.OnDataProcessingListener,
         MessageRecyclerAdapter.OnMessageClickListener,
         ContactRecyclerAdapter.OnContactClickListener {
 
     private static final String TAG = "test";
 
+    private List<Contact> contacts = new ArrayList<>();
+
+    @Override
+    public void onDataProcessing(Location location) {
+        Log.d(TAG, "MAIN ACTIVITY LOCATION: " + location.getLatitude() + " - " + location.getLongitude());
+        //user message received here...
+        String userMessage = HomeCustomMessagePreference.getInstance().getCustomMessageStorage(this);
+        Log.d(TAG, "MAIN ACTIVITY CUSTOM MESSAGE: " + userMessage);
+        //Contact
+        String preferredContact = SelectPreferredContactPreference.getInstance().getSelectPreferredContact(this);
+        Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT: " + preferredContact);
+
+        com.sti.research.personalsafetyalert.model.single.Contact contact;
+
+        switch (preferredContact) {
+            case "SINGLE_CONTACT":
+                Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT SELECTED: Send to one specific contact");
+                contact = ContactStoreSinglePerson.getInstance().restoreContactSinglePerson(this);
+                Log.d(TAG, "MAIN ACTIVITY CONTACT DISPLAY: " + contact);
+
+                break;
+            case "MULTIPLE_CONTACT":
+                Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT SELECTED: Send to this list of contacts");
+                for (int i = 0; i < contacts.size(); i++) {
+                    Log.d(TAG, "MAIN ACTIVITY LIST CONTACT #" + i + ": " + contacts.get(i));
+                }
+                break;
+        }
+
+
+        //Recording...
+
+
+        //send sms
+        //send email
+    }
 
     @Override
     public void requestNotificationLocation() {
@@ -112,6 +153,7 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
         viewModel = new ViewModelProvider(MainActivity.this, providerFactory).get(MainViewModel.class);
+        registerDataProcessingListener(this);
         getIntentObject();
         initController();
         subscribeObservers();
@@ -124,6 +166,12 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
                 Fade enterTransition = new Fade();
                 enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
                 getWindow().setEnterTransition(enterTransition);
+            }
+        });
+
+        viewModel.observedContacts().observe(this, contacts -> {
+            if (contacts != null) {
+                this.contacts = contacts;
             }
         });
     }

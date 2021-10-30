@@ -4,9 +4,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.sti.research.personalsafetyalert.model.list.Contact;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;
+import com.sti.research.personalsafetyalert.repository.database.ContactRepository;
 import com.sti.research.personalsafetyalert.repository.share.MainSharedRepository;
 import com.sti.research.personalsafetyalert.util.Constants;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -16,12 +20,24 @@ public class MainViewModel extends ViewModel {
 
     private final PermissionRepository permissionRepository;
     private final MainSharedRepository sharedRepository;
+    private final ContactRepository contactRepository;
 
     @Inject
-    public MainViewModel(PermissionRepository permissionRepository, MainSharedRepository sharedRepository) {
+    public MainViewModel(PermissionRepository permissionRepository,
+                         MainSharedRepository sharedRepository,
+                         ContactRepository contactRepository) {
         this.permissionRepository = permissionRepository;
         this.sharedRepository = sharedRepository;
+        this.contactRepository = contactRepository;
         this.transitionType = new MutableLiveData<>();
+    }
+
+    public void loadContactList() {
+        this.contactRepository.select();
+    }
+
+    public LiveData<List<Contact>> observedContacts() {
+        return this.contactRepository.observedContacts();
     }
 
     public String getSelectedMessage() {

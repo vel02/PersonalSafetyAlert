@@ -2,7 +2,6 @@ package com.sti.research.personalsafetyalert.service;
 
 import static com.sti.research.personalsafetyalert.BaseApplication.NOTIFICATION_GPS_CHANNEL_ID;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -11,7 +10,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
@@ -22,7 +20,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -30,17 +27,15 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.sti.research.personalsafetyalert.BaseApplication;
 import com.sti.research.personalsafetyalert.R;
+import com.sti.research.personalsafetyalert.receiver.DetectPowerClickedReceiver;
 import com.sti.research.personalsafetyalert.ui.splash.SplashActivity;
 import com.sti.research.personalsafetyalert.util.NetworkUtil;
 import com.sti.research.personalsafetyalert.util.Utility;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
 
-import java.util.concurrent.Executor;
-
-public class LocationService extends BaseService {
+public class LocationService extends BaseService implements DetectPowerClickedReceiver.PowerClickedReceiverCallback {
 
     private static final String TAG = "Service";
 
@@ -52,6 +47,16 @@ public class LocationService extends BaseService {
     private LocationRequest locationRequest;
     private Location location;
 
+    private DetectPowerClickedReceiver powerClickedReceiver;
+
+    private LocationDataTransmitter locationDataTransmitter;
+
+    @Override
+    public void onTriggered() {
+        if (location != null && locationDataTransmitter != null) {
+            locationDataTransmitter.onDataProcessing(location);
+        }
+    }
 
     @Override
     public void onCreate() {
@@ -111,6 +116,10 @@ public class LocationService extends BaseService {
                 intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
                         false);
 
+        powerClickedReceiver = new DetectPowerClickedReceiver();
+        powerClickedReceiver.onScreenReceiverCallback(this);
+        registerPowerClickedReceiver();
+
         if (startedFromNotification) this.removeNotificationLocation();
 
         return START_NOT_STICKY;
@@ -169,7 +178,7 @@ public class LocationService extends BaseService {
                 .addAction(R.drawable.ic_cancel, "Stop",
                         servicePI)
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("Present Location")
+                .setContentTitle("Current Location")
                 .setContentText(location)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setWhen(System.currentTimeMillis())
@@ -239,6 +248,8 @@ public class LocationService extends BaseService {
         }
     };
 
+    //=============== Receivers ===============//
+
     private void registerCheckGPSConnectionReceiver() {
         IntentFilter filter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
         filter.addAction(Intent.ACTION_PROVIDER_CHANGED);
@@ -252,9 +263,35 @@ public class LocationService extends BaseService {
             this.unregisterReceiver(checkGPSConnectionReceiver);
     }
 
+    private void registerPowerClickedReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(powerClickedReceiver, filter);
+    }
+
+    private void unregisterPowerClickedReceiver() {
+        if (powerClickedReceiver != null) {
+            unregisterReceiver(powerClickedReceiver);
+            powerClickedReceiver = null;
+        }
+    }
+
+    //=============== Interfaces ===============//
+
+    public void registerLocationDataTransmitter(LocationDataTransmitter locationDataTransmitter) {
+        this.locationDataTransmitter = locationDataTransmitter;
+    }
+
+    public interface LocationDataTransmitter {
+        void onDataProcessing(Location location);
+    }
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         unregisterCheckGPSConnectionReceiver();
+        unregisterPowerClickedReceiver();
     }
 }

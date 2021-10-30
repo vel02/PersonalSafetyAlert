@@ -59,4 +59,12 @@ public class Contact implements Parcelable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "number='" + number + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

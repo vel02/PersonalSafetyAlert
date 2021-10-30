@@ -38,6 +38,7 @@ import com.sti.research.personalsafetyalert.util.Support;
 import com.sti.research.personalsafetyalert.util.Utility;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
 import com.sti.research.personalsafetyalert.util.screen.contact.SelectPreferredContactPreference;
+import com.sti.research.personalsafetyalert.util.screen.home.HomeCustomMessagePreference;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeInitialMessage;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
@@ -169,6 +170,8 @@ public class HomeFragment extends DaggerFragment {
         viewModel.observedMessage().observe(getViewLifecycleOwner(), message -> {
             if (message != null) {
                 binding.homeMessageDisplay.setText(message.getMessage());
+                Log.d(TAG, "DITO: " + message.getMessage());
+                HomeCustomMessagePreference.getInstance().setCustomMessageStorage(requireActivity(), message.getMessage());
             }
         });
 
