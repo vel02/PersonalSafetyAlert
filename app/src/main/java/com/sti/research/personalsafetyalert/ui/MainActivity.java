@@ -3,6 +3,7 @@ package com.sti.research.personalsafetyalert.ui;
 import static com.sti.research.personalsafetyalert.util.Constants.*;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -19,7 +20,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.transition.Fade;
 import android.util.Log;
@@ -30,7 +33,6 @@ import android.view.Window;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.sti.research.personalsafetyalert.BaseActivity;
-import com.sti.research.personalsafetyalert.BuildConfig;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.contact.ContactRecyclerAdapter;
 import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecyclerAdapter;
@@ -49,6 +51,7 @@ import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragm
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragmentDirections;
 import com.sti.research.personalsafetyalert.util.Constants;
+import com.sti.research.personalsafetyalert.util.api.AudioRecordManager;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
 import com.sti.research.personalsafetyalert.util.screen.contact.SelectPreferredContactPreference;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeCustomMessagePreference;
@@ -59,6 +62,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import de.hdodenhof.circleimageview.BuildConfig;
+
 public class MainActivity extends BaseActivity implements HostScreen, NavigatePermission,
         LocationServiceListener,
         BaseActivity.OnDataProcessingListener,
@@ -67,7 +72,11 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
 
     private static final String TAG = "test";
 
+    private com.sti.research.personalsafetyalert.model.single.Contact contact;
     private List<Contact> contacts = new ArrayList<>();
+
+    private String audioPath;
+
 
     @Override
     public void onDataProcessing(Location location) {
@@ -75,11 +84,12 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
         //user message received here...
         String userMessage = HomeCustomMessagePreference.getInstance().getCustomMessageStorage(this);
         Log.d(TAG, "MAIN ACTIVITY CUSTOM MESSAGE: " + userMessage);
+
+
         //Contact
         String preferredContact = SelectPreferredContactPreference.getInstance().getSelectPreferredContact(this);
         Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT: " + preferredContact);
 
-        com.sti.research.personalsafetyalert.model.single.Contact contact;
 
         switch (preferredContact) {
             case "SINGLE_CONTACT":
@@ -98,6 +108,15 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
 
 
         //Recording...
+        new AudioRecordManager(5000, 1000, new AudioRecordManager.OnAudioRecordListener() {
+
+            @Override
+            public void audioPath(String path) {
+                MainActivity.this.audioPath = path;
+                Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
+            }
+
+        }, "PersonalSafety").start();
 
 
         //send sms
@@ -151,6 +170,21 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS); //permission to use fade transition
         super.onCreate(savedInstanceState);
+
+        //TODO transfer this to permission check screen
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+
+            if (Environment.isExternalStorageManager()) {
+                //todo when permission is granted
+            } else {
+                //request for the permission
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        }
+
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
         viewModel = new ViewModelProvider(MainActivity.this, providerFactory).get(MainViewModel.class);
         registerDataProcessingListener(this);

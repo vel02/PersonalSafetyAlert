@@ -1,6 +1,7 @@
 package com.sti.research.personalsafetyalert.util;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.sti.research.personalsafetyalert.R;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +39,25 @@ import java.util.Locale;
 public class Utility {
 
     private Utility() {
+    }
+
+
+    public static boolean serviceIsRunningInForeground(Context context, Object object) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(
+                Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(
+                Integer.MAX_VALUE)) {
+            if (object.getClass().getName().equals(service.service.getClassName())) {
+                if (service.foreground) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static String getLocationTitle(Context context) {
+        return context.getString(R.string.txt_location_updated,
+                DateFormat.getDateTimeInstance().format(new Date()));
     }
 
     public static String getLocationText(Context context, Location location) {

@@ -49,12 +49,14 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
 
     private DetectPowerClickedReceiver powerClickedReceiver;
 
-    private LocationDataTransmitter locationDataTransmitter;
+    private LocationDataTransmitterListener locationDataTransmitterListener;
 
     @Override
     public void onTriggered() {
-        if (location != null && locationDataTransmitter != null) {
-            locationDataTransmitter.onDataProcessing(location);
+        if (location != null && locationDataTransmitterListener != null) {
+            locationDataTransmitterListener.onDataProcessing(location);
+        } else {
+            Log.d(TAG, "onTriggered: Can't be send without location detected.");
         }
     }
 
@@ -68,21 +70,49 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
         locationRequest.setInterval(LOCATION_REQUEST_UPDATE_INTERVAL);
         locationRequest.setFastestInterval(LOCATION_REQUEST_UPDATE_FAST_INTERVAL);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setMaxWaitTime(LOCATION_REQUEST_MAX_WAIT_TIME);
+//        locationRequest.setMaxWaitTime(LOCATION_REQUEST_MAX_WAIT_TIME);
+        getLastLocation();
     }
 
     private final LocationCallback locationCallback = new LocationCallback() {
 
         @Override
-        public void onLocationResult(@NonNull LocationResult locationResult) {
+        public void onLocationResult(LocationResult locationResult) {
             if (locationResult != null) {
                 for (Location location : locationResult.getLocations()) {
                     Log.d(TAG, "onLocationResult: called" + location.getLatitude() + " and " + location.getLongitude());
-                    LocationService.this.location = location;
+                    getNewLocation(location);
                 }
             }
         }
     };
+
+    private void getNewLocation(Location location) {
+
+        this.location = location;
+
+        Log.d(TAG, "getNewLocation: " + this.location.getLatitude() + " and " + this.location.getLongitude());
+
+        if (Utility.serviceIsRunningInForeground(LocationService.this, this)) {
+            notificationManager.notify(NOTIFICATION_LOCATION_UPDATE_ID, notificationLocation());
+        }
+
+    }
+
+
+    private void getLastLocation() {
+        try {
+            fusedLocationClient.getLastLocation()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            location = task.getResult();
+                            Log.d(TAG, "getLastLocation: " + location.getLatitude() + " and " + location.getLongitude());
+                        } else Log.w(TAG, "getLastLocation: Failed to get location");
+                    });
+        } catch (SecurityException unlikely) {
+            Log.e(TAG, "getLastLocation: Lost location permission. " + unlikely);
+        }
+    }
 
     @Nullable
     @Override
@@ -178,7 +208,7 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
                 .addAction(R.drawable.ic_cancel, "Stop",
                         servicePI)
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("Current Location")
+                .setContentTitle(Utility.getLocationTitle(this))
                 .setContentText(location)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setWhen(System.currentTimeMillis())
@@ -279,11 +309,11 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
 
     //=============== Interfaces ===============//
 
-    public void registerLocationDataTransmitter(LocationDataTransmitter locationDataTransmitter) {
-        this.locationDataTransmitter = locationDataTransmitter;
+    public void registerLocationDataTransmitter(LocationDataTransmitterListener locationDataTransmitterListener) {
+        this.locationDataTransmitterListener = locationDataTransmitterListener;
     }
 
-    public interface LocationDataTransmitter {
+    public interface LocationDataTransmitterListener {
         void onDataProcessing(Location location);
     }
 

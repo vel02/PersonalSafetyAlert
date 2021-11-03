@@ -1,21 +1,17 @@
 package com.sti.research.personalsafetyalert;
 
-import static com.sti.research.personalsafetyalert.util.Utility.*;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.location.Location;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.sti.research.personalsafetyalert.service.LocationService;
-import com.sti.research.personalsafetyalert.util.Utility;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class BaseActivity extends DaggerAppCompatActivity implements LocationService.LocationDataTransmitter {
+public class BaseActivity extends DaggerAppCompatActivity implements LocationService.LocationDataTransmitterListener {
 
     @Override
     public void onDataProcessing(Location location) {

@@ -144,5 +144,8 @@
     <string name="desc_dialog_logo">Dialog logo</string>
     <string name="txt_delete">Delete</string>
 
+    <string name="txt_location_updated">Location Updated: %1$s</string>
+
+
 
 </resources>
