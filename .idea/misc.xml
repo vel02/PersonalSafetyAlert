@@ -29,6 +29,7 @@
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_sms_holder.xml" value="0.1814814814814815" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_splash_logo_holder.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_storage.xml" value="0.2203125" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_storage_device.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_storage_holder.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-anydpi/ic_visual_message.xml" value="0.2203125" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/drawable-v24/edt_cursor_color_black_800.xml" value="0.2203125" />
@@ -69,6 +70,7 @@
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/activity_welcome.xml" value="0.18" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_gps_layout.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_internet_layout.xml" value="0.20416666666666666" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_manage_external_storage.xml" value="0.33" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_register_contact_layout.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_add_contact.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_contact.xml" value="0.33" />

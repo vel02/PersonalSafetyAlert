@@ -16,11 +16,14 @@
 package com.sti.research.personalsafetyalert.util.api;
 
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -34,7 +37,7 @@ public class AudioRecordManager extends CountDownTimer {
 
     @Override
     public void onFinish() {
-        stopRecord();
+        if (recorder != null) stopRecord();
         listener.audioPath(path);
     }
 
@@ -46,8 +49,16 @@ public class AudioRecordManager extends CountDownTimer {
     private final String folder;
     private String path;
 
+    private static AudioRecordManager instance;
 
-    public AudioRecordManager(long millisInFuture, long countDownInterval, OnAudioRecordListener listener, String folder) {
+    public static AudioRecordManager getInstance(long millisInFuture, long countDownInterval, OnAudioRecordListener listener, String folder) {
+        if (instance == null) {
+            instance = new AudioRecordManager(millisInFuture, countDownInterval, listener, folder);
+        }
+        return instance;
+    }
+
+    private AudioRecordManager(long millisInFuture, long countDownInterval, OnAudioRecordListener listener, String folder) {
         super(millisInFuture, countDownInterval);
         this.listener = listener;
         this.folder = folder;
@@ -56,6 +67,7 @@ public class AudioRecordManager extends CountDownTimer {
     private void conversion() {
         setAudioChannel();
         setAudioSource();
+
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         recorder.setAudioSamplingRate(44100);
@@ -86,16 +98,15 @@ public class AudioRecordManager extends CountDownTimer {
         try {
             recorder.prepare();
             recorder.start();
-        } catch (RuntimeException e) {
-            Log.e(TAG, "RECORDING STATUS: FAILED TO START THE AUDIO RECORDING! ");
-            e.printStackTrace();
-        } catch (Exception e) {
+
+        } catch (IOException e) {
             Log.e(TAG, "RECORDING STATUS: FAILED TO PREPARE THE AUDIO RECORDING! ");
             e.printStackTrace();
         }
+
     }
 
-    private void stopRecord() {
+    public void stopRecord() {
         if (recorder == null) {
             Log.e(TAG, "RECORDING STATUS: FAILED TO STOP THE RECORD, MediaRecorder NOT FOUND!");
             return;

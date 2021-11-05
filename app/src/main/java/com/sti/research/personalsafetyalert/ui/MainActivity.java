@@ -39,6 +39,7 @@ import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecycler
 import com.sti.research.personalsafetyalert.databinding.ActivityMainBinding;
 import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.model.list.Contact;
+import com.sti.research.personalsafetyalert.service.LocationService;
 import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragment;
 import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
@@ -74,13 +75,13 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
 
     private com.sti.research.personalsafetyalert.model.single.Contact contact;
     private List<Contact> contacts = new ArrayList<>();
-
     private String audioPath;
 
 
     @Override
     public void onDataProcessing(Location location) {
         Log.d(TAG, "MAIN ACTIVITY LOCATION: " + location.getLatitude() + " - " + location.getLongitude());
+
         //user message received here...
         String userMessage = HomeCustomMessagePreference.getInstance().getCustomMessageStorage(this);
         Log.d(TAG, "MAIN ACTIVITY CUSTOM MESSAGE: " + userMessage);
@@ -89,8 +90,6 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
         //Contact
         String preferredContact = SelectPreferredContactPreference.getInstance().getSelectPreferredContact(this);
         Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT: " + preferredContact);
-
-
         switch (preferredContact) {
             case "SINGLE_CONTACT":
                 Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT SELECTED: Send to one specific contact");
@@ -107,17 +106,11 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
         }
 
 
-        //Recording...
-        new AudioRecordManager(5000, 1000, new AudioRecordManager.OnAudioRecordListener() {
-
-            @Override
-            public void audioPath(String path) {
-                MainActivity.this.audioPath = path;
-                Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
-            }
-
+        //Record Audio for attachment...
+        AudioRecordManager.getInstance(5000, 1000, path -> {
+            MainActivity.this.audioPath = path;
+            Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
         }, "PersonalSafety").start();
-
 
         //send sms
         //send email
@@ -170,20 +163,6 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS); //permission to use fade transition
         super.onCreate(savedInstanceState);
-
-        //TODO transfer this to permission check screen
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-
-            if (Environment.isExternalStorageManager()) {
-                //todo when permission is granted
-            } else {
-                //request for the permission
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
-            }
-        }
 
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
         viewModel = new ViewModelProvider(MainActivity.this, providerFactory).get(MainViewModel.class);

@@ -55,6 +55,7 @@ public class Utility {
         }
         return false;
     }
+
     public static String getLocationTitle(Context context) {
         return context.getString(R.string.txt_location_updated,
                 DateFormat.getDateTimeInstance().format(new Date()));
@@ -72,7 +73,8 @@ public class Utility {
             e.printStackTrace();
         }
 
-        if (addresses == null || addresses.isEmpty()) return "Please wait, the app is retrieving your location.";
+        if (addresses == null || addresses.isEmpty())
+            return "Please wait, the app is retrieving your location.";
         Address address = addresses.get(0);
         List<String> addressFragments = new ArrayList<>();
         for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {

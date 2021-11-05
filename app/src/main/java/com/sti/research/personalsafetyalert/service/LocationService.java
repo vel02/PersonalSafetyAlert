@@ -30,9 +30,11 @@ import com.google.android.gms.location.LocationServices;
 import com.sti.research.personalsafetyalert.BaseApplication;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.receiver.DetectPowerClickedReceiver;
+import com.sti.research.personalsafetyalert.ui.MainActivity;
 import com.sti.research.personalsafetyalert.ui.splash.SplashActivity;
 import com.sti.research.personalsafetyalert.util.NetworkUtil;
 import com.sti.research.personalsafetyalert.util.Utility;
+import com.sti.research.personalsafetyalert.util.api.AudioRecordManager;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
 
 public class LocationService extends BaseService implements DetectPowerClickedReceiver.PowerClickedReceiverCallback {
@@ -50,6 +52,7 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
     private DetectPowerClickedReceiver powerClickedReceiver;
 
     private LocationDataTransmitterListener locationDataTransmitterListener;
+
 
     @Override
     public void onTriggered() {
@@ -77,12 +80,9 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
     private final LocationCallback locationCallback = new LocationCallback() {
 
         @Override
-        public void onLocationResult(LocationResult locationResult) {
-            if (locationResult != null) {
-                for (Location location : locationResult.getLocations()) {
-                    Log.d(TAG, "onLocationResult: called" + location.getLatitude() + " and " + location.getLongitude());
-                    getNewLocation(location);
-                }
+        public void onLocationResult(@NonNull LocationResult locationResult) {
+            for (Location location : locationResult.getLocations()) {
+                getNewLocation(location);
             }
         }
     };
