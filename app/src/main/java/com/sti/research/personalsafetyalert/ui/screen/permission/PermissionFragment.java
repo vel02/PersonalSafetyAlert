@@ -69,41 +69,11 @@ public class PermissionFragment extends DaggerFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        //TODO transfer this to permission check screen
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            initAlertDialogBuilder(requireActivity(), R.layout.dialog_manage_external_storage);
-//        }
-
         configureActionBarTitle();
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(PermissionFragmentViewModel.class);
         navigate();
         subscribeObservers();
     }
-
-//    public void initAlertDialogBuilder(FragmentActivity context, int layout) {
-//        androidx.appcompat.app.AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context, R.style.PersonalSafetyAlert_AlertDialogTheme);
-//        View view = context.getLayoutInflater().inflate(layout, null);
-//        TextView positiveButton = view.findViewById(R.id.dialog_button_positive);
-//        builder.setCancelable(false);
-//        builder.setView(view);
-//        AlertDialog dialog = builder.create();
-//        dialog.show();
-//        positiveButton.setOnClickListener(v -> {
-//            dialog.dismiss();
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//                if (Environment.isExternalStorageManager()) {
-//                    //todo when permission is granted
-//                } else {
-//                    //request for the permission
-//                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-//                    Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
-//                    intent.setData(uri);
-//                    startActivity(intent);
-//                }
-//            }
-//        });
-//    }
 
     private void subscribeObservers() {
         viewModel.observedPermissionLocationState().removeObservers(getViewLifecycleOwner());

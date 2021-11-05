@@ -1,9 +1,10 @@
 package com.sti.research.personalsafetyalert.ui;
 
 import static com.sti.research.personalsafetyalert.util.Constants.*;
+import static com.sti.research.personalsafetyalert.util.api.SmsApi.SLOT_SIM_ONE;
+import static com.sti.research.personalsafetyalert.util.api.SmsApi.SLOT_SIM_TWO;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -16,14 +17,15 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.transition.Fade;
 import android.util.Log;
 import android.view.Menu;
@@ -39,7 +41,9 @@ import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecycler
 import com.sti.research.personalsafetyalert.databinding.ActivityMainBinding;
 import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.model.list.Contact;
-import com.sti.research.personalsafetyalert.service.LocationService;
+import com.sti.research.personalsafetyalert.receiver.sms.SentReceiverObserver;
+import com.sti.research.personalsafetyalert.receiver.sms.SmsDeliveredReceiver;
+import com.sti.research.personalsafetyalert.receiver.sms.SmsSentReceiver;
 import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragment;
 import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
@@ -53,19 +57,27 @@ import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragm
 import com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragmentDirections;
 import com.sti.research.personalsafetyalert.util.Constants;
 import com.sti.research.personalsafetyalert.util.api.AudioRecordManager;
+import com.sti.research.personalsafetyalert.util.api.SmsApi;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
 import com.sti.research.personalsafetyalert.util.screen.contact.SelectPreferredContactPreference;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeCustomMessagePreference;
+import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
+import com.sti.research.personalsafetyalert.util.screen.sms.SmsSimSubscriptionPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.inject.Inject;
 
 import de.hdodenhof.circleimageview.BuildConfig;
 
-public class MainActivity extends BaseActivity implements HostScreen, NavigatePermission,
+public class MainActivity extends BaseActivity implements
+        Observer,
+        HostScreen,
+        NavigatePermission,
         LocationServiceListener,
         BaseActivity.OnDataProcessingListener,
         MessageRecyclerAdapter.OnMessageClickListener,
@@ -75,16 +87,28 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
 
     private com.sti.research.personalsafetyalert.model.single.Contact contact;
     private List<Contact> contacts = new ArrayList<>();
+    private List localList;
+
+    private String userMessage;
     private String audioPath;
+
+    private String contactList;
+    private String emailList;
+
+
+    private Location location;
 
 
     @Override
     public void onDataProcessing(Location location) {
         Log.d(TAG, "MAIN ACTIVITY LOCATION: " + location.getLatitude() + " - " + location.getLongitude());
 
+        //location
+        this.location = location;
+
         //user message received here...
-        String userMessage = HomeCustomMessagePreference.getInstance().getCustomMessageStorage(this);
-        Log.d(TAG, "MAIN ACTIVITY CUSTOM MESSAGE: " + userMessage);
+        this.userMessage = HomeCustomMessagePreference.getInstance().getCustomMessageStorage(this);
+        Log.d(TAG, "MAIN ACTIVITY CUSTOM MESSAGE: " + this.userMessage);
 
 
         //Contact
@@ -96,24 +120,189 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
                 contact = ContactStoreSinglePerson.getInstance().restoreContactSinglePerson(this);
                 Log.d(TAG, "MAIN ACTIVITY CONTACT DISPLAY: " + contact);
 
+
+                //Record Audio for attachment...
+                AudioRecordManager.getInstance(5000, 1000, path -> {
+                    MainActivity.this.audioPath = path;
+                    Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
+
+
+                    //send sms
+
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                        return;
+
+
+                    if (subscriptionManager.getActiveSubscriptionInfoCount() > 1) {
+                        SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
+                                .sendTo(contact.getNumber(), this.userMessage, SLOT_SIM_ONE, sentPI, deliveredPI);
+
+                        //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+                        SmsSimSubscriptionPreference.settings()
+                                .setSmsSimSubscriptionStatus(this,
+                                        SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS);
+                    } else {
+                        SmsApi.getInstance(location.getLatitude(), location.getLongitude())
+                                .sendTo(contact.getNumber(), this.userMessage, sentPI, deliveredPI);
+
+                        //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+                        SmsSimSubscriptionPreference.settings()
+                                .setSmsSimSubscriptionStatus(this,
+                                        SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS);
+                    }
+
+
+                    //send email
+
+
+                }, "PersonalSafety").start();
+
+
                 break;
             case "MULTIPLE_CONTACT":
                 Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT SELECTED: Send to this list of contacts");
-                for (int i = 0; i < contacts.size(); i++) {
-                    Log.d(TAG, "MAIN ACTIVITY LIST CONTACT #" + i + ": " + contacts.get(i));
+                StringBuilder contactBuilder = new StringBuilder();
+                StringBuilder emailBuilder = new StringBuilder();
+                for (int i = 0; i < this.contacts.size(); i++) {
+                    Contact contact = this.contacts.get(i);
+                    Log.d(TAG, "MAIN ACTIVITY LIST CONTACT #" + i + ": " + contact);
+                    contactBuilder.append(contact.getMobileNumber()).append(",");
+                    emailBuilder.append(contact.getEmail()).append(",");
                 }
+
+
+                contactList = contactBuilder.substring(0, contactBuilder.length() - 1);
+                emailList = emailBuilder.substring(0, emailBuilder.length() - 1);
+
+                Log.d(TAG, "LIST OF CONTACT NUMBERS: " + contactList);
+                Log.d(TAG, "LIST OF CONTACTS EMAILS: " + emailList);
+
+
+                //Record Audio for attachment...
+                AudioRecordManager.getInstance(5000, 1000, path -> {
+                    MainActivity.this.audioPath = path;
+                    Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
+                    //send sms
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                        return;
+
+
+                    if (subscriptionManager.getActiveSubscriptionInfoCount() > 1) {
+                        SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
+                                .sendToMany(contactList, this.userMessage, SLOT_SIM_ONE, sentPI, deliveredPI);
+
+                        //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+                        SmsSimSubscriptionPreference.settings()
+                                .setSmsSimSubscriptionStatus(this,
+                                        SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS);
+                    } else {
+                        SmsApi.getInstance(location.getLatitude(), location.getLongitude())
+                                .sendToMany(contactList, this.userMessage, sentPI, deliveredPI);
+
+                        //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+                        SmsSimSubscriptionPreference.settings()
+                                .setSmsSimSubscriptionStatus(this,
+                                        SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS);
+                    }
+
+                }, "PersonalSafety").start();
+
                 break;
         }
 
 
-        //Record Audio for attachment...
-        AudioRecordManager.getInstance(5000, 1000, path -> {
-            MainActivity.this.audioPath = path;
-            Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
-        }, "PersonalSafety").start();
+    }
 
-        //send sms
-        //send email
+    private void initSmsSubscriptionManager() {
+        this.sentPI = PendingIntent.getBroadcast(
+                this, 0,
+                new Intent(this, SmsSentReceiver.class),
+                0);
+
+        this.deliveredPI = PendingIntent.getBroadcast(
+                this, 0,
+                new Intent(this, SmsDeliveredReceiver.class),
+                0);
+
+        this.subscriptionManager = SubscriptionManager.from(this);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+            return;
+        this.localList = subscriptionManager.getActiveSubscriptionInfoList();
+
+
+        SentReceiverObserver.getInstance().addObserver(this);
+    }
+
+    @Override
+    public void update(Observable observable, Object sentReceiverResult) {
+
+
+        if (sentReceiverResult != null && sentReceiverResult.equals("GENERIC_FAILURE")) {
+
+            String preferredContact = SelectPreferredContactPreference.getInstance().getSelectPreferredContact(this);
+
+            switch (SmsSimSubscriptionPreference.settings().getSmsSimSubscriptionStatus(this)) {
+                case SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS:
+
+                    if (preferredContact.equals("SINGLE_CONTACT")) {
+                        //FAILED SIM ONE, THIS WILL USED TO RESEND VIA SIM TWO.
+                        SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
+                                .sendTo(contact.getNumber(), userMessage, SLOT_SIM_TWO, sentPI, deliveredPI);
+                    } else if (preferredContact.equals("MULTIPLE_CONTACT")) {
+                        //FAILED SIM ONE, THIS WILL USED TO RESEND VIA SIM TWO.
+                        SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
+                                .sendToMany(contactList, userMessage, SLOT_SIM_TWO, sentPI, deliveredPI);
+                    }
+
+                    //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+                    SmsSimSubscriptionPreference.settings()
+                            .setSmsSimSubscriptionStatus(this,
+                                    SmsSimSubscriptionPreference.FROM_SIM_TWO_FAILED_STATUS);
+                    break;
+
+                case SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS:
+                    //FAILED SINGLE SIM, REUSED THIS TO REQUEST A LOAD FROM SIM ONE.
+                case SmsSimSubscriptionPreference.FROM_SIM_TWO_FAILED_STATUS:
+                    //FAILED SIM TWO, WE USED THIS TO REQUEST A LOAD FROM SIM ONE.
+                    SubscriptionInfo simInfo = (SubscriptionInfo) localList.get(SLOT_SIM_ONE);
+                    SmsApi.getInstance().requestLoad(simInfo.getNumber());
+
+                    //SAVE STATE TO PROCEED TO REQUESTING A LOAD.
+                    SmsSimSubscriptionPreference.settings()
+                            .setSmsSimSubscriptionStatus(this,
+                                    SmsSimSubscriptionPreference.FROM_SIM_REQUESTED_LOAD_STATUS);
+                    break;
+
+                case SmsSimSubscriptionPreference.FROM_SIM_REQUESTED_LOAD_STATUS:
+                    //SIM ONE USED FOR RESEND MESSAGE AFTER REQUEST LOAD.
+
+                    //WILL WAIT FOR AT LEAST 20 SECONDS FOR PROCESSING A LOAD REQUESTED BEFORE RESEND.
+                    new WaitResultManager(20000, WaitResultManager.WAIT_INTERVAL, () -> {
+
+                        if (preferredContact.equals("SINGLE_CONTACT")) {
+                            SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
+                                    .sendTo(contact.getNumber(), userMessage, SLOT_SIM_ONE, sentPI, deliveredPI);
+                        } else if (preferredContact.equals("MULTIPLE_CONTACT")) {
+                            SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
+                                    .sendToMany(contactList, userMessage, SLOT_SIM_ONE, sentPI, deliveredPI);
+                        }
+
+                        //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+                        SmsSimSubscriptionPreference.settings()
+                                .setSmsSimSubscriptionStatus(this,
+                                        SmsSimSubscriptionPreference.FROM_SIM_ONE_RESEND_FAILED_STATUS);
+                    }).start();
+                    break;
+
+                case SmsSimSubscriptionPreference.FROM_SIM_ONE_RESEND_FAILED_STATUS:
+                    Log.d(TAG, "RESEND MESSAGE AFTER REQUEST LOAD FAILED.");
+                    break;
+            }
+
+        }
+
+
     }
 
     @Override
@@ -153,6 +342,11 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
     private NavHostFragment navHostFragment;
     private NavController navController;
 
+    private SubscriptionManager subscriptionManager;
+
+    private PendingIntent sentPI;
+    private PendingIntent deliveredPI;
+
     private void getIntentObject() {
         Constants.TransitionType type = (Constants.TransitionType) getIntent().getSerializableExtra(Constants.KEY_ANIM_TYPE);
         if (this.viewModel.observedTransitionType().getValue() == null)
@@ -163,12 +357,12 @@ public class MainActivity extends BaseActivity implements HostScreen, NavigatePe
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS); //permission to use fade transition
         super.onCreate(savedInstanceState);
-
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
         viewModel = new ViewModelProvider(MainActivity.this, providerFactory).get(MainViewModel.class);
         registerDataProcessingListener(this);
         getIntentObject();
         initController();
+        initSmsSubscriptionManager();
         subscribeObservers();
     }
 
