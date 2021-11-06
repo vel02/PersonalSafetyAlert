@@ -89,6 +89,8 @@ public class MainActivity extends BaseActivity implements
     private List<Contact> contacts = new ArrayList<>();
     private List localList;
 
+    private static final String DEFAULT_MESSAGE = ": https://www.google.com/maps/search/?api=1&query=";
+
     private String userMessage;
     private String audioPath;
 
@@ -102,6 +104,7 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void onDataProcessing(Location location) {
         Log.d(TAG, "MAIN ACTIVITY LOCATION: " + location.getLatitude() + " - " + location.getLongitude());
+        SubscriptionInfo simInfo = (SubscriptionInfo) localList.get(SLOT_SIM_ONE);
 
         //location
         this.location = location;
@@ -122,7 +125,7 @@ public class MainActivity extends BaseActivity implements
 
 
                 //Record Audio for attachment...
-                AudioRecordManager.getInstance(5000, 1000, path -> {
+                AudioRecordManager.getInstance(AudioRecordManager.AUDIO_TEST_DURATION, AudioRecordManager.AUDIO_INTERVAL, (path, filename) -> {
                     MainActivity.this.audioPath = path;
                     Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
 
@@ -151,9 +154,10 @@ public class MainActivity extends BaseActivity implements
                                         SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS);
                     }
 
-
                     //send email
-
+                    viewModel.sendEmail("ACCIDENT REPORT - Personal Safety App Team",
+                            generateMessage("Ariel Austria", simInfo.getNumber(), location),
+                            contact.getEmail(), path, filename);
 
                 }, "PersonalSafety").start();
 
@@ -179,7 +183,7 @@ public class MainActivity extends BaseActivity implements
 
 
                 //Record Audio for attachment...
-                AudioRecordManager.getInstance(5000, 1000, path -> {
+                AudioRecordManager.getInstance(AudioRecordManager.AUDIO_TEST_DURATION, AudioRecordManager.AUDIO_INTERVAL, (path, filename) -> {
                     MainActivity.this.audioPath = path;
                     Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
                     //send sms
@@ -205,12 +209,28 @@ public class MainActivity extends BaseActivity implements
                                         SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS);
                     }
 
+                    //send email
+                    viewModel.sendEmail("ACCIDENT REPORT - Personal Safety App Team",
+                            generateMessage("Ariel Austria", simInfo.getNumber(), location),
+                            emailList, path, filename);
+
                 }, "PersonalSafety").start();
 
                 break;
         }
 
 
+    }
+
+    //TODO make a function that requires user to fill up his/her username.
+    private String generateMessage(String userName, String mobileNumber, Location location) {
+        return userMessage
+                + "\n\nYou can reach " + userName + " with his/her contact details:"
+                + "\n" + "Mobile Number: " + mobileNumber
+                + "\n\n" + userName + "'s current location" + DEFAULT_MESSAGE
+                + location.getLatitude() + "," + location.getLongitude()
+                + "\n\nBelow is an audio attachment that gives you more information regarding "
+                + userName + "'s current surroundings.";
     }
 
     private void initSmsSubscriptionManager() {

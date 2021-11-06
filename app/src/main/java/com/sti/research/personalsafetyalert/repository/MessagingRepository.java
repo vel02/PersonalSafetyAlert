@@ -64,4 +64,42 @@ public class MessagingRepository {
         });
     }
 
+    public void sendEmailWithAttachments(String subject, String body, String recipients, String path, String filename) {
+        Observable.just(new Object()).subscribeOn(Schedulers.io()).subscribe(new Observer<Object>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                disposable.add(d);
+            }
+
+            @Override
+            public void onNext(@NonNull Object o) {
+                Log.d("test", "PROCESSING");
+                new Thread(() -> {
+                    try {
+                        EmailManager manager = new EmailManager();
+                        manager.from();
+                        manager.recipients(recipients);
+                        manager.subject(subject);
+                        manager.body(body);
+                        manager.attachment(path, filename);
+                        manager.send();
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                Log.e("test", "ERROR", e);
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d("test", "DONE");
+                disposable.clear();
+            }
+        });
+    }
+
 }

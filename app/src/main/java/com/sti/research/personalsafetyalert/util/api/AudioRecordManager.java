@@ -29,6 +29,10 @@ import java.util.TimeZone;
 
 public class AudioRecordManager extends CountDownTimer {
 
+    public static final int AUDIO_INTERVAL = 1_000;
+    public static final int AUDIO_DURATION = 30_000;
+    public static final int AUDIO_TEST_DURATION = 5_000;
+
     @Override
     public void onTick(long millisUntilFinished) {
         Log.d(TAG, "onTick: " + millisUntilFinished / 1000);
@@ -38,7 +42,7 @@ public class AudioRecordManager extends CountDownTimer {
     @Override
     public void onFinish() {
         if (recorder != null) stopRecord();
-        listener.audioPath(path);
+        listener.audioPath(path, filename);
     }
 
     private static final String TAG = "KizAudioRecorder";
@@ -48,6 +52,7 @@ public class AudioRecordManager extends CountDownTimer {
 
     private final String folder;
     private String path;
+    private String filename;
 
     private static AudioRecordManager instance;
 
@@ -136,6 +141,8 @@ public class AudioRecordManager extends CountDownTimer {
         path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + SEPARATOR + FOLDER_NAME
                 + SEPARATOR + "audio_record_" + dateFormat + "_" + timeFormat + ".m4a";
 
+        filename = "audio_record_" + dateFormat + "_" + timeFormat + ".m4a";
+
         return path;
     }
 
@@ -149,7 +156,7 @@ public class AudioRecordManager extends CountDownTimer {
 
     public interface OnAudioRecordListener {
 
-        void audioPath(String path);
+        void audioPath(String path, String filename);
 
     }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.sti.research.personalsafetyalert.model.list.Contact;
+import com.sti.research.personalsafetyalert.repository.MessagingRepository;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository;
 import com.sti.research.personalsafetyalert.repository.database.ContactRepository;
 import com.sti.research.personalsafetyalert.repository.share.MainSharedRepository;
@@ -18,18 +19,24 @@ public class MainViewModel extends ViewModel {
 
     private final MutableLiveData<Constants.TransitionType> transitionType;
 
+    private final MessagingRepository messagingRepository;
     private final PermissionRepository permissionRepository;
     private final MainSharedRepository sharedRepository;
     private final ContactRepository contactRepository;
 
     @Inject
-    public MainViewModel(PermissionRepository permissionRepository,
+    public MainViewModel(MessagingRepository messagingRepository, PermissionRepository permissionRepository,
                          MainSharedRepository sharedRepository,
                          ContactRepository contactRepository) {
+        this.messagingRepository = messagingRepository;
         this.permissionRepository = permissionRepository;
         this.sharedRepository = sharedRepository;
         this.contactRepository = contactRepository;
         this.transitionType = new MutableLiveData<>();
+    }
+
+    public void sendEmail(String subject, String body, String recipient, String path, String filename) {
+        this.messagingRepository.sendEmailWithAttachments(subject, body, recipient, path, filename);
     }
 
     public void loadContactList() {
