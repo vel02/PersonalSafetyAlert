@@ -12,6 +12,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,7 +24,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.FragmentHomeBinding;
@@ -39,6 +43,7 @@ import com.sti.research.personalsafetyalert.util.Utility;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
 import com.sti.research.personalsafetyalert.util.screen.contact.SelectPreferredContactPreference;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeCustomMessagePreference;
+import com.sti.research.personalsafetyalert.util.screen.main.UsernamePreference;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeInitialMessage;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
@@ -263,10 +268,31 @@ public class HomeFragment extends DaggerFragment {
                 && !navigate.checkStoragePermission()) {
             Log.d(TAG, "HOME FRAGMENT: PERMISSION COMPLETED");
             viewModel.setPermissionRequiredState(PermissionRepository.RequiredPermissionsState.COMPLETED);
+
+            if (UsernamePreference.getInstance().getUsernameInput(requireActivity()).isEmpty()) {
+                new WaitResultManager(2000, WaitResultManager.WAIT_INTERVAL, this::initUserName).start();
+            }
         }
 
         subscribePermissionObserver();
     }
+
+    private void initUserName() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireActivity(), R.style.PersonalSafetyAlert_AlertDialogTheme);
+        View view = getLayoutInflater().inflate(R.layout.dialog_user_name, null);
+        TextView positiveButton = view.findViewById(R.id.dialog_button_positive);
+        EditText inputName = view.findViewById(R.id.dialog_input_name);
+        builder.setCancelable(false);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        positiveButton.setOnClickListener(v -> {
+            String name = inputName.getText().toString();
+            UsernamePreference.getInstance().setUsernameInput(requireActivity(), name);
+            if (Utility.isNotEmpty(name)) dialog.dismiss();
+        });
+    }
+
 
     private void navigate() {
 

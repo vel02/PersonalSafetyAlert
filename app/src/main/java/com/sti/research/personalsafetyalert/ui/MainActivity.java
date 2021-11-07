@@ -5,6 +5,7 @@ import static com.sti.research.personalsafetyalert.util.api.SmsApi.SLOT_SIM_ONE;
 import static com.sti.research.personalsafetyalert.util.api.SmsApi.SLOT_SIM_TWO;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -32,7 +33,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
@@ -56,11 +60,13 @@ import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragm
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.visual.VisualMessageFragmentDirections;
 import com.sti.research.personalsafetyalert.util.Constants;
+import com.sti.research.personalsafetyalert.util.Utility;
 import com.sti.research.personalsafetyalert.util.api.AudioRecordManager;
 import com.sti.research.personalsafetyalert.util.api.SmsApi;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
 import com.sti.research.personalsafetyalert.util.screen.contact.SelectPreferredContactPreference;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeCustomMessagePreference;
+import com.sti.research.personalsafetyalert.util.screen.main.UsernamePreference;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.sms.SmsSimSubscriptionPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
@@ -156,7 +162,7 @@ public class MainActivity extends BaseActivity implements
 
                     //send email
                     viewModel.sendEmail("ACCIDENT REPORT - Personal Safety App Team",
-                            generateMessage("Ariel Austria", simInfo.getNumber(), location),
+                            generateMessage(simInfo.getNumber(), location),
                             contact.getEmail(), path, filename);
 
                 }, "PersonalSafety").start();
@@ -211,7 +217,7 @@ public class MainActivity extends BaseActivity implements
 
                     //send email
                     viewModel.sendEmail("ACCIDENT REPORT - Personal Safety App Team",
-                            generateMessage("Ariel Austria", simInfo.getNumber(), location),
+                            generateMessage(simInfo.getNumber(), location),
                             emailList, path, filename);
 
                 }, "PersonalSafety").start();
@@ -222,15 +228,16 @@ public class MainActivity extends BaseActivity implements
 
     }
 
-    //TODO make a function that requires user to fill up his/her username.
-    private String generateMessage(String userName, String mobileNumber, Location location) {
+    private String generateMessage(String mobileNumber, Location location) {
+        String name = UsernamePreference.getInstance().getUsernameInput(this);
+        if (name.isEmpty()) name = "Anonymous";
         return userMessage
-                + "\n\nYou can reach " + userName + " with his/her contact details:"
+                + "\n\nYou can reach " + name + " with his/her contact details:"
                 + "\n" + "Mobile Number: " + mobileNumber
-                + "\n\n" + userName + "'s current location" + DEFAULT_MESSAGE
+                + "\n\n" + name + "'s current location" + DEFAULT_MESSAGE
                 + location.getLatitude() + "," + location.getLongitude()
                 + "\n\nBelow is an audio attachment that gives you more information regarding "
-                + userName + "'s current surroundings.";
+                + name + "'s current surroundings.";
     }
 
     private void initSmsSubscriptionManager() {

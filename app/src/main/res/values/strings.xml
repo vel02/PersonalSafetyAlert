@@ -145,7 +145,10 @@
     <string name="txt_delete">Delete</string>
 
     <string name="txt_location_updated">Location Updated: %1$s</string>
-
+    <string name="action_done">Done</string>
+    <string name="txt_information">Information</string>
+    <string name="txt_register_user_name">Register user\'s name</string>
+    <string name="txt_anonymous">Anonymous</string>
 
 
 </resources>
