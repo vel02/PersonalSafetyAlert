@@ -15,10 +15,13 @@
 
 package com.sti.research.personalsafetyalert.util.api;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.telephony.SmsManager;
 import android.telephony.SubscriptionInfo;
 import android.util.Log;
+
+import com.sti.research.personalsafetyalert.util.screen.manager.MobileNetworkManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -210,12 +213,33 @@ public class SmsApi {
         }
     }
 
+    @SuppressLint("UnlocalizedSms")
     public void requestLoad(String destination) {
         //if destination is globe
         //number is 3733, loan keyword is LOAN LOAD5
-        String number = "3733";
-        manager.sendTextMessage(number, null, "LOAN LOAD10", null, null);
-        Log.d(TAG, "SMS API: REQUESTING A LOAD.");
+        //https://techpilipinas.com/borrow-load-smart-tnt/
+        //https://coins.ph/blog/load-utang-load-tnt/
+        //https://mobilenetworksphilippines.com/borrow-load-globe/
+
+
+        MobileNetworkManager networkManager = new MobileNetworkManager();
+        networkManager.validate(destination);
+        switch (networkManager.getNetwork()) {
+            case "GLOBE":
+                manager.sendTextMessage("3733", null, "LOAN LOAD5", null, null);
+                Log.d(TAG, "SMS API: GLOBE REQUESTING A LOAD.");
+                break;
+
+            case "SMART":
+                manager.sendTextMessage("7676", null, "SAKLOLOAD SURF10", null, null);
+                Log.d(TAG, "SMS API: SMART REQUESTING A LOAD.");
+                break;
+
+            case "TNT":
+                manager.sendTextMessage("7676", null, "SAKLOLOAD SURF10", null, null);
+                Log.d(TAG, "SMS API: TNT REQUESTING A LOAD.");
+                break;
+        }
     }
 
 }
