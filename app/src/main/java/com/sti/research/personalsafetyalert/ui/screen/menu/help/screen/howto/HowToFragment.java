@@ -58,8 +58,10 @@ public class HowToFragment extends DaggerFragment {
                 toggle(binding.howToStepThree);
             } else if (binding.howToStepFour.getVisibility() == View.INVISIBLE) {
                 toggle(binding.howToStepFour);
+            } else if (binding.howToStepFive.getVisibility() == View.INVISIBLE) {
+                toggle(binding.howToStepFive);
                 binding.howToNextAndDone.setText(R.string.txt_done);
-            } else if (binding.howToStepFour.getVisibility() == View.VISIBLE) {
+            } else if (binding.howToStepFive.getVisibility() == View.VISIBLE) {
                 hostScreen.onInflate(v, getString(R.string.tag_fragment_how_to_to_help));
             }
         });

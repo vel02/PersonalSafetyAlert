@@ -2,7 +2,10 @@ package com.sti.research.personalsafetyalert.ui.screen.menu.notworking.screen.pa
 
 import static com.sti.research.personalsafetyalert.util.Utility.*;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.sti.research.personalsafetyalert.databinding.FragmentNotWorkingViewPagerBinding;
 import com.sti.research.personalsafetyalert.model.Instruction;
+import com.sti.research.personalsafetyalert.util.Utility;
 
 
 import dagger.android.support.DaggerFragment;
@@ -62,18 +66,31 @@ public class NotWorkingFragmentViewPager extends DaggerFragment {
 
     private void navigate() {
         switch (binding.vpButton.getText().toString()) {
-            case "Notification Access":
-                binding.vpButton.setOnClickListener(v ->
-                        Bubble.message(requireActivity(), "Notification Access"));
-                break;
             case "Settings":
-                binding.vpButton.setOnClickListener(v ->
-                        Bubble.message(requireActivity(), "Settings"));
+                binding.vpButton.setVisibility(View.VISIBLE);
+                binding.vpButton.setOnClickListener(v -> {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Uri uri = Uri.fromParts("package", binding.vpButton.getContext().getPackageName(), null);
+                    intent.setData(uri);
+                    startActivity(intent);
+                });
                 break;
-            case "Contact":
-                binding.vpButton.setOnClickListener(v ->
-                        Bubble.message(requireActivity(), "Contact"));
+            case "Go to Help":
+                binding.vpButton.setOnClickListener(v -> {
+                    listener.onBackPressed();
+                });
                 break;
         }
+    }
+
+    private NotWorkingViewPagerListener listener;
+
+    public interface NotWorkingViewPagerListener {
+        void onBackPressed();
+    }
+
+    public void setNotWorkingViewPagerListener(NotWorkingViewPagerListener listener) {
+        this.listener = listener;
     }
 }

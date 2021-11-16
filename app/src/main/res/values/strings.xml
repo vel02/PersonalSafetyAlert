@@ -40,7 +40,7 @@
     <string name="desc_contact_us">Questions? Need Help?</string>
     <string name="txt_app_version">App Version</string>
     <string name="desc_version">1.0 version</string>
-    <string name="desc_licensed">Copyright Personal Safety Alert <br />Licensed under the MIT License</string>
+    <string name="desc_licensed">Copyright Personal Safety Alert \n<br />Licensed under the MIT License</string>
     <string name="desc_navigate_next">Navigate Next</string>
     <string name="desc_navigate_previous">Navigate previous</string>
 
@@ -101,12 +101,12 @@
     <string name="tag_fragment_help_to_not_working">tag_fragment_help_to_not_working</string>
     <string name="tag_fragment_help_to_contact_us">tag_fragment_help_to_contact_us</string>
     <string name="txt_step_1">Step 1</string>
-    <string name="desc_step_one">Turn ON Safety Alert.</string>
     <string name="txt_next_small">Next</string>
     <string name="txt_step_2">Step 2</string>
     <string name="desc_dummy_medium">Lorem ipsum, or lipsum as it is sometimes known, is dummy text.</string>
     <string name="txt_step_3">Step 3</string>
     <string name="txt_step_4">Step 4</string>
+    <string name="txt_step_5">Step 5</string>
     <string name="tag_fragment_how_to_to_help">tag_fragment_how_to_to_help</string>
     <string name="desc_email_logo">Email logo</string>
     <string name="hint_describe_problem">Please describe your problem/suggestion</string>
@@ -149,6 +149,11 @@
     <string name="txt_information">Information</string>
     <string name="txt_register_user_name">Register user\'s name</string>
     <string name="txt_anonymous">Anonymous</string>
+    <string name="desc_step_one">To add contact(s), click the phone icon on the upper right part of the screen.</string>
+    <string name="desc_step_two">Once you are in Personal Safety app contact screen, there are two options on where to send your message.\n\n<br /><br />For “Send to this list of contacts” option, click add contact icon on the right side of “Send to this list of contacts”. Then register the name(s), mobile number(s) and the e-mail address of your preferred receiver. Click Done.\n\n<br /><br />For “Send to one specific contact” option, just put the mobile and number and the email address of the specific receiver.</string>
+    <string name="desc_step_three">Turn-on the “Safety Alert” button by clicking it. This will turn on the GPS of your phone.</string>
+    <string name="desc_step_four">You can choose a message that you want to send to your receiver from our default messages. You can also modify it ang put your preferred message.</string>
+    <string name="desc_step_five">Press the power button three (3) times within five (5) seconds to send a message and/or email.</string>
 
 
 </resources>

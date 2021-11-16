@@ -18,6 +18,7 @@ import com.sti.research.personalsafetyalert.databinding.FragmentNotWorkingBindin
 import com.sti.research.personalsafetyalert.model.Instruction;
 import com.sti.research.personalsafetyalert.resources.Instructions;
 import com.sti.research.personalsafetyalert.ui.screen.menu.notworking.screen.pager.NotWorkingFragmentViewPager;
+import com.sti.research.personalsafetyalert.util.Utility;
 import com.sti.research.personalsafetyalert.util.animation.CubeInScalingTransformation;
 import com.sti.research.personalsafetyalert.util.animation.PopTransformation;
 import com.sti.research.personalsafetyalert.util.animation.ZoomOutTransformation;
@@ -29,7 +30,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerFragment;
 
-public class NotWorkingFragment extends DaggerFragment {
+public class NotWorkingFragment extends DaggerFragment implements NotWorkingFragmentViewPager.NotWorkingViewPagerListener {
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -37,7 +38,6 @@ public class NotWorkingFragment extends DaggerFragment {
     private FragmentNotWorkingBinding binding;
 
     private NotWorkingFragmentViewModel viewModel;
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -53,6 +53,7 @@ public class NotWorkingFragment extends DaggerFragment {
         Instruction[] instructions = Instructions.getInstructions();
         for (Instruction instruction : instructions) {
             NotWorkingFragmentViewPager fragment = NotWorkingFragmentViewPager.getInstance(instruction);
+            fragment.setNotWorkingViewPagerListener(this);
             fragments.add(fragment);
         }
 
@@ -62,6 +63,7 @@ public class NotWorkingFragment extends DaggerFragment {
         binding.tabLayout.setupWithViewPager(binding.viewPager, true);
 
         navigate();
+
 
         subscribeObservers();
     }
@@ -126,5 +128,10 @@ public class NotWorkingFragment extends DaggerFragment {
             binding.previousInstruction.setVisibility(View.VISIBLE);
             binding.nextInstruction.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        requireActivity().onBackPressed();
     }
 }
