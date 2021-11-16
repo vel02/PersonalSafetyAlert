@@ -552,9 +552,14 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public boolean checkSendSMSPermission() {
-        int hasReadPermission = ActivityCompat.checkSelfPermission(this,
+        int hasReadPermissionSendSms = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.SEND_SMS);
-        return hasReadPermission == PackageManager.PERMISSION_DENIED;
+
+        int hasReadPermissionPhoneState = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.READ_PHONE_STATE);
+
+        return hasReadPermissionSendSms != PackageManager.PERMISSION_GRANTED
+                || hasReadPermissionPhoneState != PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
@@ -600,7 +605,9 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void requestSendSMSPermission() {
         boolean shouldProvideRational = ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.SEND_SMS);
+                Manifest.permission.SEND_SMS)
+                && ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.READ_PHONE_STATE);
 
         if (shouldProvideRational) {
             Snackbar.make(
@@ -610,11 +617,13 @@ public class MainActivity extends BaseActivity implements
                     .setActionTextColor(getResources().getColor(R.color.primaryDark))
                     .setAction(R.string.action_ok, v ->
                             ActivityCompat.requestPermissions(MainActivity.this,
-                                    new String[]{Manifest.permission.SEND_SMS},
+                                    new String[]{Manifest.permission.SEND_SMS,
+                                            Manifest.permission.READ_PHONE_STATE},
                                     PermissionManager.PERMISSION_SEND_SMS_REQUEST_CODE)).show();
         } else {
             ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.SEND_SMS},
+                    new String[]{Manifest.permission.SEND_SMS,
+                            Manifest.permission.READ_PHONE_STATE},
                     PermissionManager.PERMISSION_SEND_SMS_REQUEST_CODE);
         }
     }

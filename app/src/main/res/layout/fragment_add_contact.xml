@@ -102,7 +102,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="8dp"
-                                android:layout_weight="15"
+                                android:layout_weight="16"
                                 android:text="@string/txt_name"
                                 android:textStyle="bold" />
 
@@ -155,7 +155,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="8dp"
-                                android:layout_weight="15"
+                                android:layout_weight="16"
                                 android:text="@string/txt_mobile"
                                 android:textStyle="bold" />
 
@@ -207,7 +207,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="8dp"
-                                android:layout_weight="15"
+                                android:layout_weight="16"
                                 android:text="@string/txt_email"
                                 android:textStyle="bold" />
 
