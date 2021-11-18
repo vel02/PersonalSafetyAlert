@@ -1,5 +1,7 @@
 package com.sti.research.personalsafetyalert.util.screen.manager;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +24,8 @@ public class MobileNetworkManager implements MobileNetwork {
 
     @Override
     public void validate(String number) {
+        number = reformatNumber(number);
+
         for (String prefix : prefixes.keySet()) {
             if (number.startsWith(prefix)) {
                 this.network = prefixes.get(prefix);
@@ -30,8 +34,16 @@ public class MobileNetworkManager implements MobileNetwork {
         }
     }
 
+    public String reformatNumber(String number) {
+        if (number.startsWith("+63")) {
+            return number.replace("+63", "0");
+        }
+        return number;
+    }
+
     @Override
     public String getNetwork() {
+        Log.d("test", "VALUE: " + network);
         return network;
     }
 

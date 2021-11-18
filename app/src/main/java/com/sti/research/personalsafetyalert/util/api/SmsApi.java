@@ -214,7 +214,7 @@ public class SmsApi {
     }
 
     @SuppressLint("UnlocalizedSms")
-    public void requestLoad(String destination) {
+    public void requestLoad(String destination, PendingIntent sentPI, PendingIntent deliverPI) {
         //if destination is globe
         //number is 3733, loan keyword is LOAN LOAD5
         //https://techpilipinas.com/borrow-load-smart-tnt/
@@ -226,17 +226,17 @@ public class SmsApi {
         networkManager.validate(destination);
         switch (networkManager.getNetwork()) {
             case "GLOBE":
-                manager.sendTextMessage("3733", null, "LOAN LOAD5", null, null);
+                manager.sendTextMessage("3733", null, "LOAN GOUNLI20", sentPI, deliverPI);
                 Log.d(TAG, "SMS API: GLOBE REQUESTING A LOAD.");
                 break;
 
             case "SMART":
-                manager.sendTextMessage("7676", null, "SAKLOLOAD SURF10", null, null);
+                manager.sendTextMessage("7676", null, "SAKLOLOAD SURF10", sentPI, deliverPI);
                 Log.d(TAG, "SMS API: SMART REQUESTING A LOAD.");
                 break;
 
             case "TNT":
-                manager.sendTextMessage("7676", null, "SAKLOLOAD SURF10", null, null);
+                manager.sendTextMessage("7676", null, "SAKLOLOAD SURF10", sentPI, deliverPI);
                 Log.d(TAG, "SMS API: TNT REQUESTING A LOAD.");
                 break;
         }

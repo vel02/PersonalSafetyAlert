@@ -151,6 +151,7 @@ public class MainActivity extends BaseActivity implements
                                 .setSmsSimSubscriptionStatus(this,
                                         SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS);
                     } else {
+                        Log.d(TAG, "FIRST SEND TEXT");
                         SmsApi.getInstance(location.getLatitude(), location.getLongitude())
                                 .sendTo(contact.getNumber(), this.userMessage, sentPI, deliveredPI);
 
@@ -264,10 +265,10 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void update(Observable observable, Object sentReceiverResult) {
 
+        String preferredContact = SelectPreferredContactPreference.getInstance().getSelectPreferredContact(this);
 
         if (sentReceiverResult != null && sentReceiverResult.equals("GENERIC_FAILURE")) {
 
-            String preferredContact = SelectPreferredContactPreference.getInstance().getSelectPreferredContact(this);
 
             switch (SmsSimSubscriptionPreference.settings().getSmsSimSubscriptionStatus(this)) {
                 case SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS:
@@ -289,11 +290,14 @@ public class MainActivity extends BaseActivity implements
                     break;
 
                 case SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS:
+                    Log.d(TAG, "FAILED SINGLE SIM SEND");
                     //FAILED SINGLE SIM, REUSED THIS TO REQUEST A LOAD FROM SIM ONE.
                 case SmsSimSubscriptionPreference.FROM_SIM_TWO_FAILED_STATUS:
+                    Log.d(TAG, "REQUEST LOAN");
                     //FAILED SIM TWO, WE USED THIS TO REQUEST A LOAD FROM SIM ONE.
                     SubscriptionInfo simInfo = (SubscriptionInfo) localList.get(SLOT_SIM_ONE);
-                    SmsApi.getInstance().requestLoad(simInfo.getNumber());
+                    Log.d(TAG, "MOBILE NUMBER: " + simInfo.getNumber());
+                    SmsApi.getInstance().requestLoad(simInfo.getNumber(), sentPI, deliveredPI);
 
                     //SAVE STATE TO PROCEED TO REQUESTING A LOAD.
                     SmsSimSubscriptionPreference.settings()
@@ -324,6 +328,33 @@ public class MainActivity extends BaseActivity implements
 
                 case SmsSimSubscriptionPreference.FROM_SIM_ONE_RESEND_FAILED_STATUS:
                     Log.d(TAG, "RESEND MESSAGE AFTER REQUEST LOAD FAILED.");
+                    break;
+            }
+
+        } else if (sentReceiverResult != null && sentReceiverResult.equals("SMS_SENT")) {
+            Log.d(TAG, "SMS_SENT FOR REQUEST LOAN");
+
+            switch (SmsSimSubscriptionPreference.settings().getSmsSimSubscriptionStatus(this)) {
+                case SmsSimSubscriptionPreference.FROM_SIM_REQUESTED_LOAD_STATUS:
+                    Log.d(TAG, "NOW REQUESTING... WAIT FOR 20 SECONDS TO SEND");
+                    //SIM ONE USED FOR RESEND MESSAGE AFTER REQUEST LOAD.
+
+                    //WILL WAIT FOR AT LEAST 20 SECONDS FOR PROCESSING A LOAD REQUESTED BEFORE RESEND.
+                    new WaitResultManager(20000, WaitResultManager.WAIT_INTERVAL, () -> {
+
+                        if (preferredContact.equals("SINGLE_CONTACT")) {
+                            SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
+                                    .sendTo(contact.getNumber(), userMessage, sentPI, deliveredPI);
+                        } else if (preferredContact.equals("MULTIPLE_CONTACT")) {
+                            SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
+                                    .sendToMany(contactList, userMessage, sentPI, deliveredPI);
+                        }
+
+                        //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+                        SmsSimSubscriptionPreference.settings()
+                                .setSmsSimSubscriptionStatus(this,
+                                        SmsSimSubscriptionPreference.FROM_SIM_ONE_RESEND_FAILED_STATUS);
+                    }).start();
                     break;
             }
 

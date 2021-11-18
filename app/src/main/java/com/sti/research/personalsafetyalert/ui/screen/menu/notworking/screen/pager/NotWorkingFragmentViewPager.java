@@ -1,23 +1,18 @@
 package com.sti.research.personalsafetyalert.ui.screen.menu.notworking.screen.pager;
 
-import static com.sti.research.personalsafetyalert.util.Utility.*;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.sti.research.personalsafetyalert.databinding.FragmentNotWorkingViewPagerBinding;
 import com.sti.research.personalsafetyalert.model.Instruction;
-import com.sti.research.personalsafetyalert.util.Utility;
 
 
 import dagger.android.support.DaggerFragment;
