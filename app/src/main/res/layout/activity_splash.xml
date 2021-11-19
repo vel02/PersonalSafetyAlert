@@ -12,12 +12,12 @@
         tools:context=".ui.splash.SplashActivity">
 
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/circleImageView"
-            android:layout_width="120dp"
+            android:layout_width="150dp"
             android:layout_height="120dp"
-            android:src="@drawable/ic_splash_logo_holder"
-            app:civ_circle_background_color="@color/primarySecondaryDark"
+            android:scaleType="centerInside"
+            android:src="@drawable/logo_psa"
             app:layout_constraintBottom_toTopOf="@+id/splash_guide_one"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
