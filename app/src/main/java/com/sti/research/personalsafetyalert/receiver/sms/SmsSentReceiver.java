@@ -15,6 +15,10 @@ public class SmsSentReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        Log.d(TAG, "SMS ONRECEIVER: " + intent.getIntExtra("object", 0));
+
+
+
         switch (getResultCode()) {
             case Activity.RESULT_OK://sent message
                 Log.d(TAG, "SMS RECEIVER RESULT CODE: " + intent.getIntExtra("object", 0));
