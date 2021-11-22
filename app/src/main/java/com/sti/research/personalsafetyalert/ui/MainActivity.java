@@ -156,8 +156,6 @@ public class MainActivity extends BaseActivity implements
                                         SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS);
                     }
 
-
-
                     //send email
                     viewModel.sendEmail(subject,
                             generateMessage(simInfo.getNumber(), location),
@@ -355,10 +353,10 @@ public class MainActivity extends BaseActivity implements
             }
 
         } else if (sentReceiverResult != null && sentReceiverResult.equals("SMS_SENT")) {
-            Log.d(TAG, "SMS_SENT FOR REQUEST LOAN");
 
             switch (SmsSimSubscriptionPreference.settings().getSmsSimSubscriptionStatus(this)) {
                 case SmsSimSubscriptionPreference.FROM_SIM_REQUESTED_LOAD_STATUS:
+                    Log.d(TAG, "SMS_SENT FOR REQUEST LOAN");
                     Log.d(TAG, "NOW REQUESTING... WAIT FOR 20 SECONDS TO SEND");
                     //SIM ONE USED FOR RESEND MESSAGE AFTER REQUEST LOAD.
 
