@@ -30,7 +30,8 @@ import java.util.TimeZone;
 public class AudioRecordManager extends CountDownTimer {
 
     public static final int AUDIO_INTERVAL = 1_000;
-    public static final int AUDIO_DURATION = 30_000;
+    public static final int AUDIO_MAX_DURATION = 20_000;
+    public static final int AUDIO_MIN_DURATION = 10_000;
     public static final int AUDIO_TEST_DURATION = 5_000;
 
     @Override
@@ -63,7 +64,7 @@ public class AudioRecordManager extends CountDownTimer {
         return instance;
     }
 
-    private AudioRecordManager(long millisInFuture, long countDownInterval, OnAudioRecordListener listener, String folder) {
+    public AudioRecordManager(long millisInFuture, long countDownInterval, OnAudioRecordListener listener, String folder) {
         super(millisInFuture, countDownInterval);
         this.listener = listener;
         this.folder = folder;

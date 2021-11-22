@@ -39,6 +39,10 @@ public class MainViewModel extends ViewModel {
         this.messagingRepository.sendEmailWithAttachments(subject, body, recipient, path, filename);
     }
 
+    public void sendEmailWithMaxDuration(String subject, String body, String recipient, String path, String filename) {
+        this.messagingRepository.sendEmailWithAttachments(subject, body, recipient, path, filename);
+    }
+
     public void loadContactList() {
         this.contactRepository.select();
     }

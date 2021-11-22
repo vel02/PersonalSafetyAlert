@@ -9,14 +9,14 @@ public class Tutorials {
         return TUTORIALS;
     }
 
-    public static final Tutorial TUTORIAL_ONE = new Tutorial("Lorem Ipsum", "Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.",
+    public static final Tutorial TUTORIAL_ONE = new Tutorial("Security", "Personal Safety Alert stands for your awareness and security.",
+            R.drawable.ic_security_holder);
+    public static final Tutorial TUTORIAL_TWO = new Tutorial("Location",
+            "Let your emergency contacts know you are okay.",
             R.drawable.ic_location_holder);
-    public static final Tutorial TUTORIAL_TWO = new Tutorial("Lorem Ipsum",
-            "Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.",
-            R.drawable.ic_sms_holder);
-    public static final Tutorial TUTORIAL_THREE = new Tutorial("Lorem Ipsum",
-            "Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.",
-            R.drawable.ic_storage_holder);
+    public static final Tutorial TUTORIAL_THREE = new Tutorial("Safety",
+            "Ensure you get home safe at the end of the day.",
+            R.drawable.ic_safety_holder);
 
     public static final Tutorial[] TUTORIALS = {TUTORIAL_ONE, TUTORIAL_TWO, TUTORIAL_THREE};
 

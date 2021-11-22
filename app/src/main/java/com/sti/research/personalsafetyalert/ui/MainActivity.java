@@ -5,7 +5,6 @@ import static com.sti.research.personalsafetyalert.util.api.SmsApi.SLOT_SIM_ONE;
 import static com.sti.research.personalsafetyalert.util.api.SmsApi.SLOT_SIM_TWO;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -33,10 +32,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
@@ -123,21 +119,20 @@ public class MainActivity extends BaseActivity implements
         //Contact
         String preferredContact = SelectPreferredContactPreference.getInstance().getSelectPreferredContact(this);
         Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT: " + preferredContact);
+
+        String subject = "Personal Safety Team - ALERT MESSAGE";
         switch (preferredContact) {
             case "SINGLE_CONTACT":
                 Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT SELECTED: Send to one specific contact");
                 contact = ContactStoreSinglePerson.getInstance().restoreContactSinglePerson(this);
                 Log.d(TAG, "MAIN ACTIVITY CONTACT DISPLAY: " + contact);
 
-
-                //Record Audio for attachment...
-                AudioRecordManager.getInstance(AudioRecordManager.AUDIO_TEST_DURATION, AudioRecordManager.AUDIO_INTERVAL, (path, filename) -> {
+                //########### Record Audio for attachment ###########
+                new AudioRecordManager(AudioRecordManager.AUDIO_MIN_DURATION, AudioRecordManager.AUDIO_INTERVAL, (path, filename) -> {
                     MainActivity.this.audioPath = path;
                     Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
 
-
-                    //send sms
-
+                    //########### Send SMS ###########
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
                         return;
 
@@ -161,15 +156,27 @@ public class MainActivity extends BaseActivity implements
                                         SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS);
                     }
 
+
+
                     //send email
-                    viewModel.sendEmail("ACCIDENT REPORT - Personal Safety App Team",
+                    viewModel.sendEmail(subject,
                             generateMessage(simInfo.getNumber(), location),
                             contact.getEmail(), path, filename);
+
+                    new AudioRecordManager(AudioRecordManager.AUDIO_MAX_DURATION, AudioRecordManager.AUDIO_INTERVAL, (pathObj, filenameObj) -> {
+                        Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + pathObj);
+                        //send email
+                        viewModel.sendEmailWithMaxDuration(subject,
+                                generateMessageWithMaxDuration(),
+                                contact.getEmail(), pathObj, filenameObj);
+
+                    }, "PersonalSafety").start();
 
                 }, "PersonalSafety").start();
 
 
                 break;
+
             case "MULTIPLE_CONTACT":
                 Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT SELECTED: Send to this list of contacts");
                 StringBuilder contactBuilder = new StringBuilder();
@@ -181,7 +188,6 @@ public class MainActivity extends BaseActivity implements
                     emailBuilder.append(contact.getEmail()).append(",");
                 }
 
-
                 contactList = contactBuilder.substring(0, contactBuilder.length() - 1);
                 emailList = emailBuilder.substring(0, emailBuilder.length() - 1);
 
@@ -189,11 +195,13 @@ public class MainActivity extends BaseActivity implements
                 Log.d(TAG, "LIST OF CONTACTS EMAILS: " + emailList);
 
 
-                //Record Audio for attachment...
-                AudioRecordManager.getInstance(AudioRecordManager.AUDIO_TEST_DURATION, AudioRecordManager.AUDIO_INTERVAL, (path, filename) -> {
+                //########### Record Audio for attachment ###########
+                new AudioRecordManager(AudioRecordManager.AUDIO_MIN_DURATION, AudioRecordManager.AUDIO_INTERVAL, (path, filename) -> {
                     MainActivity.this.audioPath = path;
                     Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
-                    //send sms
+
+
+                    //########### Send SMS ###########
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
                         return;
 
@@ -217,16 +225,31 @@ public class MainActivity extends BaseActivity implements
                     }
 
                     //send email
-                    viewModel.sendEmail("ACCIDENT REPORT - Personal Safety App Team",
+                    viewModel.sendEmail(subject,
                             generateMessage(simInfo.getNumber(), location),
                             emailList, path, filename);
 
-                }, "PersonalSafety").start();
+                    new AudioRecordManager(AudioRecordManager.AUDIO_MAX_DURATION, AudioRecordManager.AUDIO_INTERVAL, (pathObj, filenameObj) -> {
+                        Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + pathObj);
+                        //send email
+                        viewModel.sendEmailWithMaxDuration(subject,
+                                generateMessageWithMaxDuration(),
+                                emailList, pathObj, filenameObj);
 
+                    }, "PersonalSafety").start();
+
+                }, "PersonalSafety").start();
                 break;
         }
 
+    }
 
+    private String generateMessageWithMaxDuration() {
+        String name = UsernamePreference.getInstance().getUsernameInput(this);
+        if (name.isEmpty()) name = "Anonymous";
+        return "The second audio email is linked to the previous email received."
+                + "\n\nThe attached media in this message is an audio recording attachment describing "
+                + name + "'s current surrounding.";
     }
 
     private String generateMessage(String mobileNumber, Location location) {
@@ -235,9 +258,10 @@ public class MainActivity extends BaseActivity implements
         return userMessage
                 + "\n\nYou can reach " + name + " with his/her contact details:"
                 + "\n" + "Mobile Number: " + mobileNumber
-                + "\n\n" + name + "'s current location" + DEFAULT_MESSAGE
+                + "\n\n" + name + "'s Location: " + Utility.getLocationText(this, location)
+                + "\n" + "Link" + DEFAULT_MESSAGE
                 + location.getLatitude() + "," + location.getLongitude()
-                + "\n\nBelow is an audio attachment that gives you more information regarding "
+                + "\n\nThe attached media in this message is an audio recording attachment describing "
                 + name + "'s current surroundings.";
     }
 
@@ -257,7 +281,6 @@ public class MainActivity extends BaseActivity implements
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
             return;
         this.localList = subscriptionManager.getActiveSubscriptionInfoList();
-
 
         SentReceiverObserver.getInstance().addObserver(this);
     }
