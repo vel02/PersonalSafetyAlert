@@ -127,9 +127,20 @@ public class PermissionFragment extends DaggerFragment {
         });
     }
 
+    private void drawIOAppPermission () {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(requireActivity())) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + requireActivity().getPackageName()));
+                startActivityForResult(intent, 0);
+            }
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        drawIOAppPermission();
         if (!navigate.checkLocationPermission()
                 && !navigate.checkSendSMSPermission()
                 && !navigate.checkRecordAudioPermission()

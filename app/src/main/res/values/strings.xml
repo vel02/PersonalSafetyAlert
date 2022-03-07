@@ -17,7 +17,8 @@
     <string name="txt_help">Help</string>
     <string name="txt_hide">HIDE</string>
 
-    <string name="txt_sample_text_00">I am in trouble, please help by reaching to below location.</string>
+<!--    <string name="txt_sample_text_00">I am in trouble, please help by reaching to below location.</string>-->
+    <string name="txt_sample_text_00">I am in trouble, A recorded audio is sent to your email.</string>
     <string name="txt_sample_text_01">I am in trouble, this is an emergency please help me.</string>
     <string name="txt_sample_text_02">I am in need, do reach me ASAP!</string>
     <string name="txt_sample_text_03">Emergency! something happened to me please reach me.</string>
@@ -126,6 +127,7 @@
     <string name="txt_dummy_title">Lorem Ipsum</string>
     <string name="desc_dummy_large">Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</string>
     <string name="desc_permission_sub_title">Needs your permission to work</string>
+    <string name="desc_permission_sub_second_title">Press all icon to activate permissions</string>
     <string name="tag_fragment_contact_us_to_not_working">tag_fragment_contact_us_to_not_working</string>
     <string name="txt_edit">Edit</string>
     <string name="tag_fragment_contact_to_add_contact">tag_fragment_contact_to_add_contact</string>

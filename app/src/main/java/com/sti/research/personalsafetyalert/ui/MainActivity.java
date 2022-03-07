@@ -67,7 +67,9 @@ import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManage
 import com.sti.research.personalsafetyalert.util.screen.sms.SmsSimSubscriptionPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -120,7 +122,9 @@ public class MainActivity extends BaseActivity implements
         String preferredContact = SelectPreferredContactPreference.getInstance().getSelectPreferredContact(this);
         Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT: " + preferredContact);
 
-        String subject = "Personal Safety Team - ALERT MESSAGE";
+        String subject_first_email = "Personal Safety Team - ALERT MESSAGE";
+        String subject_second_email = "Personal Safety Team - ALERT MESSAGE (Audio Continuation Recording)";
+
         switch (preferredContact) {
             case "SINGLE_CONTACT":
                 Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT SELECTED: Send to one specific contact");
@@ -157,14 +161,14 @@ public class MainActivity extends BaseActivity implements
                     }
 
                     //send email
-                    viewModel.sendEmail(subject,
+                    viewModel.sendEmail(subject_first_email,
                             generateMessage(simInfo.getNumber(), location),
                             contact.getEmail(), path, filename);
 
                     new AudioRecordManager(AudioRecordManager.AUDIO_MAX_DURATION, AudioRecordManager.AUDIO_INTERVAL, (pathObj, filenameObj) -> {
                         Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + pathObj);
                         //send email
-                        viewModel.sendEmailWithMaxDuration(subject,
+                        viewModel.sendEmailWithMaxDuration(subject_second_email,
                                 generateMessageWithMaxDuration(),
                                 contact.getEmail(), pathObj, filenameObj);
 
@@ -223,14 +227,14 @@ public class MainActivity extends BaseActivity implements
                     }
 
                     //send email
-                    viewModel.sendEmail(subject,
+                    viewModel.sendEmail(subject_first_email,
                             generateMessage(simInfo.getNumber(), location),
                             emailList, path, filename);
 
                     new AudioRecordManager(AudioRecordManager.AUDIO_MAX_DURATION, AudioRecordManager.AUDIO_INTERVAL, (pathObj, filenameObj) -> {
                         Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + pathObj);
                         //send email
-                        viewModel.sendEmailWithMaxDuration(subject,
+                        viewModel.sendEmailWithMaxDuration(subject_second_email,
                                 generateMessageWithMaxDuration(),
                                 emailList, pathObj, filenameObj);
 
@@ -240,6 +244,17 @@ public class MainActivity extends BaseActivity implements
                 break;
         }
 
+    }
+
+
+    private String getDateAndTime() {
+        //https://stackoverflow.com/questions/5369682/how-to-get-current-time-and-date-in-android
+        Calendar c = Calendar.getInstance();
+//        System.out.println("Current dateTime => " + c.getTime());
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
+//        String formattedDate = df.format(c.getTime());
+        String formattedDate = String.valueOf(c.getTime());
+        return "Date and time = " + formattedDate;
     }
 
     private String generateMessageWithMaxDuration() {
@@ -259,6 +274,7 @@ public class MainActivity extends BaseActivity implements
                 + "\n\n" + name + "'s Location: " + Utility.getLocationText(this, location)
                 + "\n" + "Link" + DEFAULT_MESSAGE
                 + location.getLatitude() + "," + location.getLongitude()
+                + "\n" + getDateAndTime()
                 + "\n\nThe attached media in this message is an audio recording attachment describing "
                 + name + "'s current surroundings.";
     }

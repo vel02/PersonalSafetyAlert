@@ -48,11 +48,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/permission_title" />
 
+
+            <TextView
+                android:id="@+id/permission_second_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/desc_permission_sub_second_title"
+                android:textColor="@color/text_color_black_800"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/permission_description" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/permission_location"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
@@ -62,7 +76,7 @@
                 android:paddingBottom="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/permission_description">
+                app:layout_constraintTop_toBottomOf="@+id/permission_second_description">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/permission_location_circle"
