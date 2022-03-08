@@ -2,6 +2,7 @@ package com.sti.research.personalsafetyalert.ui.screen.menu.notworking.screen.pa
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -71,11 +72,26 @@ public class NotWorkingFragmentViewPager extends DaggerFragment {
                     startActivity(intent);
                 });
                 break;
+            case "Open Settings":
+                binding.vpButton.setOnClickListener(v -> {
+                    drawOverlayAppPermission();
+                });
+                break;
             case "Go to Help":
                 binding.vpButton.setOnClickListener(v -> {
                     listener.onBackPressed();
                 });
                 break;
+        }
+    }
+
+    private void drawOverlayAppPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(requireActivity())) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + requireActivity().getPackageName()));
+                startActivityForResult(intent, 0);
+            }
         }
     }
 

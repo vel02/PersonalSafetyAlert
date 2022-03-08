@@ -509,14 +509,18 @@ public class MainActivity extends BaseActivity implements
             intent.putExtra(KEY_ANIM_TYPE, TransitionType.Fade);
             startActivity(intent, options.toBundle());
             return true;
-        } else if (item.getItemId() == R.id.action_not_working) {
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
-            Intent intent = new Intent(MainActivity.this, NotWorkingActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra(KEY_ANIM_TYPE, TransitionType.Fade);
-            startActivity(intent, options.toBundle());
-            return true;
-        } else if (item.getItemId() == R.id.action_help) {
+        }
+
+//        else if (item.getItemId() == R.id.action_not_working) {
+//            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+//            Intent intent = new Intent(MainActivity.this, NotWorkingActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            intent.putExtra(KEY_ANIM_TYPE, TransitionType.Fade);
+//            startActivity(intent, options.toBundle());
+//            return true;
+//        }
+
+        else if (item.getItemId() == R.id.action_help) {
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             Intent intent = new Intent(MainActivity.this, HelpActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

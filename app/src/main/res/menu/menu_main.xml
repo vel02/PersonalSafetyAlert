@@ -9,16 +9,17 @@
         android:title="@string/title_help"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_not_working"
-        android:orderInCategory="200"
-        android:title="@string/title_not_working"
-        app:showAsAction="never" />
+    <!--    <item-->
+    <!--        android:id="@+id/action_not_working"-->
+    <!--        android:orderInCategory="200"-->
+    <!--        android:title="@string/title_not_working"-->
+    <!--        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="300"
         android:title="@string/title_settings"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="ifRoom" />
 
 </menu>
