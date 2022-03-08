@@ -246,17 +246,6 @@ public class MainActivity extends BaseActivity implements
 
     }
 
-
-    private String getDateAndTime() {
-        //https://stackoverflow.com/questions/5369682/how-to-get-current-time-and-date-in-android
-        Calendar c = Calendar.getInstance();
-//        System.out.println("Current dateTime => " + c.getTime());
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
-//        String formattedDate = df.format(c.getTime());
-        String formattedDate = String.valueOf(c.getTime());
-        return "Date and time = " + formattedDate;
-    }
-
     private String generateMessageWithMaxDuration() {
         String name = UsernamePreference.getInstance().getUsernameInput(this);
         if (name.isEmpty()) name = "Anonymous";
@@ -274,7 +263,7 @@ public class MainActivity extends BaseActivity implements
                 + "\n\n" + name + "'s Location: " + Utility.getLocationText(this, location)
                 + "\n" + "Link" + DEFAULT_MESSAGE
                 + location.getLatitude() + "," + location.getLongitude()
-                + "\n" + getDateAndTime()
+                + "\n" + Utility.generateDateAndTime()
                 + "\n\nThe attached media in this message is an audio recording attachment describing "
                 + name + "'s current surroundings.";
     }

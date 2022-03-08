@@ -2,21 +2,19 @@ package com.sti.research.personalsafetyalert.ui.screen.permission;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,7 +30,6 @@ import com.sti.research.personalsafetyalert.databinding.FragmentPermissionBindin
 import com.sti.research.personalsafetyalert.repository.PermissionRepository.RequiredPermissionsState;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.NavigatePermission;
-import com.sti.research.personalsafetyalert.util.Utility;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import java.util.Objects;
@@ -125,9 +122,13 @@ public class PermissionFragment extends DaggerFragment {
         binding.permissionProceed.setOnClickListener(v -> {
             hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_permission_to_home));
         });
+
+        binding.permissionOverlayOpenSettings.setOnClickListener(v -> {
+            drawOverlayAppPermission();
+        });
     }
 
-    private void drawIOAppPermission () {
+    private void drawOverlayAppPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(requireActivity())) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -140,7 +141,6 @@ public class PermissionFragment extends DaggerFragment {
     @Override
     public void onResume() {
         super.onResume();
-        drawIOAppPermission();
         if (!navigate.checkLocationPermission()
                 && !navigate.checkSendSMSPermission()
                 && !navigate.checkRecordAudioPermission()

@@ -32,6 +32,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -194,5 +195,15 @@ public class Utility {
             dialog.show();
             positiveButton.setOnClickListener(v -> dialog.dismiss());
         }
+    }
+
+    public static String generateDateAndTime() {
+        //https://stackoverflow.com/questions/5369682/how-to-get-current-time-and-date-in-android
+        Calendar c = Calendar.getInstance();
+//        System.out.println("Current dateTime => " + c.getTime());
+//        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
+//        String formattedDate = df.format(c.getTime());
+//        String formattedDate = String.valueOf(c.getTime());
+        return "Date and time = " + c.getTime();
     }
 }

@@ -156,6 +156,8 @@
     <string name="desc_step_three">Turn-on the “Safety Alert” button by clicking it. This will turn on the GPS of your phone.</string>
     <string name="desc_step_four">You can choose a message that you want to send to your receiver from our default messages. You can also modify it ang put your preferred message.</string>
     <string name="desc_step_five">Press the power button three (3) times within five (5) seconds to send a message and/or email.</string>
+    <string name="permission_overlay_title">Permit drawing over other apps</string>
+    <string name="permission_overlay_desc">This permission allows an app to display on top of other apps you\'re using and may interfere with your use of the interface in other applications.</string>
 
 
 </resources>

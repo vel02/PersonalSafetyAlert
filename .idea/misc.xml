@@ -73,6 +73,7 @@
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_gps_layout.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_internet_layout.xml" value="0.20416666666666666" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_manage_external_storage.xml" value="0.33" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_overlay_permission_layout.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_register_contact_layout.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_user_name.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_add_contact.xml" value="0.5" />
@@ -85,7 +86,7 @@
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_message.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_not_working.xml" value="0.22" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_not_working_view_pager.xml" value="0.33" />
-        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_permission.xml" value="0.33" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_permission.xml" value="0.1" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_update_contact.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_visual_message.xml" value="0.22" />
