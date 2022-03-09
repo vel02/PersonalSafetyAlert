@@ -99,7 +99,7 @@ public class ContactFragment extends DaggerFragment {
                             .setSelectPreferredContact(requireActivity(),
                                     SelectPreferredContactPreference.SELECT_PREFERRED_CONTACT_SINGLE);
                     break;
-                case "Send to this list of contacts":
+                case "Send to list of contacts":
                     binding.contactSinglePerson.setVisibility(View.GONE);
                     binding.contactContactListCard.setVisibility(View.VISIBLE);
                     SelectPreferredContactPreference.getInstance()

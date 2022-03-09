@@ -66,7 +66,7 @@
     <string name="tag_fragment_visual_to_home">tag_fragment_visual_to_home</string>
     <string name="desc_add_contact">Add contact from contact list</string>
     <string name="txt_single_person">Send to one specific contact</string>
-    <string name="txt_contact_list">Send to this list of contacts</string>
+    <string name="txt_contact_list">Send to list of contacts</string>
     <string name="txt_message_to">Message to</string>
     <string name="txt_confirm">Confirm</string>
     <string name="txt_mobile_number">Mobile number</string>
@@ -158,6 +158,8 @@
     <string name="desc_step_five">Press the power button three (3) times within five (5) seconds to send a message and/or email.</string>
     <string name="permission_overlay_title">Permit drawing over other apps</string>
     <string name="permission_overlay_desc">This permission allows an app to display on top of other apps you\'re using and may interfere with your use of the interface in other applications.</string>
+    <string name="txt_any_concern">Any concern ?</string>
+    <string name="txt_send_feedback">Send Feedback</string>
 
 
 </resources>
