@@ -13,8 +13,11 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -36,6 +39,8 @@ import com.sti.research.personalsafetyalert.util.NetworkUtil;
 import com.sti.research.personalsafetyalert.util.Utility;
 import com.sti.research.personalsafetyalert.util.api.AudioRecordManager;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
+import com.sti.research.personalsafetyalert.util.test.HomeWatcher;
+import com.sti.research.personalsafetyalert.util.test.OnHomePressedListener;
 
 public class LocationService extends BaseService implements DetectPowerClickedReceiver.PowerClickedReceiverCallback {
 
@@ -53,6 +58,7 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
 
     private LocationDataTransmitterListener locationDataTransmitterListener;
 
+    HomeWatcher mHomeWatcher = new HomeWatcher(this);
 
     @Override
     public void onTriggered() {
@@ -62,6 +68,12 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
             Log.d(TAG, "onTriggered: Can't be send without location detected.");
         }
     }
+
+    private int numberOfClicks = 0;
+    private long startTimeSecond = 0;
+    int timelapse = 0;
+    private Vibrator vibrator;
+
 
     @Override
     public void onCreate() {
@@ -75,6 +87,62 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 //        locationRequest.setMaxWaitTime(LOCATION_REQUEST_MAX_WAIT_TIME);
         getLastLocation();
+        if (vibrator == null)
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+
+        mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
+            @Override
+            public void onHomePressed() {
+                // do something here...
+                Log.d(TAG, "DETECTED AKO!");
+
+                if (startTimeSecond == 0) startTimeSecond = (System.currentTimeMillis() / 1000);
+                ++numberOfClicks;
+
+                if (startTimeSecond != 0) {
+                    long time = (System.currentTimeMillis() / 1000);
+                    timelapse = (int) (time - startTimeSecond);
+                    Log.e(TAG, "timelapse: " + timelapse);
+
+                    if (timelapse > 1) {
+
+                        numberOfClicks = 0;
+                        startTimeSecond = 0;
+
+                    }
+
+                }
+
+                if (numberOfClicks > 3) {
+                    Log.e(TAG, "triggered");
+
+                    vibrate();
+                    if (location != null && locationDataTransmitterListener != null) {
+                        locationDataTransmitterListener.onDataProcessing(location);
+                    } else {
+                        Log.d(TAG, "onTriggered: Can't be send without location detected.");
+                    }
+
+                    numberOfClicks = 0;
+                    startTimeSecond = 0;
+                }
+
+
+            }
+
+            @Override
+            public void onHomeLongPressed() {
+            }
+        });
+
+
+    }
+
+    private void vibrate() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else vibrator.vibrate(500);
     }
 
     private final LocationCallback locationCallback = new LocationCallback() {
@@ -152,6 +220,10 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
 
         if (startedFromNotification) this.removeNotificationLocation();
 
+        if (mHomeWatcher != null)
+            mHomeWatcher.startWatch();
+
+
         return START_NOT_STICKY;
     }
 
@@ -207,7 +279,7 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
                         activityPI)
                 .addAction(R.drawable.ic_cancel, "Stop",
                         servicePI)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_gps)
                 .setContentTitle(Utility.getLocationTitle(this))
                 .setContentText(location)
                 .setPriority(Notification.PRIORITY_HIGH)
@@ -226,7 +298,7 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
                 .getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         return new NotificationCompat.Builder(this, NOTIFICATION_GPS_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_notif_info)
                 .setContentTitle("Connection Interrupted")
                 .setContentText("Please check your connection, turn it on to work properly.")
                 .setPriority(Notification.PRIORITY_DEFAULT)
