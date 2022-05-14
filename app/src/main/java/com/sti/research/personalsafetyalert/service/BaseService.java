@@ -14,6 +14,7 @@ public abstract class BaseService extends Service {
 
     protected static final int NOTIFICATION_LOCATION_UPDATE_ID = 1;
     protected static final int NOTIFICATION_GPS_ID = 2;
+    protected static final int NOTIFICATION_USER_SEND_ACTIVATION_ID = 3;
 
     protected ConfigurationChangeStatus status;
 

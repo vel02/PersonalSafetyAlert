@@ -19,6 +19,9 @@ public class BaseApplication extends DaggerApplication {
     public static final String NOTIFICATION_GPS_CHANNEL_ID = "com.sti.research.personalsafetyalert.CHANNEL_GPS";
     public static final String NOTIFICATION_GPS_CHANNEL_NAME = "GPS Connection";
 
+    public static final String NOTIFICATION_NOTIFY_USER_SEND_ACTIVATION_CHANNEL_ID = "com.sti.research.personalsafetyalert.CHANNEL_USER_SEND";
+    public static final String NOTIFICATION_NOTIFY_USER_SEND_ACTIVATION_CHANNEL_NAME = "User send activation state";
+
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
         return DaggerAppComponent.builder().application(this).build();
@@ -40,8 +43,12 @@ public class BaseApplication extends DaggerApplication {
                     NOTIFICATION_GPS_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
             channel_gps.setDescription("Remind GPS connection status.");
 
+            NotificationChannel channel_notify_user = new NotificationChannel(NOTIFICATION_NOTIFY_USER_SEND_ACTIVATION_CHANNEL_ID,
+                    NOTIFICATION_NOTIFY_USER_SEND_ACTIVATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel_gps.setDescription("Remind user sending activation succeeded.");
+
             NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannels(Arrays.asList(channel_location, channel_gps));
+            manager.createNotificationChannels(Arrays.asList(channel_location, channel_gps, channel_notify_user));
         }
     }
 }

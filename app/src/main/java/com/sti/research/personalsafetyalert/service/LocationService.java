@@ -1,6 +1,7 @@
 package com.sti.research.personalsafetyalert.service;
 
 import static com.sti.research.personalsafetyalert.BaseApplication.NOTIFICATION_GPS_CHANNEL_ID;
+import static com.sti.research.personalsafetyalert.BaseApplication.NOTIFICATION_NOTIFY_USER_SEND_ACTIVATION_CHANNEL_ID;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -63,6 +64,8 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
     @Override
     public void onTriggered() {
         if (location != null && locationDataTransmitterListener != null) {
+            Log.e("NOTIFICATION_STATE", "triggered");
+            notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendActivationState());
             locationDataTransmitterListener.onDataProcessing(location);
         } else {
             Log.d(TAG, "onTriggered: Can't be send without location detected.");
@@ -119,6 +122,8 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
 
                     vibrate();
                     if (location != null && locationDataTransmitterListener != null) {
+                        Log.e("NOTIFICATION_STATE", "triggered");
+                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendActivationState());
                         locationDataTransmitterListener.onDataProcessing(location);
                     } else {
                         Log.d(TAG, "onTriggered: Can't be send without location detected.");
@@ -307,6 +312,16 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
                 .build();
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
+    private Notification notificationUserSendActivationState() {
+
+        return new NotificationCompat.Builder(this, NOTIFICATION_NOTIFY_USER_SEND_ACTIVATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notif_info)
+                .setContentText("Alert Activated.")
+                .setPriority(Notification.PRIORITY_DEFAULT)
+                .setOngoing(true)
+                .build();
+    }
 
     private final BroadcastReceiver checkGPSConnectionReceiver = new BroadcastReceiver() {
 

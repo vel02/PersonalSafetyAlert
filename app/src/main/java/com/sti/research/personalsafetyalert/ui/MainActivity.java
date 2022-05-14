@@ -1,5 +1,6 @@
 package com.sti.research.personalsafetyalert.ui;
 
+import static com.sti.research.personalsafetyalert.BaseApplication.NOTIFICATION_NOTIFY_USER_SEND_ACTIVATION_CHANNEL_ID;
 import static com.sti.research.personalsafetyalert.util.Constants.*;
 import static com.sti.research.personalsafetyalert.util.api.SmsApi.SLOT_SIM_ONE;
 import static com.sti.research.personalsafetyalert.util.api.SmsApi.SLOT_SIM_TWO;
@@ -7,6 +8,7 @@ import static com.sti.research.personalsafetyalert.util.api.SmsApi.SLOT_SIM_TWO;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -17,6 +19,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -49,7 +53,6 @@ import com.sti.research.personalsafetyalert.ui.screen.contact.ContactFragmentDir
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
-import com.sti.research.personalsafetyalert.ui.screen.menu.notworking.NotWorkingActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
 import com.sti.research.personalsafetyalert.ui.screen.message.MessageFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragment;
@@ -67,9 +70,7 @@ import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManage
 import com.sti.research.personalsafetyalert.util.screen.sms.SmsSimSubscriptionPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -104,6 +105,9 @@ public class MainActivity extends BaseActivity implements
 
     private Location location;
 
+    //NOTIFICATION
+    private final int NOTIFICATION_USER_SEND_ACTIVATION_ID = 3;
+    private NotificationManager notificationManager;
 
     @Override
     public void onDataProcessing(Location location) {
@@ -142,6 +146,7 @@ public class MainActivity extends BaseActivity implements
 
 
                     if (subscriptionManager.getActiveSubscriptionInfoCount() > 1) {
+                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
                         SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
                                 .sendTo(contact.getNumber(), this.userMessage, SLOT_SIM_ONE, sentPI, deliveredPI);
 
@@ -150,6 +155,7 @@ public class MainActivity extends BaseActivity implements
                                 .setSmsSimSubscriptionStatus(this,
                                         SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS);
                     } else {
+                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
                         Log.d(TAG, "FIRST SEND TEXT");
                         SmsApi.getInstance(location.getLatitude(), location.getLongitude())
                                 .sendTo(contact.getNumber(), this.userMessage, sentPI, deliveredPI);
@@ -167,6 +173,7 @@ public class MainActivity extends BaseActivity implements
 
                     new AudioRecordManager(AudioRecordManager.AUDIO_MAX_DURATION, AudioRecordManager.AUDIO_INTERVAL, (pathObj, filenameObj) -> {
                         Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + pathObj);
+                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendEmailActivationState());
                         //send email
                         viewModel.sendEmailWithMaxDuration(subject_second_email,
                                 generateMessageWithMaxDuration(),
@@ -209,6 +216,7 @@ public class MainActivity extends BaseActivity implements
 
 
                     if (subscriptionManager.getActiveSubscriptionInfoCount() > 1) {
+                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
                         SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
                                 .sendToMany(contactList, this.userMessage, SLOT_SIM_ONE, sentPI, deliveredPI);
 
@@ -217,6 +225,7 @@ public class MainActivity extends BaseActivity implements
                                 .setSmsSimSubscriptionStatus(this,
                                         SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS);
                     } else {
+                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
                         SmsApi.getInstance(location.getLatitude(), location.getLongitude())
                                 .sendToMany(contactList, this.userMessage, sentPI, deliveredPI);
 
@@ -233,6 +242,7 @@ public class MainActivity extends BaseActivity implements
 
                     new AudioRecordManager(AudioRecordManager.AUDIO_MAX_DURATION, AudioRecordManager.AUDIO_INTERVAL, (pathObj, filenameObj) -> {
                         Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + pathObj);
+                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendEmailActivationState());
                         //send email
                         viewModel.sendEmailWithMaxDuration(subject_second_email,
                                 generateMessageWithMaxDuration(),
@@ -441,6 +451,8 @@ public class MainActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS); //permission to use fade transition
         super.onCreate(savedInstanceState);
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
         viewModel = new ViewModelProvider(MainActivity.this, providerFactory).get(MainViewModel.class);
         registerDataProcessingListener(this);
@@ -828,6 +840,31 @@ public class MainActivity extends BaseActivity implements
         if (!(navHostFragment.getChildFragmentManager().getFragments().get(0) instanceof PermissionFragment)) {
             super.onBackPressed();
         }
+    }
+
+
+    @SuppressLint("UnspecifiedImmutableFlag")
+    private Notification notificationUserSendSMSActivationState() {
+
+        String NOTIFICATION_USER_SEND_ACTIVATION_SMS_SENT = "SMS sent";
+        return new NotificationCompat.Builder(this, NOTIFICATION_NOTIFY_USER_SEND_ACTIVATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notif_info)
+                .setContentText(NOTIFICATION_USER_SEND_ACTIVATION_SMS_SENT)
+                .setPriority(Notification.PRIORITY_DEFAULT)
+                .setOngoing(true)
+                .build();
+    }
+
+    @SuppressLint("UnspecifiedImmutableFlag")
+    private Notification notificationUserSendEmailActivationState() {
+
+        String NOTIFICATION_USER_SEND_ACTIVATION_EMAIL_SENT = "SMS and email are successfully sent";
+        return new NotificationCompat.Builder(this, NOTIFICATION_NOTIFY_USER_SEND_ACTIVATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notif_info)
+                .setContentText(NOTIFICATION_USER_SEND_ACTIVATION_EMAIL_SENT)
+                .setPriority(Notification.PRIORITY_DEFAULT)
+                .setOngoing(false)
+                .build();
     }
 
 }
