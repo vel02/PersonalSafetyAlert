@@ -6,6 +6,7 @@ import static com.sti.research.personalsafetyalert.util.api.SmsApi.SLOT_SIM_ONE;
 import static com.sti.research.personalsafetyalert.util.api.SmsApi.SLOT_SIM_TWO;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -22,6 +23,7 @@ import android.app.ActivityOptions;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -36,7 +38,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
@@ -66,8 +70,11 @@ import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSing
 import com.sti.research.personalsafetyalert.util.screen.contact.SelectPreferredContactPreference;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeCustomMessagePreference;
 import com.sti.research.personalsafetyalert.util.screen.main.UsernamePreference;
+import com.sti.research.personalsafetyalert.util.screen.manager.MobileNetworkManager;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.sms.SmsSimSubscriptionPreference;
+import com.sti.research.personalsafetyalert.util.test.contact.ContactVO;
+import com.sti.research.personalsafetyalert.util.test.contact.ContactVORecyclerAdapter;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import java.util.ArrayList;
@@ -86,7 +93,8 @@ public class MainActivity extends BaseActivity implements
         LocationServiceListener,
         BaseActivity.OnDataProcessingListener,
         MessageRecyclerAdapter.OnMessageClickListener,
-        ContactRecyclerAdapter.OnContactClickListener {
+        ContactRecyclerAdapter.OnContactClickListener,
+        ContactVORecyclerAdapter.OnContactClickListener {
 
     private static final String TAG = "test";
 
@@ -425,6 +433,44 @@ public class MainActivity extends BaseActivity implements
             ContactFragment fragment = (ContactFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
             fragment.onContactDataReceiver(contact);
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onContactResult(ContactVO contact) {
+        //add contact to database.
+
+        androidx.appcompat.app.AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this, R.style.PersonalSafetyAlert_AlertDialogTheme);
+        View view = getLayoutInflater().inflate(R.layout.dialog_add_contact_layout, null);
+        TextView positiveButton = view.findViewById(R.id.dialog_button_positive);
+        TextView content = view.findViewById(R.id.dialog_content);
+        content.setText("Are you sure you want to add " + contact.getContactName() + "?");
+
+
+        builder.setCancelable(true);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        positiveButton.setOnClickListener(v -> {
+            Log.e("CONTACT", contact.getContactName());
+
+            MobileNetworkManager networkManager = new MobileNetworkManager();
+
+            Contact con = new Contact();
+            con.setName(contact.getContactName());
+
+            String number = contact.getContactNumber().replaceAll("\\s+", "");
+            con.setMobileNumber(number);
+
+            networkManager.validate(number);
+            con.setMobileNetwork(networkManager.getNetwork());
+            
+            //add contact to database.
+            viewModel.insertContact(con);
+
+            dialog.dismiss();
+        });
+
     }
 
     @Inject

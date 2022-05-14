@@ -43,6 +43,10 @@ public class MainViewModel extends ViewModel {
         this.messagingRepository.sendEmailWithAttachments(subject, body, recipient, path, filename);
     }
 
+    public void insertContact(Contact contact) {
+        this.contactRepository.insert(contact);
+    }
+
     public void loadContactList() {
         this.contactRepository.select();
     }

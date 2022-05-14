@@ -137,8 +137,8 @@
     <string name="txt_mobile">Mobile</string>
     <string name="txt_phone_number">Phone number</string>
     <string name="txt_email_address">Email address</string>
-    <string name="txt_new_contact">New Contact</string>
-    <string name="desc_new_contact">This contact will be added to your list of person who\'ll received an emergency message.</string>
+    <string name="txt_new_contact">List Of Available Device Contacts</string>
+    <string name="desc_new_contact">Selecting contacts will be added to your list of person who\'ll received an emergency message.</string>
     <string name="tag_fragment_add_contact_to_contact">tag_fragment_add_contact_to_contact</string>
     <string name="tag_fragment_contact_to_update_contact">tag_fragment_contact_to_update_contact</string>
     <string name="txt_update_contact">Update contact</string>
