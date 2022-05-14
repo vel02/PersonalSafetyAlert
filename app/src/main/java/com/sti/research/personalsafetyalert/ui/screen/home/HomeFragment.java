@@ -94,6 +94,7 @@ public class HomeFragment extends DaggerFragment {
         configureActionBarTitle();
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(HomeFragmentViewModel.class);
         binding.setPopupListener(this::clearAllPopup);
+        SelectPreferredContactPreference.getInstance().setSelectPreferredContact(getActivity(), SelectPreferredContactPreference.SELECT_PREFERRED_CONTACT_MULTIPLE);
 
         navigate();
         navigateWithGestureDetector();

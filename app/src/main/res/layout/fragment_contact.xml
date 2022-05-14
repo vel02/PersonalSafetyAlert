@@ -63,203 +63,203 @@
                 android:orientation="vertical"
                 android:padding="8dp">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/contact_message_to_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="3dp"
-                    app:cardPreventCornerOverlap="true"
-                    app:cardUseCompatPadding="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints">
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:id="@+id/contact_message_to_card"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:cardCornerRadius="4dp"-->
+<!--                    app:cardElevation="3dp"-->
+<!--                    app:cardPreventCornerOverlap="true"-->
+<!--                    app:cardUseCompatPadding="true"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    tools:ignore="MissingConstraints">-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:padding="16dp">-->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/txt_message_to"
-                            android:textColor="@color/text_color_black_900" />
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="@string/txt_message_to"-->
+<!--                            android:textColor="@color/text_color_black_900" />-->
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginBottom="8dp"
-                            android:background="?attr/dividerHorizontal" />
+<!--                        <View-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="1dp"-->
+<!--                            android:layout_marginTop="16dp"-->
+<!--                            android:layout_marginBottom="8dp"-->
+<!--                            android:background="?attr/dividerHorizontal" />-->
 
-                        <RadioGroup
-                            android:id="@+id/contact_radio_group"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
+<!--                        <RadioGroup-->
+<!--                            android:id="@+id/contact_radio_group"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="vertical">-->
 
-                            <RadioButton
-                                android:id="@+id/contact_radio_single_person"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:buttonTint="@color/primarySecondary"
-                                android:paddingStart="16dp"
-                                android:tag="@string/txt_single_person"
-                                android:text="@string/txt_single_person"
-                                android:textColor="@color/text_color_black_800"
-                                tools:ignore="RtlSymmetry" />
+<!--                            <RadioButton-->
+<!--                                android:id="@+id/contact_radio_single_person"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:buttonTint="@color/primarySecondary"-->
+<!--                                android:paddingStart="16dp"-->
+<!--                                android:tag="@string/txt_single_person"-->
+<!--                                android:text="@string/txt_single_person"-->
+<!--                                android:textColor="@color/text_color_black_800"-->
+<!--                                tools:ignore="RtlSymmetry" />-->
 
-                            <RadioButton
-                                android:id="@+id/contact_radio_contact_list"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:buttonTint="@color/primarySecondary"
-                                android:paddingStart="16dp"
-                                android:tag="@string/txt_contact_list"
-                                android:text="@string/txt_contact_list"
-                                android:textColor="@color/text_color_black_800"
-                                tools:ignore="RtlSymmetry" />
+<!--                            <RadioButton-->
+<!--                                android:id="@+id/contact_radio_contact_list"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:buttonTint="@color/primarySecondary"-->
+<!--                                android:paddingStart="16dp"-->
+<!--                                android:tag="@string/txt_contact_list"-->
+<!--                                android:text="@string/txt_contact_list"-->
+<!--                                android:textColor="@color/text_color_black_800"-->
+<!--                                tools:ignore="RtlSymmetry" />-->
 
-                        </RadioGroup>
-
-
-                    </LinearLayout>
+<!--                        </RadioGroup>-->
 
 
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/contact_single_person"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:visibility="visible"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="3dp"
-                    app:cardPreventCornerOverlap="true"
-                    app:cardUseCompatPadding="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/contact_message_to_card"
-                    tools:ignore="MissingConstraints">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/txt_single_person"
-                            android:textColor="@color/text_color_black_900"
-                            tools:ignore="RelativeOverlap" />
+<!--                    </LinearLayout>-->
 
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="16dp"
-                            android:background="?attr/dividerHorizontal" />
+<!--                </androidx.cardview.widget.CardView>-->
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:background="@drawable/round_corner"
-                            android:orientation="vertical"
-                            android:paddingStart="16dp"
-                            android:paddingTop="8dp"
-                            android:paddingEnd="16dp"
-                            android:paddingBottom="8dp">
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:id="@+id/contact_single_person"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:visibility="visible"-->
+<!--                    app:cardCornerRadius="4dp"-->
+<!--                    app:cardElevation="3dp"-->
+<!--                    app:cardPreventCornerOverlap="true"-->
+<!--                    app:cardUseCompatPadding="true"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/contact_message_to_card"-->
+<!--                    tools:ignore="MissingConstraints">-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/txt_mobile_number"
-                                android:textColor="@color/text_color_black_800"
-                                android:textSize="@dimen/text_size_small" />
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:padding="16dp">-->
 
-                            <EditText
-                                android:id="@+id/contact_mobile_number"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@android:color/transparent"
-                                android:importantForAutofill="no"
-                                android:inputType="number|phone"
-                                android:maxLength="11"
-                                android:paddingTop="4dp"
-                                android:textCursorDrawable="@drawable/edt_cursor_color_primary"
-                                tools:ignore="LabelFor" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:background="@drawable/round_corner"
-                            android:orientation="vertical"
-                            android:paddingStart="16dp"
-                            android:paddingTop="8dp"
-                            android:paddingEnd="16dp"
-                            android:paddingBottom="8dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/txt_email"
-                                android:textColor="@color/text_color_black_800"
-                                android:textSize="@dimen/text_size_small" />
-
-                            <EditText
-                                android:id="@+id/contact_email"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@android:color/transparent"
-                                android:importantForAutofill="no"
-                                android:inputType="textEmailAddress"
-                                android:maxLength="40"
-                                android:paddingTop="8dp"
-                                android:textCursorDrawable="@drawable/edt_cursor_color_primary"
-                                tools:ignore="LabelFor" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="@string/txt_single_person"-->
+<!--                            android:textColor="@color/text_color_black_900"-->
+<!--                            tools:ignore="RelativeOverlap" />-->
 
 
-                        </LinearLayout>
+<!--                        <View-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="1dp"-->
+<!--                            android:layout_marginTop="16dp"-->
+<!--                            android:background="?attr/dividerHorizontal" />-->
 
-                        <Button
-                            android:id="@+id/contact_confirm"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="32dp"
-                            android:background="@drawable/button_round_corner"
-                            android:text="@string/txt_confirm"
-                            android:textColor="@color/text_color_white"
-                            android:visibility="visible"
-                            app:backgroundTint="@null" />
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="16dp"-->
+<!--                            android:background="@drawable/round_corner"-->
+<!--                            android:orientation="vertical"-->
+<!--                            android:paddingStart="16dp"-->
+<!--                            android:paddingTop="8dp"-->
+<!--                            android:paddingEnd="16dp"-->
+<!--                            android:paddingBottom="8dp">-->
 
-                        <Button
-                            android:id="@+id/contact_edit"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="32dp"
-                            android:background="@drawable/button_round_corner"
-                            android:text="@string/txt_edit"
-                            android:textColor="@color/text_color_white"
-                            android:visibility="gone"
-                            app:backgroundTint="@null" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="@string/txt_mobile_number"-->
+<!--                                android:textColor="@color/text_color_black_800"-->
+<!--                                android:textSize="@dimen/text_size_small" />-->
 
-                    </LinearLayout>
+<!--                            <EditText-->
+<!--                                android:id="@+id/contact_mobile_number"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:background="@android:color/transparent"-->
+<!--                                android:importantForAutofill="no"-->
+<!--                                android:inputType="number|phone"-->
+<!--                                android:maxLength="11"-->
+<!--                                android:paddingTop="4dp"-->
+<!--                                android:textCursorDrawable="@drawable/edt_cursor_color_primary"-->
+<!--                                tools:ignore="LabelFor" />-->
+
+<!--                        </LinearLayout>-->
+
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:background="@drawable/round_corner"-->
+<!--                            android:orientation="vertical"-->
+<!--                            android:paddingStart="16dp"-->
+<!--                            android:paddingTop="8dp"-->
+<!--                            android:paddingEnd="16dp"-->
+<!--                            android:paddingBottom="8dp">-->
+
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="@string/txt_email"-->
+<!--                                android:textColor="@color/text_color_black_800"-->
+<!--                                android:textSize="@dimen/text_size_small" />-->
+
+<!--                            <EditText-->
+<!--                                android:id="@+id/contact_email"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:background="@android:color/transparent"-->
+<!--                                android:importantForAutofill="no"-->
+<!--                                android:inputType="textEmailAddress"-->
+<!--                                android:maxLength="40"-->
+<!--                                android:paddingTop="8dp"-->
+<!--                                android:textCursorDrawable="@drawable/edt_cursor_color_primary"-->
+<!--                                tools:ignore="LabelFor" />-->
 
 
-                </androidx.cardview.widget.CardView>
+<!--                        </LinearLayout>-->
+
+<!--                        <Button-->
+<!--                            android:id="@+id/contact_confirm"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginTop="32dp"-->
+<!--                            android:background="@drawable/button_round_corner"-->
+<!--                            android:text="@string/txt_confirm"-->
+<!--                            android:textColor="@color/text_color_white"-->
+<!--                            android:visibility="visible"-->
+<!--                            app:backgroundTint="@null" />-->
+
+<!--                        <Button-->
+<!--                            android:id="@+id/contact_edit"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginTop="32dp"-->
+<!--                            android:background="@drawable/button_round_corner"-->
+<!--                            android:text="@string/txt_edit"-->
+<!--                            android:textColor="@color/text_color_white"-->
+<!--                            android:visibility="gone"-->
+<!--                            app:backgroundTint="@null" />-->
+
+<!--                    </LinearLayout>-->
+
+
+<!--                </androidx.cardview.widget.CardView>-->
 
 
                 <androidx.cardview.widget.CardView
@@ -267,7 +267,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="8dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="3dp"
                     app:cardPreventCornerOverlap="true"

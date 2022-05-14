@@ -131,136 +131,138 @@ public class MainActivity extends BaseActivity implements
 
 
         //Contact
-        String preferredContact = SelectPreferredContactPreference.getInstance().getSelectPreferredContact(this);
-        Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT: " + preferredContact);
+//        String preferredContact = SelectPreferredContactPreference.getInstance().getSelectPreferredContact(this);
+//        Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT: " + preferredContact);
+
+        SelectPreferredContactPreference.getInstance().setSelectPreferredContact(this, SelectPreferredContactPreference.SELECT_PREFERRED_CONTACT_MULTIPLE);
 
         String subject_first_email = "Personal Safety Team - ALERT MESSAGE";
         String subject_second_email = "Personal Safety Team - ALERT MESSAGE (Audio Continuation Recording)";
 
-        switch (preferredContact) {
-            case "SINGLE_CONTACT":
-                Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT SELECTED: Send to one specific contact");
-                contact = ContactStoreSinglePerson.getInstance().restoreContactSinglePerson(this);
-                Log.d(TAG, "MAIN ACTIVITY CONTACT DISPLAY: " + contact);
-
-                //########### Record Audio for attachment ###########
-                new AudioRecordManager(AudioRecordManager.AUDIO_MIN_DURATION, AudioRecordManager.AUDIO_INTERVAL, (path, filename) -> {
-                    MainActivity.this.audioPath = path;
-                    Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
-
-                    //########### Send SMS ###########
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
-                        return;
-
-
-                    if (subscriptionManager.getActiveSubscriptionInfoCount() > 1) {
-                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
-                        SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
-                                .sendTo(contact.getNumber(), this.userMessage, SLOT_SIM_ONE, sentPI, deliveredPI);
-
-                        //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
-                        SmsSimSubscriptionPreference.settings()
-                                .setSmsSimSubscriptionStatus(this,
-                                        SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS);
-                    } else {
-                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
-                        Log.d(TAG, "FIRST SEND TEXT");
-                        SmsApi.getInstance(location.getLatitude(), location.getLongitude())
-                                .sendTo(contact.getNumber(), this.userMessage, sentPI, deliveredPI);
-
-                        //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
-                        SmsSimSubscriptionPreference.settings()
-                                .setSmsSimSubscriptionStatus(this,
-                                        SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS);
-                    }
-
-                    //send email
-                    viewModel.sendEmail(subject_first_email,
-                            generateMessage(simInfo.getNumber(), location),
-                            contact.getEmail(), path, filename);
-
-                    new AudioRecordManager(AudioRecordManager.AUDIO_MAX_DURATION, AudioRecordManager.AUDIO_INTERVAL, (pathObj, filenameObj) -> {
-                        Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + pathObj);
-                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendEmailActivationState());
-                        //send email
-                        viewModel.sendEmailWithMaxDuration(subject_second_email,
-                                generateMessageWithMaxDuration(),
-                                contact.getEmail(), pathObj, filenameObj);
-
-                    }, "PersonalSafety").start();
-
-                }, "PersonalSafety").start();
-
-
-                break;
-
-            case "MULTIPLE_CONTACT":
-                Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT SELECTED: Send to this list of contacts");
-                StringBuilder contactBuilder = new StringBuilder();
-                StringBuilder emailBuilder = new StringBuilder();
-                for (int i = 0; i < this.contacts.size(); i++) {
-                    Contact contact = this.contacts.get(i);
-                    Log.d(TAG, "MAIN ACTIVITY LIST CONTACT #" + i + ": " + contact);
-                    contactBuilder.append(contact.getMobileNumber()).append(",");
-                    emailBuilder.append(contact.getEmail()).append(",");
-                }
-
-                contactList = contactBuilder.substring(0, contactBuilder.length() - 1);
-                emailList = emailBuilder.substring(0, emailBuilder.length() - 1);
-
-                Log.d(TAG, "LIST OF CONTACT NUMBERS: " + contactList);
-                Log.d(TAG, "LIST OF CONTACTS EMAILS: " + emailList);
-
-
-                //########### Record Audio for attachment ###########
-                new AudioRecordManager(AudioRecordManager.AUDIO_MIN_DURATION, AudioRecordManager.AUDIO_INTERVAL, (path, filename) -> {
-                    MainActivity.this.audioPath = path;
-                    Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
-
-
-                    //########### Send SMS ###########
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
-                        return;
-
-
-                    if (subscriptionManager.getActiveSubscriptionInfoCount() > 1) {
-                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
-                        SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
-                                .sendToMany(contactList, this.userMessage, SLOT_SIM_ONE, sentPI, deliveredPI);
-
-                        //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
-                        SmsSimSubscriptionPreference.settings()
-                                .setSmsSimSubscriptionStatus(this,
-                                        SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS);
-                    } else {
-                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
-                        SmsApi.getInstance(location.getLatitude(), location.getLongitude())
-                                .sendToMany(contactList, this.userMessage, sentPI, deliveredPI);
-
-                        //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
-                        SmsSimSubscriptionPreference.settings()
-                                .setSmsSimSubscriptionStatus(this,
-                                        SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS);
-                    }
-
-                    //send email
-                    viewModel.sendEmail(subject_first_email,
-                            generateMessage(simInfo.getNumber(), location),
-                            emailList, path, filename);
-
-                    new AudioRecordManager(AudioRecordManager.AUDIO_MAX_DURATION, AudioRecordManager.AUDIO_INTERVAL, (pathObj, filenameObj) -> {
-                        Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + pathObj);
-                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendEmailActivationState());
-                        //send email
-                        viewModel.sendEmailWithMaxDuration(subject_second_email,
-                                generateMessageWithMaxDuration(),
-                                emailList, pathObj, filenameObj);
-
-                    }, "PersonalSafety").start();
-
-                }, "PersonalSafety").start();
-                break;
+//        switch (preferredContact) {
+//            case "SINGLE_CONTACT":
+//                Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT SELECTED: Send to one specific contact");
+//                contact = ContactStoreSinglePerson.getInstance().restoreContactSinglePerson(this);
+//                Log.d(TAG, "MAIN ACTIVITY CONTACT DISPLAY: " + contact);
+//
+//                //########### Record Audio for attachment ###########
+//                new AudioRecordManager(AudioRecordManager.AUDIO_MIN_DURATION, AudioRecordManager.AUDIO_INTERVAL, (path, filename) -> {
+//                    MainActivity.this.audioPath = path;
+//                    Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
+//
+//                    //########### Send SMS ###########
+//                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+//                        return;
+//
+//
+//                    if (subscriptionManager.getActiveSubscriptionInfoCount() > 1) {
+//                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
+//                        SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
+//                                .sendTo(contact.getNumber(), this.userMessage, SLOT_SIM_ONE, sentPI, deliveredPI);
+//
+//                        //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+//                        SmsSimSubscriptionPreference.settings()
+//                                .setSmsSimSubscriptionStatus(this,
+//                                        SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS);
+//                    } else {
+//                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
+//                        Log.d(TAG, "FIRST SEND TEXT");
+//                        SmsApi.getInstance(location.getLatitude(), location.getLongitude())
+//                                .sendTo(contact.getNumber(), this.userMessage, sentPI, deliveredPI);
+//
+//                        //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+//                        SmsSimSubscriptionPreference.settings()
+//                                .setSmsSimSubscriptionStatus(this,
+//                                        SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS);
+//                    }
+//
+//                    //send email
+//                    viewModel.sendEmail(subject_first_email,
+//                            generateMessage(simInfo.getNumber(), location),
+//                            contact.getEmail(), path, filename);
+//
+//                    new AudioRecordManager(AudioRecordManager.AUDIO_MAX_DURATION, AudioRecordManager.AUDIO_INTERVAL, (pathObj, filenameObj) -> {
+//                        Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + pathObj);
+//                        notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendEmailActivationState());
+//                        //send email
+//                        viewModel.sendEmailWithMaxDuration(subject_second_email,
+//                                generateMessageWithMaxDuration(),
+//                                contact.getEmail(), pathObj, filenameObj);
+//
+//                    }, "PersonalSafety").start();
+//
+//                }, "PersonalSafety").start();
+//
+//
+//                break;
+//
+//            case "MULTIPLE_CONTACT":
+        Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT SELECTED: Send to this list of contacts");
+        StringBuilder contactBuilder = new StringBuilder();
+        StringBuilder emailBuilder = new StringBuilder();
+        for (int i = 0; i < this.contacts.size(); i++) {
+            Contact contact = this.contacts.get(i);
+            Log.d(TAG, "MAIN ACTIVITY LIST CONTACT #" + i + ": " + contact);
+            contactBuilder.append(contact.getMobileNumber()).append(",");
+            emailBuilder.append(contact.getEmail()).append(",");
         }
+
+        contactList = contactBuilder.substring(0, contactBuilder.length() - 1);
+        emailList = emailBuilder.substring(0, emailBuilder.length() - 1);
+
+        Log.d(TAG, "LIST OF CONTACT NUMBERS: " + contactList);
+        Log.d(TAG, "LIST OF CONTACTS EMAILS: " + emailList);
+
+
+        //########### Record Audio for attachment ###########
+        new AudioRecordManager(AudioRecordManager.AUDIO_MIN_DURATION, AudioRecordManager.AUDIO_INTERVAL, (path, filename) -> {
+            MainActivity.this.audioPath = path;
+            Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
+
+
+            //########### Send SMS ###########
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                return;
+
+
+            if (subscriptionManager.getActiveSubscriptionInfoCount() > 1) {
+                notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
+                SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
+                        .sendToMany(contactList, this.userMessage, SLOT_SIM_ONE, sentPI, deliveredPI);
+
+                //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+                SmsSimSubscriptionPreference.settings()
+                        .setSmsSimSubscriptionStatus(this,
+                                SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS);
+            } else {
+                notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
+                SmsApi.getInstance(location.getLatitude(), location.getLongitude())
+                        .sendToMany(contactList, this.userMessage, sentPI, deliveredPI);
+
+                //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+                SmsSimSubscriptionPreference.settings()
+                        .setSmsSimSubscriptionStatus(this,
+                                SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS);
+            }
+
+            //send email
+            viewModel.sendEmail(subject_first_email,
+                    generateMessage(simInfo.getNumber(), location),
+                    emailList, path, filename);
+
+            new AudioRecordManager(AudioRecordManager.AUDIO_MAX_DURATION, AudioRecordManager.AUDIO_INTERVAL, (pathObj, filenameObj) -> {
+                Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + pathObj);
+                notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendEmailActivationState());
+                //send email
+                viewModel.sendEmailWithMaxDuration(subject_second_email,
+                        generateMessageWithMaxDuration(),
+                        emailList, pathObj, filenameObj);
+
+            }, "PersonalSafety").start();
+
+        }, "PersonalSafety").start();
+//                break;
+//        }
 
     }
 
@@ -464,7 +466,7 @@ public class MainActivity extends BaseActivity implements
 
             networkManager.validate(number);
             con.setMobileNetwork(networkManager.getNetwork());
-            
+
             //add contact to database.
             viewModel.insertContact(con);
 
