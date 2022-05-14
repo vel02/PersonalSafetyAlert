@@ -98,7 +98,24 @@ public class AddContactFragment extends DaggerFragment {
     }
 
     public boolean isValidEmail(CharSequence target) {
-        return (Patterns.EMAIL_ADDRESS.matcher(target).matches());
+
+        String EMAIL_VALIDATION_GMAIL = "gmail.com";
+        String EMAIL_VALIDATION_YAHOO = "yahoo.com";
+        String EMAIL_VALIDATION_PROTONMAIL = "protonmail.com";
+
+        if (Patterns.EMAIL_ADDRESS.matcher(target).matches()) {
+
+            int beginIndex = target.toString().indexOf("@") + 1;
+            int lastIndex = target.toString().length();
+
+            String email_postfix = target.toString().substring(beginIndex, lastIndex);
+            return email_postfix.equals(EMAIL_VALIDATION_GMAIL)
+                    || email_postfix.equals(EMAIL_VALIDATION_YAHOO)
+                    || email_postfix.equals(EMAIL_VALIDATION_PROTONMAIL);
+
+        }
+
+        return false;
     }
 
     private void resetUiBehavior() {
