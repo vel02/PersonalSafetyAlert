@@ -226,7 +226,7 @@ public class SmsApi {
         networkManager.validate(destination);
         switch (networkManager.getNetwork()) {
             case "GLOBE":
-                manager.sendTextMessage("3733", null, "LOAN GOUNLI20", sentPI, deliverPI);
+                manager.sendTextMessage("3733", null, "LOAN LOAD20", sentPI, deliverPI);
                 Log.d(TAG, "SMS API: GLOBE REQUESTING A LOAD.");
                 break;
 
