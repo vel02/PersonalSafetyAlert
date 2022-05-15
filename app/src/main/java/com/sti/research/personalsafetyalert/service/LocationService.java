@@ -319,7 +319,7 @@ public class LocationService extends BaseService implements DetectPowerClickedRe
                 .setSmallIcon(R.drawable.ic_notif_info)
                 .setContentText("Alert Activated.")
                 .setPriority(Notification.PRIORITY_DEFAULT)
-                .setOngoing(true)
+                .setOngoing(false)
                 .build();
     }
 

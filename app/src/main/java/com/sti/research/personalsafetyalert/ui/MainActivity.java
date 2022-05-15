@@ -694,7 +694,16 @@ public class MainActivity extends BaseActivity implements
     public boolean checkStoragePermission() {
         int hasReadPermission = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        return hasReadPermission == PackageManager.PERMISSION_DENIED;
+
+        int hasReadContactPermission = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS);
+
+        int hasWriteContactPermission = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_CONTACTS);
+
+        return hasReadPermission == PackageManager.PERMISSION_DENIED
+                || hasReadContactPermission == PackageManager.PERMISSION_DENIED
+                || hasWriteContactPermission == PackageManager.PERMISSION_DENIED;
     }
 
     @Override
@@ -774,7 +783,11 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void requestStoragePermission() {
         boolean shouldProvideRational = ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                && ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.READ_CONTACTS)
+                && ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.WRITE_CONTACTS);
 
         if (shouldProvideRational) {
             Snackbar.make(
@@ -784,11 +797,15 @@ public class MainActivity extends BaseActivity implements
                     .setActionTextColor(getResources().getColor(R.color.primaryDark))
                     .setAction(R.string.action_ok, v ->
                             ActivityCompat.requestPermissions(MainActivity.this,
-                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                            Manifest.permission.READ_CONTACTS,
+                                            Manifest.permission.WRITE_CONTACTS},
                                     PermissionManager.PERMISSION_STORAGE_REQUEST_CODE)).show();
         } else {
             ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_CONTACTS,
+                            Manifest.permission.WRITE_CONTACTS},
                     PermissionManager.PERMISSION_STORAGE_REQUEST_CODE);
         }
     }
@@ -899,7 +916,7 @@ public class MainActivity extends BaseActivity implements
                 .setSmallIcon(R.drawable.ic_notif_info)
                 .setContentText(NOTIFICATION_USER_SEND_ACTIVATION_SMS_SENT)
                 .setPriority(Notification.PRIORITY_DEFAULT)
-                .setOngoing(true)
+                .setOngoing(false)
                 .build();
     }
 
