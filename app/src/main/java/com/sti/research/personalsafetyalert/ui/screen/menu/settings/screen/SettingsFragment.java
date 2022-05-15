@@ -1,6 +1,8 @@
 package com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -44,6 +47,22 @@ public class SettingsFragment extends DaggerFragment {
         else binding.displayInputName.setText(name);
 
         binding.layoutInputName.setOnClickListener(v -> initUserName());
+
+        binding.layoutAdminAuth.setOnClickListener(vw -> {
+
+            Dialog dialog = new Dialog(requireActivity());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.dialog_admin_auth_layout);
+
+            TextView dialogPositive = dialog.findViewById(R.id.dialog_button_positive);
+            dialogPositive.setOnClickListener(view1 -> {
+                dialog.dismiss();
+            });
+
+            dialog.show();
+            
+        });
 
 
         binding.layoutShare.setOnClickListener(v -> {
