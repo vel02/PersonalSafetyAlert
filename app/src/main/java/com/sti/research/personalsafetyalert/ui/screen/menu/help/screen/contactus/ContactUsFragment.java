@@ -4,6 +4,7 @@ import static com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.co
 import static com.sti.research.personalsafetyalert.util.Constants.*;
 import static com.sti.research.personalsafetyalert.util.Utility.*;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,7 @@ import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -49,7 +51,7 @@ public class ContactUsFragment extends DaggerFragment {
 
     private HostScreen hostScreen;
 
-    private final List<String> pathImages = new ArrayList<>();
+    private final List<String> pathAttachements = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,6 +93,22 @@ public class ContactUsFragment extends DaggerFragment {
             viewModel.setScreenshotSlot(ScreenshotSlot.SLOT_THREE);
         });
 
+        binding.contactUsUploadVideo.setOnClickListener(view -> {
+
+            //remove last selected video if it does, otherwise will not execute this
+            if (this.pathAttachements.size() > 0) {
+                int lastItem = this.pathAttachements.size() - 1;
+                String path = this.pathAttachements.get(lastItem);
+                String lastSegment = path.substring(path.indexOf(".") + 1);
+                Log.e("ATTACHMENT", "LAST SEGMENT " + lastSegment);
+                if (lastSegment.equals("mp4")) {
+                    this.pathAttachements.remove(lastItem);
+                }
+            }
+
+            selectVideoFromGallery();
+        });
+
         binding.contactUsNotWorking.setOnClickListener(v -> {
             hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_contact_us_to_not_working));
         });
@@ -101,21 +119,46 @@ public class ContactUsFragment extends DaggerFragment {
     private void selectImageFromGallery() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, GalleryManager.PICK_GALLERY_REQUEST);
+        startActivityForResult(photoPickerIntent, GalleryManager.PICK_GALLERY_IMAGE_REQUEST);
     }
 
+    @SuppressWarnings("deprecation")
+    private void selectVideoFromGallery() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("video/*");
+        startActivityForResult(photoPickerIntent, GalleryManager.PICK_GALLERY_VIDEO_REQUEST);
+    }
+
+    @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK)
-            if (requestCode == GalleryManager.PICK_GALLERY_REQUEST) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GalleryManager.PICK_GALLERY_IMAGE_REQUEST) {
                 assert data != null;
                 Uri imageUri = data.getData();
-                this.pathImages.add(getImageUriPath(imageUri));
+                this.pathAttachements.add(getImageUriPath(imageUri));
                 setScreenshotPerSlot(imageUri);
+            } else if (requestCode == GalleryManager.PICK_GALLERY_VIDEO_REQUEST) {
+                assert data != null;
+                Uri selectedVideoUri = data.getData();
+
+                // MEDIA GALLERY
+                String selectedVideoPath = getVideoUriPath(selectedVideoUri);
+                if (selectedVideoPath != null) {
+                    this.pathAttachements.add(selectedVideoPath);
+
+                    List<String> pathSegments = Arrays.asList(selectedVideoPath.split("/"));
+                    String lastSegment = pathSegments.get(pathSegments.size() - 1);
+                    binding.contactUsVideoFilenameUploaded.setText(lastSegment + " attached.");
+                    Log.e("VIDEO", "MEDIA PATH " + selectedVideoPath);
+                }
+
             }
+        }
     }
+
 
     private void setScreenshotPerSlot(Uri imageUri) {
         try {
@@ -158,6 +201,18 @@ public class ContactUsFragment extends DaggerFragment {
         return "";
     }
 
+    public String getVideoUriPath(Uri uri) {
+        String[] projection = {MediaStore.Video.Media.DATA};
+        getActivity().getContentResolver();
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } else
+            return null;
+    }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -189,7 +244,7 @@ public class ContactUsFragment extends DaggerFragment {
                 body,
                 MessagingManager.EMAIL_HOST,
                 withSuggestion,
-                pathImages);
+                pathAttachements);
     }
 
     @Override

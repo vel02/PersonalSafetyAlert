@@ -12,7 +12,8 @@ public class Constants {
     }
 
     public static class GalleryManager {
-        public static final int PICK_GALLERY_REQUEST = 201;
+        public static final int PICK_GALLERY_IMAGE_REQUEST = 201;
+        public static final int PICK_GALLERY_VIDEO_REQUEST = 202;
     }
 
     public static class MessagingManager {

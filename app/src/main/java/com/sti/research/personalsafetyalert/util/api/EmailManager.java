@@ -17,6 +17,8 @@ package com.sti.research.personalsafetyalert.util.api;
 
 import static com.sti.research.personalsafetyalert.util.Constants.*;
 
+import android.util.Log;
+
 import com.sti.research.personalsafetyalert.util.Constants;
 
 import java.util.List;
@@ -120,7 +122,11 @@ public class EmailManager {
     public void attachments(List<String> paths, String fileName) throws MessagingException {
         int count = 1;
         for (String path : paths) {
-            this.attachment(path, fileName + "_" + count + ".png");
+            String lastSegment = path.substring(path.indexOf(".") + 1);
+            Log.e("ATTACHMENT", lastSegment);
+            if (lastSegment.equals("mp4")) {
+                this.attachment(path, "video_" + count + ".mp4");
+            } else this.attachment(path, fileName + "_" + count + ".png");
             count++;
         }
     }
