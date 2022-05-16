@@ -320,6 +320,18 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="dashboardLogFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="293" />
+                            <option name="y" value="11" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="nav_settings">
                     <value>
                       <LayoutPositions>

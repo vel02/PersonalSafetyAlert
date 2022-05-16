@@ -3,19 +3,29 @@ package com.sti.research.personalsafetyalert.ui.screen.menu.settings;
 
 import android.os.Bundle;
 import android.transition.Fade;
+import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.ActivitySettingsBinding;
+import com.sti.research.personalsafetyalert.ui.HostScreen;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.SettingsFragmentDirections;
 import com.sti.research.personalsafetyalert.util.Constants;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
@@ -23,7 +33,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class SettingsActivity extends BaseActivity {
+public class SettingsActivity extends BaseActivity implements HostScreen {
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -32,6 +42,11 @@ public class SettingsActivity extends BaseActivity {
     private SettingsViewModel viewModel;
 
     private NavController navController;
+
+    private final static String TAG = "FIREBASE";
+
+    //FIREBASE
+    private FirebaseAuth.AuthStateListener authListener;
 
     private void getIntentObject() {
         Constants.TransitionType type = (Constants.TransitionType) getIntent().getSerializableExtra(Constants.KEY_ANIM_TYPE);
@@ -45,6 +60,8 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(SettingsActivity.this, R.layout.activity_settings);
         viewModel = new ViewModelProvider(SettingsActivity.this, providerFactory).get(SettingsViewModel.class);
+        setupFirebaseAuth();
+
         getIntentObject();
         subscribeObservers();
         initController();
@@ -73,11 +90,64 @@ public class SettingsActivity extends BaseActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        finishAfterTransition();
+//        finishAfterTransition();
         if (!(navController.navigateUp() || super.onSupportNavigateUp())) {
             onBackPressed();
         }
         return true;
     }
 
+    private void setupFirebaseAuth() {
+        authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                if (user != null) {
+
+                    Log.d(TAG, "onAuthStateChanged: signed_in: " + user.getUid());
+                    Toast.makeText(SettingsActivity.this, "Authenticated with: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Log.d(TAG, "onAuthStateChanged: signed_out");
+                }
+            }
+        };
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseAuth.getInstance().addAuthStateListener(authListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (authListener != null) {
+            FirebaseAuth.getInstance().removeAuthStateListener(authListener);
+        }
+    }
+
+    @Override
+    public void onInflate(View view, String screen) {
+
+        NavDirections directions;
+
+        switch (screen) {
+            case "tag_fragment_settings_to_dashboardlog":
+                directions = SettingsFragmentDirections.actionNavSettingsToDashboardLog();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + screen);
+        }
+
+        Navigation.findNavController(view).navigate(directions);
+
+    }
+
+    @Override
+    public void onInflate(View view, String screen, Object object) {
+        //not supported
+    }
 }

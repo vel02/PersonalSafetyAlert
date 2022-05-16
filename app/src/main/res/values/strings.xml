@@ -17,7 +17,7 @@
     <string name="txt_help">Help</string>
     <string name="txt_hide">HIDE</string>
 
-<!--    <string name="txt_sample_text_00">I am in trouble, please help by reaching to below location.</string>-->
+    <!--    <string name="txt_sample_text_00">I am in trouble, please help by reaching to below location.</string>-->
     <string name="txt_sample_text_00">I am in trouble, A recorded audio is sent to your email.</string>
     <string name="txt_sample_text_01">I am in trouble, this is an emergency please help me.</string>
     <string name="txt_sample_text_02">I am in need, do reach me ASAP!</string>

@@ -609,12 +609,12 @@ public class MainActivity extends BaseActivity implements
 
             case "tag_fragment_visual_message":
                 content = viewModel.getSelectedMessage();
-                directions = HomeFragmentDirections.actionNavHomeToNavVisualMessage(content);
+                directions = (NavDirections) HomeFragmentDirections.actionNavHomeToNavVisualMessage(content);
                 break;
 
             case "tag_fragment_message_to_visual":
                 content = viewModel.getAddMessage();
-                directions = MessageFragmentDirections.actionNavMessageToNavVisualMessage(content);
+                directions = (NavDirections) MessageFragmentDirections.actionNavMessageToNavVisualMessage(content);
                 break;
 
             case "tag_fragment_message_to_home":
@@ -652,7 +652,7 @@ public class MainActivity extends BaseActivity implements
         switch (screen) {
             case "tag_fragment_contact_to_update_contact":
                 if (object instanceof Contact)
-                    directions = ContactFragmentDirections.actionNavContactToNavUpdateContact((Contact) object);
+                    directions = (NavDirections) ContactFragmentDirections.actionNavContactToNavUpdateContact((Contact) object);
                 break;
 
             default:

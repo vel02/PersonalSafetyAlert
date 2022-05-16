@@ -3,6 +3,8 @@ plugins {
     id "androidx.navigation.safeargs"
 }
 
+apply plugin: 'com.google.gms.google-services'
+
 android {
     compileSdk 29
 
@@ -112,5 +114,14 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.8'
     //reference: https://github.com/google/gson
+
+//    implementation platform('com.google.firebase:firebase-bom:30.0.1')
+//    implementation 'com.google.firebase:firebase-analytics'
+
+    def firebase_analytics_version = "17.5.0"
+    implementation "com.google.firebase:firebase-analytics:$firebase_analytics_version"
+
+    def firebase_auth_version = "19.3.2"
+    implementation "com.google.firebase:firebase-auth:$firebase_auth_version"
 
 }
