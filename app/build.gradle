@@ -124,4 +124,10 @@ dependencies {
     def firebase_auth_version = "19.3.2"
     implementation "com.google.firebase:firebase-auth:$firebase_auth_version"
 
+    def firebase_database = "19.4.0"
+    implementation "com.google.firebase:firebase-database:$firebase_database"
+
+    def firebase_storage = "19.2.0"
+    implementation "com.google.firebase:firebase-storage:$firebase_storage"
+
 }

@@ -23,13 +23,20 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentPermissionBinding;
+import com.sti.research.personalsafetyalert.model.MobileUser;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository.RequiredPermissionsState;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.NavigatePermission;
+import com.sti.research.personalsafetyalert.util.screen.permission.MobileUserIDPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import java.util.Objects;
@@ -68,6 +75,41 @@ public class PermissionFragment extends DaggerFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         configureActionBarTitle();
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(PermissionFragmentViewModel.class);
+
+        FirebaseAuth.getInstance()
+                .signInWithEmailAndPassword(
+                        "personal.safety.alert.bot@gmail.com",
+                        "personal@alert")
+                .addOnCompleteListener(task -> {
+                    Toast.makeText(requireActivity(), "Authentication Success", Toast.LENGTH_SHORT).show();
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                    if (user != null) {
+                        DatabaseReference reference = FirebaseDatabase.getInstance("https://personalsafetyalert-a5eef-default-rtdb.firebaseio.com/").getReference();
+
+                        MobileUser mobileUser = new MobileUser();
+                        mobileUser.setAdmin_id(user.getUid());
+                        mobileUser.setUsername("");
+
+                        String mobileusersId = reference.child(getString(R.string.db_node_mobileusers))
+                                .push().getKey();
+
+                        MobileUserIDPreference.getInstance().setMobileUserIDPreference(requireActivity(), mobileusersId);
+
+                        reference
+                                .child(getString(R.string.db_node_admin))
+                                .child(user.getUid())
+
+                                .child(getString(R.string.db_node_mobileusers))
+                                .child(mobileusersId)
+
+                                .setValue(mobileUser);
+
+                    }
+
+
+                }).addOnFailureListener(e -> Toast.makeText(requireActivity(), "Authentication Failed", Toast.LENGTH_SHORT).show());
+
         navigate();
         subscribeObservers();
     }
@@ -121,6 +163,7 @@ public class PermissionFragment extends DaggerFragment {
 
         binding.permissionProceed.setOnClickListener(v -> {
             hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_permission_to_home));
+            FirebaseAuth.getInstance().signOut();
         });
 
         binding.permissionOverlayOpenSettings.setOnClickListener(v -> {

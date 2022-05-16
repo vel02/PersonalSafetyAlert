@@ -39,9 +39,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.contact.ContactRecyclerAdapter;
@@ -500,6 +502,9 @@ public class MainActivity extends BaseActivity implements
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS); //permission to use fade transition
         super.onCreate(savedInstanceState);
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+//        Toast.makeText(this, "User signed out", Toast.LENGTH_SHORT).show();
+//        FirebaseAuth.getInstance().signOut();
 
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
         viewModel = new ViewModelProvider(MainActivity.this, providerFactory).get(MainViewModel.class);

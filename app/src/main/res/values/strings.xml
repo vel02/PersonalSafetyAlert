@@ -160,6 +160,9 @@
     <string name="permission_overlay_desc">This permission allows an app to display on top of other apps you\'re using and may interfere with your use of the interface in other applications.</string>
     <string name="txt_any_concern">Any concern ?</string>
     <string name="txt_send_feedback">Send Feedback</string>
+    <string name="db_node_admin">users</string>
+    <string name="db_node_mobileusers">mobileusers</string>
+    <string name="db_node_logs">logs</string>
 
 
 </resources>

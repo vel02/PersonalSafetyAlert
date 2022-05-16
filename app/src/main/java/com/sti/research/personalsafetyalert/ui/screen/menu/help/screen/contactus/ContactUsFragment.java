@@ -26,16 +26,28 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentContactUsBinding;
+import com.sti.research.personalsafetyalert.model.Logs;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
+import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
+import com.sti.research.personalsafetyalert.util.screen.permission.MobileUserIDPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -53,6 +65,9 @@ public class ContactUsFragment extends DaggerFragment {
 
     private final List<String> pathAttachements = new ArrayList<>();
 
+    private final List<Uri> uriAttachments = new ArrayList<>();
+    private Uri uriAttachment;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +78,20 @@ public class ContactUsFragment extends DaggerFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentContactUsBinding.inflate(inflater);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Toast.makeText(requireActivity(), "Already Authenticated", Toast.LENGTH_SHORT).show();
+        } else {
+            // No user is signed in
+            FirebaseAuth.getInstance()
+                    .signInWithEmailAndPassword("personal.safety.alert.bot@gmail.com", "personal@alert")
+                    .addOnCompleteListener(task -> {
+                        Toast.makeText(requireActivity(), "Authentication Success", Toast.LENGTH_SHORT).show();
+                    }).addOnFailureListener(e -> Toast.makeText(requireActivity(), "Authentication Failed", Toast.LENGTH_SHORT).show());
+        }
+
         return binding.getRoot();
     }
 
@@ -138,12 +167,13 @@ public class ContactUsFragment extends DaggerFragment {
             if (requestCode == GalleryManager.PICK_GALLERY_IMAGE_REQUEST) {
                 assert data != null;
                 Uri imageUri = data.getData();
+                this.uriAttachments.add(imageUri);
                 this.pathAttachements.add(getImageUriPath(imageUri));
                 setScreenshotPerSlot(imageUri);
             } else if (requestCode == GalleryManager.PICK_GALLERY_VIDEO_REQUEST) {
                 assert data != null;
                 Uri selectedVideoUri = data.getData();
-
+                this.uriAttachment = selectedVideoUri;
                 // MEDIA GALLERY
                 String selectedVideoPath = getVideoUriPath(selectedVideoUri);
                 if (selectedVideoPath != null) {
@@ -245,6 +275,64 @@ public class ContactUsFragment extends DaggerFragment {
                 MessagingManager.EMAIL_HOST,
                 withSuggestion,
                 pathAttachements);
+
+        //DATABASE FIREBASE
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+
+            DatabaseReference reference = FirebaseDatabase.getInstance("https://personalsafetyalert-a5eef-default-rtdb.firebaseio.com/").getReference();
+
+            String mobileusersId = MobileUserIDPreference.getInstance().getMobileUserIDPreference(requireActivity());
+
+            Logs logs = new Logs();
+            logs.setMobileusers_id(mobileusersId);
+            logs.setMessage(body);
+
+            List<String> images = new ArrayList<>();
+            for (Uri attachment : this.uriAttachments) {
+                viewModel.writeUserPhoto(requireView(), attachment);
+                images.add(String.valueOf(attachment));
+            }
+
+            viewModel.writeUserVideo(requireView(), this.uriAttachment);
+
+            for (String attachment : this.pathAttachements) {
+                if (attachment.contains(".mp4"))
+                    logs.setVideo(attachment);
+            }
+
+            logs.setImages(images);
+            logs.setTimestamp(getTimestamp());
+
+            String logsId = reference.child(getString(R.string.db_node_logs))
+                    .push().getKey();
+
+            reference
+                    .child(getString(R.string.db_node_admin))
+                    .child(user.getUid())
+
+                    .child(getString(R.string.db_node_mobileusers))
+                    .child(mobileusersId)//"-N2A_n8ph3wbXtxO8OI0")//"-N2AWkR8zT4v0sJ51dg7") //mobileusers id
+
+                    .child(getString(R.string.db_node_logs))
+                    .child(logsId)
+
+                    .setValue(logs);
+
+            new WaitResultManager(5000, 1000,
+                    () -> FirebaseAuth.getInstance().signOut()).start();
+
+
+
+        }
+
+    }
+
+    private String getTimestamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+        sdf.setTimeZone(TimeZone.getDefault());
+        return sdf.format(new Date());
     }
 
     @Override
@@ -263,6 +351,12 @@ public class ContactUsFragment extends DaggerFragment {
     public void onDetach() {
         super.onDetach();
         hostScreen = null;
+//        Toast.makeText(requireActivity(), "User signed out", Toast.LENGTH_SHORT).show();
+//        FirebaseAuth.getInstance().signOut();
     }
+
+
+    //---------------------
+
 
 }

@@ -4,13 +4,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,23 +19,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentSettingsBinding;
+import com.sti.research.personalsafetyalert.model.Logs;
+import com.sti.research.personalsafetyalert.model.MobileUser;
+import com.sti.research.personalsafetyalert.model.User;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
-import com.sti.research.personalsafetyalert.util.Utility;
 import com.sti.research.personalsafetyalert.util.screen.main.UsernamePreference;
-import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
-
-import java.util.Objects;
-
-import javax.inject.Inject;
 
 import dagger.android.support.DaggerFragment;
 
@@ -185,9 +178,62 @@ public class SettingsFragment extends DaggerFragment implements HostScreen {
                     Log.d(TAG, "onComplete: " + task.isSuccessful());
 
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "onComplete: AuthState: ");//+ Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+                        Log.d(TAG, "onComplete: AuthState: success");
 
-                        FirebaseAuth.getInstance().signOut();
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                        if (user != null) {
+                            User admin = new User();
+                            admin.setAdmin_id(user.getUid());
+                            admin.setEmail(user.getEmail());
+
+                            DatabaseReference reference = FirebaseDatabase.getInstance("https://personalsafetyalert-a5eef-default-rtdb.firebaseio.com/").getReference();
+
+                            reference.child(getString(R.string.db_node_admin))
+                                    .child(user.getUid())
+                                    .setValue(admin);
+
+
+                            MobileUser mobileUser = new MobileUser();
+                            mobileUser.setUsername(UsernamePreference.getInstance().getUsernameInput(requireActivity()));
+
+                            String mobileusersId = reference.child(getString(R.string.db_node_mobileusers))
+                                    .push().getKey();
+
+                            reference
+                                    .child(getString(R.string.db_node_admin))
+                                    .child(user.getUid())
+
+                                    .child(getString(R.string.db_node_mobileusers))
+                                    .child(mobileusersId)
+
+                                    .setValue(mobileUser);
+
+                            Logs logs = new Logs();
+                            logs.setMobileusers_id("");
+                            logs.setTitle("");
+                            logs.setTimestamp("");
+
+
+                            String logsId = reference.child(getString(R.string.db_node_logs))
+                                    .push().getKey();
+
+                            reference
+                                    .child(getString(R.string.db_node_admin))
+                                    .child(user.getUid())
+
+
+                                    .child(getString(R.string.db_node_mobileusers))
+                                    .child(mobileusersId)
+
+                                    .child(getString(R.string.db_node_logs))
+                                    .child(logsId)
+
+                                    .setValue(logs);
+
+
+                        }
+
                     } else {
                         Toast.makeText(requireActivity(), "Unable to Register", Toast.LENGTH_SHORT).show();
                     }

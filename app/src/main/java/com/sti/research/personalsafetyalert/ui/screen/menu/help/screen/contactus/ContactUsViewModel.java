@@ -3,19 +3,43 @@ package com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.contactu
 import static com.sti.research.personalsafetyalert.util.Constants.*;
 
 import android.net.Uri;
+import android.util.Log;
+import android.util.TimeUtils;
+import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.repository.MessagingRepository;
 import com.sti.research.personalsafetyalert.util.Constants;
+import com.sti.research.personalsafetyalert.util.screen.permission.MobileUserIDPreference;
+import com.sun.mail.imap.protocol.UID;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
 public class ContactUsViewModel extends ViewModel {
+
+    private static final String TAG = "IMAGES";
+
 
     private final MutableLiveData<ScreenshotSlot> screenshotSlot;
 
@@ -40,6 +64,90 @@ public class ContactUsViewModel extends ViewModel {
 
     public ScreenshotSlot getScreenshotSlot() {
         return this.screenshotSlot.getValue();
+    }
+
+    private String getTimestamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+        sdf.setTimeZone(TimeZone.getDefault());
+        return sdf.format(new Date());
+    }
+
+//    private double progress;
+
+    public void writeUserVideo(View view, Uri uri) {
+//        Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
+        final String FIREBASE_IMAGE_STORAGE = "videos/user";
+
+        final StorageReference reference = FirebaseStorage.getInstance().getReference();
+
+        StorageReference riversRef = reference.child(FIREBASE_IMAGE_STORAGE + "/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/"
+                + MobileUserIDPreference.getInstance().getMobileUserIDPreference(view.getContext()) + "/video_" + System.currentTimeMillis());
+        UploadTask uploadTask = riversRef.putFile(uri);
+
+// Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
+    }
+
+    public void writeUserPhoto(View view, Uri file) {
+        final String FIREBASE_IMAGE_STORAGE = "images/user";
+
+        final StorageReference reference = FirebaseStorage.getInstance().getReference()
+                .child(FIREBASE_IMAGE_STORAGE + "/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/"
+                        + MobileUserIDPreference.getInstance().getMobileUserIDPreference(view.getContext()) + "/image_" + System.currentTimeMillis());
+
+
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setContentType("image/jpg")
+                .setContentLanguage("en")
+                .setCustomMetadata("Meta-data", "Images")
+                .setCustomMetadata("location", "Philippines")
+                .build();
+        UploadTask uploadTask = reference.putFile(file, metadata);
+
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            Task<Uri> firebaseURL = taskSnapshot.getStorage().getDownloadUrl();
+            firebaseURL.addOnSuccessListener(uri -> {
+//                if (uri != null) {
+//
+//
+//                    String logsId = FirebaseDatabase.getInstance().getReference()
+//                            .child(view.getContext().getString(R.string.db_node_logs))
+//                            .push().getKey();
+//
+//                    FirebaseDatabase.getInstance().getReference()
+//                            .child(view.getContext().getString(R.string.db_node_admin))
+//                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//
+//                            .child(view.getContext().getString(R.string.db_node_mobileusers))
+//                            .child(MobileUserIDPreference.getInstance().getMobileUserIDPreference(view.getContext()))
+//
+//                            .child(view.getContext().getString(R.string.db_node_logs))
+//                            .child(logsId)
+//
+//                            .setValue(uri.toString());
+//                    progress = 0;
+//                }
+            }).addOnFailureListener(e -> Log.d(TAG, "Could not upload photo"));
+        }).addOnFailureListener(e -> Log.d(TAG, "Could not upload photo"))
+                .addOnProgressListener(taskSnapshot -> {
+//                    double currentProgress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+//                    if (currentProgress > (progress + 15)) {
+//                        progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+//                        Log.d(TAG, "onProgress: Upload is " + progress + "% done");
+//                    }
+                });
+
     }
 
     public enum ScreenshotSlot {

@@ -7,15 +7,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.animation.AlphaAnimation;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.ActivitySplashBinding;
+import com.sti.research.personalsafetyalert.model.MobileUser;
 import com.sti.research.personalsafetyalert.ui.MainActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
 import com.sti.research.personalsafetyalert.ui.welcome.WelcomeActivity;
 import com.sti.research.personalsafetyalert.util.Constants;
+import com.sti.research.personalsafetyalert.util.screen.main.UsernamePreference;
 import com.sti.research.personalsafetyalert.util.screen.splash.SplashNavigationPreference;
 
 import dagger.android.support.DaggerAppCompatActivity;
