@@ -42,6 +42,8 @@ public class ContactUsViewModel extends ViewModel {
 
 
     private final MutableLiveData<ScreenshotSlot> screenshotSlot;
+    private final MutableLiveData<String> videoUri = new MutableLiveData<>();
+    private final MutableLiveData<String> imageUri = new MutableLiveData<>();
 
     private final MessagingRepository repository;
 
@@ -74,6 +76,9 @@ public class ContactUsViewModel extends ViewModel {
 
 //    private double progress;
 
+    //    private String videoUri;
+    private String uriImage = "";
+
     public void writeUserVideo(View view, Uri uri) {
 //        Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         final String FIREBASE_IMAGE_STORAGE = "videos/user";
@@ -95,8 +100,20 @@ public class ContactUsViewModel extends ViewModel {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 // ...
+
+                Task<Uri> firebaseURL = taskSnapshot.getStorage().getDownloadUrl();
+                firebaseURL.addOnSuccessListener(uri -> {
+                    Log.e(TAG, "writeUserVideo: URI " + uri);
+                    videoUri.setValue(String.valueOf(uri));
+
+                });
+
             }
         });
+    }
+
+    public LiveData<String> getVideoUri() {
+        return videoUri;
     }
 
     public void writeUserPhoto(View view, Uri file) {
@@ -118,26 +135,9 @@ public class ContactUsViewModel extends ViewModel {
         uploadTask.addOnSuccessListener(taskSnapshot -> {
             Task<Uri> firebaseURL = taskSnapshot.getStorage().getDownloadUrl();
             firebaseURL.addOnSuccessListener(uri -> {
-//                if (uri != null) {
-//
-//
-//                    String logsId = FirebaseDatabase.getInstance().getReference()
-//                            .child(view.getContext().getString(R.string.db_node_logs))
-//                            .push().getKey();
-//
-//                    FirebaseDatabase.getInstance().getReference()
-//                            .child(view.getContext().getString(R.string.db_node_admin))
-//                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-//
-//                            .child(view.getContext().getString(R.string.db_node_mobileusers))
-//                            .child(MobileUserIDPreference.getInstance().getMobileUserIDPreference(view.getContext()))
-//
-//                            .child(view.getContext().getString(R.string.db_node_logs))
-//                            .child(logsId)
-//
-//                            .setValue(uri.toString());
-//                    progress = 0;
-//                }
+                Log.e(TAG, "writeUserPhoto: URI " + uri);
+//                this.uriImage += uri + ",";
+                this.imageUri.setValue(String.valueOf(uri));
             }).addOnFailureListener(e -> Log.d(TAG, "Could not upload photo"));
         }).addOnFailureListener(e -> Log.d(TAG, "Could not upload photo"))
                 .addOnProgressListener(taskSnapshot -> {
@@ -148,6 +148,10 @@ public class ContactUsViewModel extends ViewModel {
 //                    }
                 });
 
+    }
+
+    public LiveData<String> getImageUri() {
+        return imageUri;
     }
 
     public enum ScreenshotSlot {

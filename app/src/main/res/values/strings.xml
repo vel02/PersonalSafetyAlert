@@ -163,6 +163,7 @@
     <string name="db_node_admin">users</string>
     <string name="db_node_mobileusers">mobileusers</string>
     <string name="db_node_logs">logs</string>
+    <string name="db_node_images">images</string>
 
 
 </resources>

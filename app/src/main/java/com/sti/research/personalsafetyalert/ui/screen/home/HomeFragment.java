@@ -26,8 +26,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.FragmentHomeBinding;
@@ -47,6 +52,7 @@ import com.sti.research.personalsafetyalert.util.screen.main.UsernamePreference;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeInitialMessage;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeSwitchPreference;
+import com.sti.research.personalsafetyalert.util.screen.permission.MobileUserIDPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import java.util.ArrayList;
@@ -290,6 +296,25 @@ public class HomeFragment extends DaggerFragment {
         positiveButton.setOnClickListener(v -> {
             String name = inputName.getText().toString();
             UsernamePreference.getInstance().setUsernameInput(requireActivity(), name);
+
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (user != null) {
+                Toast.makeText(requireActivity(), "ONLINE", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "initUserName: ONLINE ");
+                DatabaseReference reference = FirebaseDatabase.getInstance("https://personalsafetyalert-a5eef-default-rtdb.firebaseio.com/").getReference();
+                reference
+                        .child(getString(R.string.db_node_admin))
+                        .child(user.getUid())
+
+                        .child(getString(R.string.db_node_mobileusers))
+                        .child(MobileUserIDPreference.getInstance().getMobileUserIDPreference(requireActivity()))
+                        .child("username")
+
+                        .setValue(name);
+            }
+            FirebaseAuth.getInstance().signOut();
+
             if (Utility.isNotEmpty(name)) dialog.dismiss();
         });
     }

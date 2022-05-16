@@ -87,14 +87,15 @@ public class PermissionFragment extends DaggerFragment {
                     if (user != null) {
                         DatabaseReference reference = FirebaseDatabase.getInstance("https://personalsafetyalert-a5eef-default-rtdb.firebaseio.com/").getReference();
 
-                        MobileUser mobileUser = new MobileUser();
-                        mobileUser.setAdmin_id(user.getUid());
-                        mobileUser.setUsername("");
-
                         String mobileusersId = reference.child(getString(R.string.db_node_mobileusers))
                                 .push().getKey();
 
                         MobileUserIDPreference.getInstance().setMobileUserIDPreference(requireActivity(), mobileusersId);
+
+                        MobileUser mobileUser = new MobileUser();
+                        mobileUser.setAdmin_id(user.getUid());
+                        mobileUser.setUsername("");
+                        mobileUser.setId(MobileUserIDPreference.getInstance().getMobileUserIDPreference(requireActivity()));
 
                         reference
                                 .child(getString(R.string.db_node_admin))
@@ -163,7 +164,6 @@ public class PermissionFragment extends DaggerFragment {
 
         binding.permissionProceed.setOnClickListener(v -> {
             hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_permission_to_home));
-            FirebaseAuth.getInstance().signOut();
         });
 
         binding.permissionOverlayOpenSettings.setOnClickListener(v -> {

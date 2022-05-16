@@ -55,11 +55,11 @@ public class MobileUser {
 
     @Override
     public String toString() {
-        return "MobileUser{" +
-                "id='" + id + '\'' +
-                ", admin_id='" + admin_id + '\'' +
-                ", username='" + username + '\'' +
-                ", logs=" + logs +
-                '}';
+        return "\n\nMobileUser{" +
+                "\nid='" + id + '\'' +
+                "\nadmin_id='" + admin_id + '\'' +
+                "\nusername='" + username + '\'' +
+                "\nlogs=" + logs +
+                "}\n\n";
     }
 }

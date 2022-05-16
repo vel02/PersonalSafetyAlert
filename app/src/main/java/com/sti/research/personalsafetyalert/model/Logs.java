@@ -7,7 +7,7 @@ public class Logs {
     private String mobileusers_id;
     private String title;
     private String message;
-    private List<String> images;
+    private String images;
     private String video;
     private String count;
     private String timestamp;
@@ -15,7 +15,7 @@ public class Logs {
     public Logs() {
     }
 
-    public Logs(String mobileusers_id, String title, String message, List<String> images, String video, String count, String timestamp) {
+    public Logs(String mobileusers_id, String title, String message, String images, String video, String count, String timestamp) {
         this.mobileusers_id = mobileusers_id;
         this.title = title;
         this.message = message;
@@ -49,11 +49,11 @@ public class Logs {
         this.message = message;
     }
 
-    public List<String> getImages() {
+    public String getImages() {
         return images;
     }
 
-    public void setImages(List<String> images) {
+    public void setImages(String images) {
         this.images = images;
     }
 
@@ -79,5 +79,18 @@ public class Logs {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "\n\nLogs: " +
+                "\nmobileusers_id='" + mobileusers_id + '\'' +
+                "\ntitle='" + title + '\'' +
+                "\nmessage='" + message + '\'' +
+                "\nimages=" + images +
+                "\nvideo='" + video + '\'' +
+                "\ncount='" + count + '\'' +
+                "\ntimestamp='" + timestamp + '\'' +
+                "}\n\n";
     }
 }

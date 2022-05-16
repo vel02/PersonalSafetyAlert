@@ -15,6 +15,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.provider.MediaStore;
@@ -65,8 +66,8 @@ public class ContactUsFragment extends DaggerFragment {
 
     private final List<String> pathAttachements = new ArrayList<>();
 
-    private final List<Uri> uriAttachments = new ArrayList<>();
-    private Uri uriAttachment;
+    private String uriVideo;
+    private String uriImages = "";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,6 +104,28 @@ public class ContactUsFragment extends DaggerFragment {
     }
 
     private void subscribeObservers() {
+
+        viewModel.getVideoUri().removeObservers(getViewLifecycleOwner());
+        viewModel.getVideoUri().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String uri) {
+                if (uri != null) {
+                    uriVideo = uri;
+                    binding.progressbar.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        viewModel.getImageUri().removeObservers(getViewLifecycleOwner());
+        viewModel.getImageUri().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String uri) {
+                if (uri != null) {
+                    uriImages += uri + ",";
+                    binding.progressbar.setVisibility(View.GONE);
+                }
+            }
+        });
 
     }
 
@@ -167,13 +190,17 @@ public class ContactUsFragment extends DaggerFragment {
             if (requestCode == GalleryManager.PICK_GALLERY_IMAGE_REQUEST) {
                 assert data != null;
                 Uri imageUri = data.getData();
-                this.uriAttachments.add(imageUri);
+                viewModel.writeUserPhoto(requireView(), imageUri);
+                binding.progressbar.setVisibility(View.VISIBLE);
+
                 this.pathAttachements.add(getImageUriPath(imageUri));
                 setScreenshotPerSlot(imageUri);
             } else if (requestCode == GalleryManager.PICK_GALLERY_VIDEO_REQUEST) {
                 assert data != null;
                 Uri selectedVideoUri = data.getData();
-                this.uriAttachment = selectedVideoUri;
+                viewModel.writeUserVideo(requireView(), selectedVideoUri);
+                binding.progressbar.setVisibility(View.VISIBLE);
+
                 // MEDIA GALLERY
                 String selectedVideoPath = getVideoUriPath(selectedVideoUri);
                 if (selectedVideoPath != null) {
@@ -254,8 +281,17 @@ public class ContactUsFragment extends DaggerFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_send) {
             if (!TextUtils.isEmpty(binding.contactUsMessage.getText())) {
+                binding.progressbar.setVisibility(View.VISIBLE);
                 this.sendUserConcern();
-                hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_contact_us_to_help));
+                new WaitResultManager(10000, 1000, new WaitResultManager.WaitResultReceiverListener() {
+                    @Override
+                    public void onFinished() {
+                        //loading here.....
+                        binding.progressbar.setVisibility(View.GONE);
+                        FirebaseAuth.getInstance().signOut();
+                        hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_contact_us_to_help));
+                    }
+                }).start();
             } else Popup.message(requireView(),
                     "Please give as a clear detail of your concerns.");
             return true;
@@ -269,6 +305,10 @@ public class ContactUsFragment extends DaggerFragment {
 
         String body = binding.contactUsMessage.getText().toString()
                 + "\n\n" + (userTried ? getString(R.string.txt_user_tried) : "");
+
+        String title = "";
+        if (withSuggestion) title = MessagingManager.EMAIL_SUBJECT_WITH_SUGGESTION;
+        else title = MessagingManager.EMAIL_SUBJECT_WITHOUT_SUGGESTION;
 
         viewModel.sendEmailWithAttachments(
                 body,
@@ -287,22 +327,28 @@ public class ContactUsFragment extends DaggerFragment {
 
             Logs logs = new Logs();
             logs.setMobileusers_id(mobileusersId);
+            logs.setTitle(title);
             logs.setMessage(body);
 
-            List<String> images = new ArrayList<>();
-            for (Uri attachment : this.uriAttachments) {
-                viewModel.writeUserPhoto(requireView(), attachment);
-                images.add(String.valueOf(attachment));
-            }
+//            StringBuilder images = new StringBuilder();
+//            if (this.uriAttachments.size() > 0) {
+//                for (Uri attachment : this.uriAttachments) {
+////                    viewModel.writeUserPhoto(requireView(), attachment);
+//                    images.append(attachment).append(",");
+//                }
+//            }
 
-            viewModel.writeUserVideo(requireView(), this.uriAttachment);
+//            if (this.uriAttachment != null) {
+//                viewModel.writeUserVideo(requireView(), this.uriAttachment);
+//            }
 
-            for (String attachment : this.pathAttachements) {
-                if (attachment.contains(".mp4"))
-                    logs.setVideo(attachment);
-            }
+//            for (String attachment : this.pathAttachements) {
+//                if (attachment.contains(".mp4"))
+//                    logs.setVideo(attachment);
+//            }
 
-            logs.setImages(images);
+            logs.setVideo(uriVideo);
+            logs.setImages(uriImages);
             logs.setTimestamp(getTimestamp());
 
             String logsId = reference.child(getString(R.string.db_node_logs))
@@ -319,12 +365,6 @@ public class ContactUsFragment extends DaggerFragment {
                     .child(logsId)
 
                     .setValue(logs);
-
-            new WaitResultManager(5000, 1000,
-                    () -> FirebaseAuth.getInstance().signOut()).start();
-
-
-
         }
 
     }
