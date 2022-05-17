@@ -141,7 +141,34 @@ public class SettingsActivity extends BaseActivity implements HostScreen,
     @Override
     public boolean onSupportNavigateUp() {
 //        finishAfterTransition();
-        if (!(navController.navigateUp() || super.onSupportNavigateUp())) {
+
+
+        assert navHostFragment != null;
+        if ((navHostFragment.getChildFragmentManager().getFragments().get(0) instanceof DashboardLogFragment)) {
+            Log.e(TAG, "onSupportNavigateUp: TRIGGERED");
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this, R.style.PersonalSafetyAlert_AlertDialogTheme);
+                View view = getLayoutInflater().inflate(R.layout.dialog_logout_layout, null);
+
+                TextView positive = view.findViewById(R.id.dialog_button_positive);
+                TextView negative = view.findViewById(R.id.dialog_button_negative);
+                builder.setCancelable(false);
+                builder.setView(view);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                negative.setOnClickListener(v -> {
+                    dialog.dismiss();
+                });
+
+                positive.setOnClickListener(v -> {
+                    FirebaseAuth.getInstance().signOut();
+                    onBackPressed();
+                    dialog.dismiss();
+                });
+            }
+        } else if (!(navController.navigateUp() || super.onSupportNavigateUp())) {
             onBackPressed();
         }
         return true;

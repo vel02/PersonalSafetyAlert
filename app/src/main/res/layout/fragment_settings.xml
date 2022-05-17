@@ -97,14 +97,14 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Administrator log review"
+                    android:text="Administrator user's log review"
                     android:textColor="@color/text_color_black_900" />
 
                 <TextView
                     android:id="@+id/display_admin_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="User's suggestions logs" />
+                    android:text="User's report logs" />
 
             </LinearLayout>
 
