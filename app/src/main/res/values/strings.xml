@@ -164,6 +164,7 @@
     <string name="db_node_mobileusers">mobileusers</string>
     <string name="db_node_logs">logs</string>
     <string name="db_node_images">images</string>
+    <string name="txt_logout">Logout</string>
 
 
 </resources>

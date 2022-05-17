@@ -35,6 +35,7 @@ import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.DashboardLogFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.DashboardLogFragmentDirections;
+//import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.LogFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.MobileUserFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.MobileUserFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.SettingsFragment;
@@ -78,7 +79,11 @@ public class SettingsActivity extends BaseActivity implements HostScreen,
 
     @Override
     public void onLogResult(Logs log) {
-
+        assert navHostFragment != null;
+        if ((navHostFragment.getChildFragmentManager().getFragments().get(0) instanceof MobileUserFragment)) {
+            MobileUserFragment fragment = (MobileUserFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+            fragment.onUserLogDataReceiver(log);
+        }
     }
 
     private void getIntentObject() {
@@ -215,12 +220,15 @@ public class SettingsActivity extends BaseActivity implements HostScreen,
             case "tag_fragment_settings_to_dashboardlog":
                 directions = SettingsFragmentDirections.actionNavSettingsToDashboardLog();
                 break;
-            case "tag_fragment_dashboard_to_settings":
-                directions = DashboardLogFragmentDirections.actionNavDashboardLogToNavSettings();
-                break;
-            case "tag_fragment_mobileuser_to_settings":
-                directions = MobileUserFragmentDirections.actionNavMobileuserToNavSettings();
-                break;
+//            case "tag_fragment_dashboard_to_settings":
+////                directions = DashboardLogFragmentDirections.actionNavDashboardLogToNavSettings();
+//                break;
+//            case "tag_fragment_mobileuser_to_settings":
+//                directions = MobileUserFragmentDirections.actionNavMobileuserToNavSettings();
+//                break;
+//            case "tag_fragment_log_to_settings":
+//                directions = LogFragmentDirections.actionLogFragmentToNavSettings();
+//                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + screen);
         }
@@ -238,6 +246,10 @@ public class SettingsActivity extends BaseActivity implements HostScreen,
             case "tag_fragment_dashboard_to_mobileuser":
                 if (object instanceof MobileUser)
                     directions = DashboardLogFragmentDirections.actionNavDashboardLogToMobileUserFragment((MobileUser) object);
+                break;
+            case "tag_fragment_mobileuser_to_log":
+                if (object instanceof Logs)
+                    directions = MobileUserFragmentDirections.actionNavMobileuserToLogFragment((Logs)object);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + screen);

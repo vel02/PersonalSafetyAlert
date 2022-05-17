@@ -336,7 +336,23 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_nav_dashboardLog_to_nav_settings">
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="nav_log">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="375" />
+                            <option name="y" value="-526" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_logFragment_to_nav_mobileuser">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -354,6 +370,15 @@
                             <option name="x" value="708" />
                             <option name="y" value="15" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_nav_mobileuser_to_logFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>

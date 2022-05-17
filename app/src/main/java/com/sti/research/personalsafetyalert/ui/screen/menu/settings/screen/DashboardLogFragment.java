@@ -2,6 +2,7 @@ package com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,8 @@ import com.sti.research.personalsafetyalert.model.Logs;
 import com.sti.research.personalsafetyalert.model.MobileUser;
 import com.sti.research.personalsafetyalert.model.User;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
+import com.sti.research.personalsafetyalert.ui.welcome.WelcomeActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +112,11 @@ public class DashboardLogFragment extends DaggerFragment {
 
                 positive.setOnClickListener(v -> {
                     FirebaseAuth.getInstance().signOut();
-                    hostScreen.onInflate(binding.getRoot(), "tag_fragment_dashboard_to_settings");
+//                    hostScreen.onInflate(binding.getRoot(), "tag_fragment_dashboard_to_settings");
+                    Intent intent = new Intent(requireActivity(), SettingsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
                     dialog.dismiss();
                 });
             }

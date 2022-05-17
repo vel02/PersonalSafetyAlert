@@ -2,6 +2,7 @@ package com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,7 @@ import com.sti.research.personalsafetyalert.model.Logs;
 import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.model.MobileUser;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
 
 import java.util.List;
 
@@ -45,6 +47,10 @@ public class MobileUserFragment extends DaggerFragment {
     private HostScreen hostScreen;
     private UserLogsRecyclerAdapter adapter;
 
+    public void onUserLogDataReceiver(Logs log) {
+        Log.e("MOBILEUSER", "onUserLogDataReceiver: " + log);
+        hostScreen.onInflate(requireView(), "tag_fragment_mobileuser_to_log", log);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -57,6 +63,8 @@ public class MobileUserFragment extends DaggerFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         initContactRecyclerAdapter();
         if (mobileUser != null) {
+
+            ((SettingsActivity) getActivity()).getSupportActionBar().setTitle(mobileUser.getUsername() + "'s logs");
             Log.e("MOBILEUSER", "onViewCreated: " + mobileUser);
 
             List<Logs> logsList = mobileUser.getLogs();
@@ -68,6 +76,13 @@ public class MobileUserFragment extends DaggerFragment {
                 }
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mobileUser != null && mobileUser.getLogs().size() > 0)
+            adapter.refresh(mobileUser.getLogs());
     }
 
     private void initContactRecyclerAdapter() {
@@ -110,7 +125,10 @@ public class MobileUserFragment extends DaggerFragment {
 
                 positive.setOnClickListener(v -> {
                     FirebaseAuth.getInstance().signOut();
-                    hostScreen.onInflate(binding.getRoot(), "tag_fragment_mobileuser_to_settings");
+//                    hostScreen.onInflate(binding.getRoot(), "tag_fragment_mobileuser_to_settings");
+                    Intent intent = new Intent(requireActivity(), SettingsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                     dialog.dismiss();
                 });
             }
@@ -123,6 +141,7 @@ public class MobileUserFragment extends DaggerFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         Activity activity = getActivity();
+
         if (!(activity instanceof HostScreen)) {
             assert activity != null;
             throw new ClassCastException(activity.getClass().getSimpleName()

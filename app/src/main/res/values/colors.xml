@@ -35,6 +35,7 @@
     <color name="text_color_white">#FAFAFA</color>
     <color name="text_color_black_800">#424242</color>
     <color name="text_color_black_900">#212121</color>
+    <color name="link_color">#3366BB</color>
 
 
 </resources>

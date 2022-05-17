@@ -37,6 +37,7 @@ import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentContactUsBinding;
 import com.sti.research.personalsafetyalert.model.Logs;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
+import com.sti.research.personalsafetyalert.util.screen.main.UsernamePreference;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.permission.MobileUserIDPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
@@ -325,16 +326,17 @@ public class ContactUsFragment extends DaggerFragment {
 
             String mobileusersId = MobileUserIDPreference.getInstance().getMobileUserIDPreference(requireActivity());
 
+            String logsId = reference.child(getString(R.string.db_node_logs))
+                    .push().getKey();
+
             Logs logs = new Logs();
-            logs.setMobileusers_id(mobileusersId);
+            logs.setMobileusers_id(logsId);
             logs.setTitle(title);
             logs.setMessage(body);
             logs.setVideo(uriVideo);
             logs.setImages(uriImages);
             logs.setTimestamp(getTimestamp());
 
-            String logsId = reference.child(getString(R.string.db_node_logs))
-                    .push().getKey();
 
             reference
                     .child(getString(R.string.db_node_admin))
