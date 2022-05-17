@@ -12,9 +12,12 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.ActivityHelpBinding;
@@ -81,6 +84,11 @@ public class HelpActivity extends BaseActivity implements HostScreen {
     @Override
     public boolean onSupportNavigateUp() {
         if (!(navController.navigateUp() || super.onSupportNavigateUp())) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                Log.e("FIREBASE", "AUTHENTICATION SIGNED OUT");
+                FirebaseAuth.getInstance().signOut();
+            }
             onBackPressed();
         }
         return true;

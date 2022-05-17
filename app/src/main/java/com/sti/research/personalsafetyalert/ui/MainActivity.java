@@ -47,9 +47,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.contact.ContactRecyclerAdapter;
+import com.sti.research.personalsafetyalert.adapter.view.dashboard.MobileUserRecyclerAdapter;
 import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.ActivityMainBinding;
 import com.sti.research.personalsafetyalert.model.Message;
+import com.sti.research.personalsafetyalert.model.MobileUser;
 import com.sti.research.personalsafetyalert.model.list.Contact;
 import com.sti.research.personalsafetyalert.receiver.sms.SentReceiverObserver;
 import com.sti.research.personalsafetyalert.receiver.sms.SmsDeliveredReceiver;
@@ -60,6 +62,7 @@ import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.HelpActivity;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.DashboardLogFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.message.MessageFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragment;
 import com.sti.research.personalsafetyalert.ui.screen.permission.PermissionFragmentDirections;
@@ -430,6 +433,7 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
+
     @Override
     public void onContactResult(Contact contact) {
         assert navHostFragment != null;
@@ -659,7 +663,6 @@ public class MainActivity extends BaseActivity implements
                 if (object instanceof Contact)
                     directions = (NavDirections) ContactFragmentDirections.actionNavContactToNavUpdateContact((Contact) object);
                 break;
-
             default:
                 throw new IllegalStateException("Unexpected value: " + screen);
         }

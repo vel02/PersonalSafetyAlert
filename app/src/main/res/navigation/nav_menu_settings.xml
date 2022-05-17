@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/nav_dashboardLog"
         android:name="com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.DashboardLogFragment"
-        android:label="Log"
+        android:label="Logs"
         tools:layout="@layout/fragment_dashboard_log">
         <action
             android:id="@+id/action_nav_dashboardLog_to_nav_settings"
@@ -32,6 +32,38 @@
             app:popExitAnim="@anim/fade_out"
             app:popUpTo="@id/nav_settings"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_nav_dashboardLog_to_mobileUserFragment"
+            app:destination="@id/nav_mobileuser"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_mobileuser"
+        android:name="com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.MobileUserFragment"
+        android:label="User logs"
+        tools:layout="@layout/fragment_mobile_user">
+        <action
+            android:id="@+id/action_nav_mobileuser_to_dashboardLog"
+            app:destination="@id/nav_dashboardLog"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/nav_dashboardLog"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="mobileUser"
+            app:argType="com.sti.research.personalsafetyalert.model.MobileUser" />
+        <action
+            android:id="@+id/action_nav_mobileuser_to_nav_settings"
+            app:destination="@id/nav_settings"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
 
 </navigation>

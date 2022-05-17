@@ -1,17 +1,27 @@
 package com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,10 +29,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.sti.research.personalsafetyalert.R;
+import com.sti.research.personalsafetyalert.adapter.view.dashboard.MobileUserRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.FragmentDashboardLogBinding;
 import com.sti.research.personalsafetyalert.model.Logs;
 import com.sti.research.personalsafetyalert.model.MobileUser;
 import com.sti.research.personalsafetyalert.model.User;
+import com.sti.research.personalsafetyalert.ui.HostScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +49,82 @@ public class DashboardLogFragment extends DaggerFragment {
     private static final String TAG = "RETRIEVING!";
     private FragmentDashboardLogBinding binding;
 
+    private MobileUserRecyclerAdapter adapter;
+
+    private HostScreen hostScreen;
+
+
+    private List<MobileUser> mobileUserList = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    public void onMobileUserDataReceiver(MobileUser mobileUser) {
+        Log.e("DASHBOARD", "onMobileUserDataReceiver: " + mobileUser);
+        hostScreen.onInflate(requireView(), "tag_fragment_dashboard_to_mobileuser", mobileUser);
+    }
+
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDashboardLogBinding.inflate(inflater);
+        getDatabaseData();
+        return binding.getRoot();
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        initContactRecyclerAdapter();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_admin, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_logout) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.PersonalSafetyAlert_AlertDialogTheme);
+                View view = getLayoutInflater().inflate(R.layout.dialog_logout_layout, null);
+
+                TextView positive = view.findViewById(R.id.dialog_button_positive);
+                TextView negative = view.findViewById(R.id.dialog_button_negative);
+                builder.setCancelable(false);
+                builder.setView(view);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                negative.setOnClickListener(v -> {
+                    dialog.dismiss();
+                });
+
+                positive.setOnClickListener(v -> {
+                    FirebaseAuth.getInstance().signOut();
+                    hostScreen.onInflate(binding.getRoot(), "tag_fragment_dashboard_to_settings");
+                    dialog.dismiss();
+                });
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initContactRecyclerAdapter() {
+        binding.rvMobileUserList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        adapter = new MobileUserRecyclerAdapter();
+        binding.rvMobileUserList.setAdapter(adapter);
+    }
+
+    private void getDatabaseData() {
         DatabaseReference reference = FirebaseDatabase.getInstance("https://personalsafetyalert-a5eef-default-rtdb.firebaseio.com/").getReference();
 
         Query query = reference.child(getString(R.string.db_node_admin))
@@ -52,14 +134,18 @@ public class DashboardLogFragment extends DaggerFragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                List<MobileUser> mobileUsers = null;
+
                 for (DataSnapshot singleSnap : snapshot.getChildren()) {
                     User user = new User();
 
                     Map<String, Object> objectMap = (Map<String, Object>) singleSnap.getValue();
                     user.setEmail(objectMap.get("email").toString());
 
-                    List<MobileUser> mobileUsers = getMobileUsers(singleSnap, requireContext());
+                    mobileUsers = getMobileUsers(singleSnap, requireContext());
                     user.setUsers(mobileUsers);
+
                 }
             }
 
@@ -68,9 +154,6 @@ public class DashboardLogFragment extends DaggerFragment {
 
             }
         });
-
-
-        return binding.getRoot();
     }
 
     private List<MobileUser> getMobileUsers(DataSnapshot singleSnap, Context requireContext) {
@@ -91,7 +174,15 @@ public class DashboardLogFragment extends DaggerFragment {
             users.add(mobileUser);
 
         }
-        Log.e(TAG, "onDataChange: mobileusers: " + users.toString());
+
+        adapter.refresh(users);
+
+        DashboardLogFragment.this.mobileUserList = users;
+        for (MobileUser mobileuser : mobileUserList) {
+            Log.e(TAG, "onCreateView: " + mobileuser + "\n\n");
+        }
+
+//        Log.e(TAG, "onDataChange: mobileusers: " + users.toString());
 
         return users;
     }
@@ -118,5 +209,22 @@ public class DashboardLogFragment extends DaggerFragment {
         return logs;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity = getActivity();
+        if (!(activity instanceof HostScreen)) {
+            assert activity != null;
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement HostScreen interface.");
+        }
+        hostScreen = (HostScreen) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        hostScreen = null;
+    }
 
 }

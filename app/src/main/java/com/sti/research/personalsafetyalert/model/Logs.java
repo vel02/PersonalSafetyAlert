@@ -1,8 +1,11 @@
 package com.sti.research.personalsafetyalert.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class Logs {
+public class Logs implements Parcelable {
 
     private String mobileusers_id;
     private String title;
@@ -24,6 +27,44 @@ public class Logs {
         this.count = count;
         this.timestamp = timestamp;
     }
+
+    protected Logs(Parcel in) {
+        mobileusers_id = in.readString();
+        title = in.readString();
+        message = in.readString();
+        images = in.readString();
+        video = in.readString();
+        count = in.readString();
+        timestamp = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mobileusers_id);
+        dest.writeString(title);
+        dest.writeString(message);
+        dest.writeString(images);
+        dest.writeString(video);
+        dest.writeString(count);
+        dest.writeString(timestamp);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Logs> CREATOR = new Creator<Logs>() {
+        @Override
+        public Logs createFromParcel(Parcel in) {
+            return new Logs(in);
+        }
+
+        @Override
+        public Logs[] newArray(int size) {
+            return new Logs[size];
+        }
+    };
 
     public String getMobileusers_id() {
         return mobileusers_id;

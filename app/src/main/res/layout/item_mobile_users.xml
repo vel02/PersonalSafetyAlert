@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="mobileUsers"
+            type="com.sti.research.personalsafetyalert.model.MobileUser" />
+
+        <variable
+            name="listener"
+            type="com.sti.research.personalsafetyalert.adapter.view.dashboard.MobileUserRecyclerAdapter.OnMobileUserClickListener" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> listener.onMobileUserResult(mobileUsers)}">
+
+        <TextView
+            android:id="@+id/item_mobile_user_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@{mobileUsers.id}"
+            android:textColor="@color/black_800"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="-N2BtyjiON8H97BWC5HJ" />
+
+        <TextView
+            android:id="@+id/item_mobile_user_username_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="NAME"
+            android:textAllCaps="true"
+            android:textColor="@color/primarySecondaryDark"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/item_mobile_user_id"
+            app:layout_constraintTop_toBottomOf="@+id/item_mobile_user_id" />
+
+        <TextView
+            android:id="@+id/item_mobile_user_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:text="@{mobileUsers.username}"
+            android:textColor="@color/black_800"
+            android:textStyle="italic"
+            app:layout_constraintStart_toEndOf="@+id/item_mobile_user_vertical"
+            app:layout_constraintTop_toBottomOf="@id/item_mobile_user_id"
+            tools:text="Ariel" />
+
+        <View
+            android:id="@+id/item_mobile_user_vertical"
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="?android:attr/dividerVertical"
+            app:layout_constraintBottom_toBottomOf="@+id/item_mobile_user_username_label"
+            app:layout_constraintStart_toEndOf="@+id/item_mobile_user_username_label"
+            app:layout_constraintTop_toTopOf="@+id/item_mobile_user_username_label" />
+
+        <View
+            android:id="@+id/item_mobile_user_divider_horizontal"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="?android:attr/dividerHorizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_mobile_user_username" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

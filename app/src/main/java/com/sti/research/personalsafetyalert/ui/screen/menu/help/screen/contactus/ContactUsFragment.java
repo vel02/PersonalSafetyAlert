@@ -329,24 +329,6 @@ public class ContactUsFragment extends DaggerFragment {
             logs.setMobileusers_id(mobileusersId);
             logs.setTitle(title);
             logs.setMessage(body);
-
-//            StringBuilder images = new StringBuilder();
-//            if (this.uriAttachments.size() > 0) {
-//                for (Uri attachment : this.uriAttachments) {
-////                    viewModel.writeUserPhoto(requireView(), attachment);
-//                    images.append(attachment).append(",");
-//                }
-//            }
-
-//            if (this.uriAttachment != null) {
-//                viewModel.writeUserVideo(requireView(), this.uriAttachment);
-//            }
-
-//            for (String attachment : this.pathAttachements) {
-//                if (attachment.contains(".mp4"))
-//                    logs.setVideo(attachment);
-//            }
-
             logs.setVideo(uriVideo);
             logs.setImages(uriImages);
             logs.setTimestamp(getTimestamp());
@@ -370,7 +352,8 @@ public class ContactUsFragment extends DaggerFragment {
     }
 
     private String getTimestamp() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+        String pattern = "MMMM dd, yyyy - HH:mm:ss a";//"yyyy-MM-dd'T'HH:mm:ss'Z'"
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.US);
         sdf.setTimeZone(TimeZone.getDefault());
         return sdf.format(new Date());
     }

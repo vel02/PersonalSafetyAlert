@@ -22,12 +22,8 @@ import android.widget.Toast;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentSettingsBinding;
 import com.sti.research.personalsafetyalert.model.Logs;
@@ -35,6 +31,7 @@ import com.sti.research.personalsafetyalert.model.MobileUser;
 import com.sti.research.personalsafetyalert.model.User;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.util.screen.main.UsernamePreference;
+import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.permission.MobileUserIDPreference;
 
 import dagger.android.support.DaggerFragment;
@@ -134,6 +131,15 @@ public class SettingsFragment extends DaggerFragment implements HostScreen {
     }
 
     private void initUserName() {
+
+        FirebaseAuth.getInstance()
+                .signInWithEmailAndPassword(
+                        "personal.safety.alert.bot@gmail.com",
+                        "personal@alert")
+                .addOnCompleteListener(task ->
+                        Toast.makeText(requireActivity(), "Authentication Success", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> FirebaseAuth.getInstance().signOut());
+
         androidx.appcompat.app.AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireActivity(), R.style.PersonalSafetyAlert_AlertDialogTheme);
         View view = getLayoutInflater().inflate(R.layout.dialog_user_name, null);
         TextView positiveButton = view.findViewById(R.id.dialog_button_positive);
@@ -145,11 +151,39 @@ public class SettingsFragment extends DaggerFragment implements HostScreen {
         positiveButton.setOnClickListener(v -> {
             String name = inputName.getText().toString();
             UsernamePreference.getInstance().setUsernameInput(requireActivity(), name);
+
+
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (user != null) {
+                Toast.makeText(requireActivity(), "ONLINE", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "initUserName: ONLINE ");
+                DatabaseReference reference = FirebaseDatabase.getInstance("https://personalsafetyalert-a5eef-default-rtdb.firebaseio.com/").getReference();
+                reference
+                        .child(getString(R.string.db_node_admin))
+                        .child(user.getUid())
+
+                        .child(getString(R.string.db_node_mobileusers))
+                        .child(MobileUserIDPreference.getInstance().getMobileUserIDPreference(requireActivity()))
+                        .child("username")
+
+                        .setValue(name);
+
+                onDialogSettingsDisplay.onDialogDisplay("Updating user's name...");
+            }
+
+
             String newName = UsernamePreference.getInstance().getUsernameInput(requireActivity());
             if (newName.isEmpty()) binding.displayInputName.setText(R.string.txt_anonymous);
             else binding.displayInputName.setText(newName);
             dialog.dismiss();
         });
+    }
+
+    private OnDialogSettingsDisplay onDialogSettingsDisplay;
+
+    public interface OnDialogSettingsDisplay {
+        void onDialogDisplay(String content);
     }
 
     @Override
@@ -163,12 +197,20 @@ public class SettingsFragment extends DaggerFragment implements HostScreen {
         }
         hostScreen = (HostScreen) activity;
 
+        if (!(activity instanceof OnDialogSettingsDisplay)) {
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + " must implement OnDialogSettingsDisplay interface.");
+        }
+
+        onDialogSettingsDisplay = (OnDialogSettingsDisplay) activity;
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         hostScreen = null;
+        onDialogSettingsDisplay = null;
     }
 
     /*

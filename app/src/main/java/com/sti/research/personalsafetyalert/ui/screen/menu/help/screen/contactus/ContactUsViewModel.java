@@ -74,13 +74,10 @@ public class ContactUsViewModel extends ViewModel {
         return sdf.format(new Date());
     }
 
-//    private double progress;
 
-    //    private String videoUri;
     private String uriImage = "";
 
     public void writeUserVideo(View view, Uri uri) {
-//        Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         final String FIREBASE_IMAGE_STORAGE = "videos/user";
 
         final StorageReference reference = FirebaseStorage.getInstance().getReference();
@@ -89,7 +86,7 @@ public class ContactUsViewModel extends ViewModel {
                 + MobileUserIDPreference.getInstance().getMobileUserIDPreference(view.getContext()) + "/video_" + System.currentTimeMillis());
         UploadTask uploadTask = riversRef.putFile(uri);
 
-// Register observers to listen for when the download is done or if it fails
+        // Register observers to listen for when the download is done or if it fails
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
@@ -136,16 +133,10 @@ public class ContactUsViewModel extends ViewModel {
             Task<Uri> firebaseURL = taskSnapshot.getStorage().getDownloadUrl();
             firebaseURL.addOnSuccessListener(uri -> {
                 Log.e(TAG, "writeUserPhoto: URI " + uri);
-//                this.uriImage += uri + ",";
                 this.imageUri.setValue(String.valueOf(uri));
             }).addOnFailureListener(e -> Log.d(TAG, "Could not upload photo"));
         }).addOnFailureListener(e -> Log.d(TAG, "Could not upload photo"))
                 .addOnProgressListener(taskSnapshot -> {
-//                    double currentProgress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-//                    if (currentProgress > (progress + 15)) {
-//                        progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-//                        Log.d(TAG, "onProgress: Upload is " + progress + "% done");
-//                    }
                 });
 
     }

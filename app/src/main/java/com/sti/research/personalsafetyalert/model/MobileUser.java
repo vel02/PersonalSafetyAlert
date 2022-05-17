@@ -1,10 +1,13 @@
 package com.sti.research.personalsafetyalert.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.sti.research.personalsafetyalert.model.Logs;
 
 import java.util.List;
 
-public class MobileUser {
+public class MobileUser implements Parcelable {
 
     private String id;
     private String admin_id;
@@ -20,6 +23,24 @@ public class MobileUser {
         this.username = username;
         this.logs = logs;
     }
+
+    protected MobileUser(Parcel in) {
+        id = in.readString();
+        admin_id = in.readString();
+        username = in.readString();
+    }
+
+    public static final Creator<MobileUser> CREATOR = new Creator<MobileUser>() {
+        @Override
+        public MobileUser createFromParcel(Parcel in) {
+            return new MobileUser(in);
+        }
+
+        @Override
+        public MobileUser[] newArray(int size) {
+            return new MobileUser[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -61,5 +82,17 @@ public class MobileUser {
                 "\nusername='" + username + '\'' +
                 "\nlogs=" + logs +
                 "}\n\n";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(admin_id);
+        parcel.writeString(username);
     }
 }
