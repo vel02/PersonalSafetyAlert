@@ -1,5 +1,6 @@
 package com.sti.research.personalsafetyalert.ui.screen.menu.help;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,7 +16,9 @@ import android.transition.Fade;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sti.research.personalsafetyalert.BaseActivity;
@@ -23,16 +26,19 @@ import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.ActivityHelpBinding;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.HelpFragmentDirections;
+import com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.contactus.ContactUsFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.contactus.ContactUsFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.help.screen.howto.HowToFragmentDirections;
 import com.sti.research.personalsafetyalert.util.Constants;
+import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class HelpActivity extends BaseActivity implements HostScreen {
+public class HelpActivity extends BaseActivity implements HostScreen,
+        ContactUsFragment.OnDialogSettingsDisplay {
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -128,5 +134,19 @@ public class HelpActivity extends BaseActivity implements HostScreen {
     @Override
     public void onInflate(View view, String screen, Object object) {
         //not supported
+    }
+
+    @Override
+    public AlertDialog onDialogDisplay(String content) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this, R.style.PersonalSafetyAlert_AlertDialogTheme);
+        View view = getLayoutInflater().inflate(R.layout.dialog_username_layout, null);
+        TextView txtContent = view.findViewById(R.id.dialog_content);
+        txtContent.setText(content);
+        builder.setCancelable(false);
+        builder.setView(view);
+
+
+        return builder.create();
+
     }
 }

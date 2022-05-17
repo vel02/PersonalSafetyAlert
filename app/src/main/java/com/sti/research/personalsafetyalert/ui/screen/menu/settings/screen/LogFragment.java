@@ -75,7 +75,7 @@ public class LogFragment extends DaggerFragment {
             binding.logTime.setText(log.getTimestamp());
 
 
-            if (!log.getVideo().isEmpty()) {
+            if (log.getVideo() != null && !log.getVideo().isEmpty()) {
                 String link = "Download video with link.";
 
                 binding.logVideoCard.setVisibility(View.VISIBLE);
@@ -138,6 +138,11 @@ public class LogFragment extends DaggerFragment {
                             Glide.with(this).load(image).into(binding.logImageThree);
                         }
                     }
+
+                    if (image.isEmpty() || image.contains(" ")) {
+                        binding.logImageCard.setVisibility(View.GONE);
+                    } else binding.logImageCard.setVisibility(View.VISIBLE);
+
                 }
             } else {
                 binding.logImageCard.setVisibility(View.GONE);
@@ -180,7 +185,6 @@ public class LogFragment extends DaggerFragment {
 
                 positive.setOnClickListener(v -> {
                     FirebaseAuth.getInstance().signOut();
-//                    hostScreen.onInflate(binding.getRoot(), "tag_fragment_log_to_settings");
                     Intent intent = new Intent(requireActivity(), SettingsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -197,14 +201,13 @@ public class LogFragment extends DaggerFragment {
                         .child(FirebaseAuth.getInstance().getUid())
 
                         .child(getActivity().getString(R.string.db_node_mobileusers))
-                        .child(MobileUserIDPreference.getInstance().getMobileUserIDPreference(requireContext()))
+                        .child(log.getMobileusers_id())//MobileUserIDPreference.getInstance().getMobileUserIDPreference(requireContext()))
 
                         .child(getActivity().getString(R.string.db_node_logs))
-                        .child(log.getMobileusers_id())
+                        .child(log.getLog_id())//log.getMobileusers_id())
 
                         .removeValue();
                 requireActivity().onBackPressed();
-
             }
         }
 

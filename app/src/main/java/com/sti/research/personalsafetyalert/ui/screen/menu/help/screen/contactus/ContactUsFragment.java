@@ -15,6 +15,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -29,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +39,6 @@ import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.databinding.FragmentContactUsBinding;
 import com.sti.research.personalsafetyalert.model.Logs;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
-import com.sti.research.personalsafetyalert.util.screen.main.UsernamePreference;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.permission.MobileUserIDPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
@@ -70,6 +71,12 @@ public class ContactUsFragment extends DaggerFragment {
     private String uriVideo;
     private String uriImages = "";
 
+    private OnDialogSettingsDisplay onDialogSettingsDisplay;
+
+    public interface OnDialogSettingsDisplay {
+        AlertDialog onDialogDisplay(String content);
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,14 +91,17 @@ public class ContactUsFragment extends DaggerFragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // User is signed in
-            Toast.makeText(requireActivity(), "Already Authenticated", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(requireActivity(), "Already Authenticated", Toast.LENGTH_SHORT).show();
         } else {
             // No user is signed in
             FirebaseAuth.getInstance()
                     .signInWithEmailAndPassword("personal.safety.alert.bot@gmail.com", "personal@alert")
                     .addOnCompleteListener(task -> {
-                        Toast.makeText(requireActivity(), "Authentication Success", Toast.LENGTH_SHORT).show();
-                    }).addOnFailureListener(e -> Toast.makeText(requireActivity(), "Authentication Failed", Toast.LENGTH_SHORT).show());
+//                        Toast.makeText(requireActivity(), "Authentication Success", Toast.LENGTH_SHORT).show();
+                    }).addOnFailureListener(e -> {
+                //                    Toast.makeText(requireActivity(), "Authentication Failed", Toast.LENGTH_SHORT).show()
+            });
+
         }
 
         return binding.getRoot();
@@ -100,6 +110,9 @@ public class ContactUsFragment extends DaggerFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity(), providerFactory).get(ContactUsViewModel.class);
+        dialogLoadingDisplay();
+        dialogSendingDisplay();
+
         navigate();
         subscribeObservers();
     }
@@ -112,7 +125,8 @@ public class ContactUsFragment extends DaggerFragment {
             public void onChanged(String uri) {
                 if (uri != null) {
                     uriVideo = uri;
-                    binding.progressbar.setVisibility(View.GONE);
+                    dialogLoading.dismiss();
+
                 }
             }
         });
@@ -123,7 +137,7 @@ public class ContactUsFragment extends DaggerFragment {
             public void onChanged(String uri) {
                 if (uri != null) {
                     uriImages += uri + ",";
-                    binding.progressbar.setVisibility(View.GONE);
+                    dialogLoading.dismiss();
                 }
             }
         });
@@ -182,6 +196,27 @@ public class ContactUsFragment extends DaggerFragment {
         startActivityForResult(photoPickerIntent, GalleryManager.PICK_GALLERY_VIDEO_REQUEST);
     }
 
+    private AlertDialog dialogLoading;
+    private AlertDialog dialogSending;
+
+    private void dialogLoadingDisplay() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.PersonalSafetyAlert_AlertDialogTheme);
+        View view = getLayoutInflater().inflate(R.layout.dialog_loading_layout, null);
+
+        builder.setCancelable(false);
+        builder.setView(view);
+        dialogLoading = builder.create();
+    }
+
+    private void dialogSendingDisplay() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.PersonalSafetyAlert_AlertDialogTheme);
+        View view = getLayoutInflater().inflate(R.layout.dialog_sending_layout, null);
+
+        builder.setCancelable(false);
+        builder.setView(view);
+        dialogSending = builder.create();
+    }
+
     @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
     @Override
@@ -192,7 +227,9 @@ public class ContactUsFragment extends DaggerFragment {
                 assert data != null;
                 Uri imageUri = data.getData();
                 viewModel.writeUserPhoto(requireView(), imageUri);
-                binding.progressbar.setVisibility(View.VISIBLE);
+
+                dialogLoading.show();
+
 
                 this.pathAttachements.add(getImageUriPath(imageUri));
                 setScreenshotPerSlot(imageUri);
@@ -200,7 +237,9 @@ public class ContactUsFragment extends DaggerFragment {
                 assert data != null;
                 Uri selectedVideoUri = data.getData();
                 viewModel.writeUserVideo(requireView(), selectedVideoUri);
-                binding.progressbar.setVisibility(View.VISIBLE);
+
+                dialogLoading.show();
+
 
                 // MEDIA GALLERY
                 String selectedVideoPath = getVideoUriPath(selectedVideoUri);
@@ -282,13 +321,13 @@ public class ContactUsFragment extends DaggerFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_send) {
             if (!TextUtils.isEmpty(binding.contactUsMessage.getText())) {
-                binding.progressbar.setVisibility(View.VISIBLE);
+                dialogSending.show();
                 this.sendUserConcern();
                 new WaitResultManager(10000, 1000, new WaitResultManager.WaitResultReceiverListener() {
                     @Override
                     public void onFinished() {
                         //loading here.....
-                        binding.progressbar.setVisibility(View.GONE);
+                        dialogSending.dismiss();
                         FirebaseAuth.getInstance().signOut();
                         hostScreen.onInflate(requireView(), getString(R.string.tag_fragment_contact_us_to_help));
                     }
@@ -330,7 +369,8 @@ public class ContactUsFragment extends DaggerFragment {
                     .push().getKey();
 
             Logs logs = new Logs();
-            logs.setMobileusers_id(logsId);
+            logs.setMobileusers_id(mobileusersId);
+            logs.setLog_id(logsId);
             logs.setTitle(title);
             logs.setMessage(body);
             logs.setVideo(uriVideo);

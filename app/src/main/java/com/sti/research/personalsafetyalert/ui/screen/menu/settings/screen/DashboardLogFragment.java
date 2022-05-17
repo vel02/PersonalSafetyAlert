@@ -204,10 +204,12 @@ public class DashboardLogFragment extends DaggerFragment {
 
             Map<String, Object> objectMap = (Map<String, Object>) shotLog.getValue();
             log.setMobileusers_id(objectMap.get("mobileusers_id").toString());
+            log.setLog_id(objectMap.get("log_id").toString());
             log.setTitle(objectMap.get("title").toString());
             log.setMessage(objectMap.get("message").toString());
             log.setTimestamp(objectMap.get("timestamp").toString());
-            log.setVideo(objectMap.get("video").toString());
+
+            if (objectMap.get("video") != null) log.setVideo(objectMap.get("video").toString());
             log.setImages(objectMap.get("images").toString());
 
             logs.add(log);

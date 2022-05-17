@@ -75,11 +75,13 @@
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_admin_auth_layout.xml" value="0.33" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_gps_layout.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_internet_layout.xml" value="0.20416666666666666" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_loading_layout.xml" value="0.2934426229508197" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_logout.xml" value="0.20416666666666666" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_logout_layout.xml" value="0.33" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_manage_external_storage.xml" value="0.33" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_overlay_permission_layout.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_register_contact_layout.xml" value="0.25" />
+        <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_sending_layout.xml" value="0.20416666666666666" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_user_name.xml" value="0.25" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/dialog_username_layout.xml" value="0.33" />
         <entry key="..\:/ThesisResources/Application/PersonalSafetyAlert/app/src/main/res/layout/fragment_add_contact.xml" value="0.39895833333333336" />

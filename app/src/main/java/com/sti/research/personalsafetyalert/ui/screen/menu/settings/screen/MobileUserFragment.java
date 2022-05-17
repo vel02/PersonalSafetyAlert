@@ -23,6 +23,12 @@ import android.widget.TextView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.dashboard.MobileUserRecyclerAdapter;
 import com.sti.research.personalsafetyalert.adapter.view.logs.UserLogsRecyclerAdapter;
@@ -30,10 +36,15 @@ import com.sti.research.personalsafetyalert.databinding.FragmentMobileUserBindin
 import com.sti.research.personalsafetyalert.model.Logs;
 import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.model.MobileUser;
+import com.sti.research.personalsafetyalert.model.User;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
+import com.sti.research.personalsafetyalert.util.screen.permission.MobileUserIDPreference;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import dagger.android.support.DaggerFragment;
 
@@ -46,6 +57,7 @@ public class MobileUserFragment extends DaggerFragment {
 
     private HostScreen hostScreen;
     private UserLogsRecyclerAdapter adapter;
+
 
     public void onUserLogDataReceiver(Logs log) {
         Log.e("MOBILEUSER", "onUserLogDataReceiver: " + log);
@@ -79,10 +91,8 @@ public class MobileUserFragment extends DaggerFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (mobileUser != null && mobileUser.getLogs().size() > 0)
-            adapter.refresh(mobileUser.getLogs());
+    public void onPause() {
+        super.onPause();
     }
 
     private void initContactRecyclerAdapter() {
@@ -125,7 +135,6 @@ public class MobileUserFragment extends DaggerFragment {
 
                 positive.setOnClickListener(v -> {
                     FirebaseAuth.getInstance().signOut();
-//                    hostScreen.onInflate(binding.getRoot(), "tag_fragment_mobileuser_to_settings");
                     Intent intent = new Intent(requireActivity(), SettingsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -157,5 +166,4 @@ public class MobileUserFragment extends DaggerFragment {
         super.onDetach();
         hostScreen = null;
     }
-
 }

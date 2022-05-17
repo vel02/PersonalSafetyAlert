@@ -136,8 +136,9 @@ public class SettingsFragment extends DaggerFragment implements HostScreen {
                 .signInWithEmailAndPassword(
                         "personal.safety.alert.bot@gmail.com",
                         "personal@alert")
-                .addOnCompleteListener(task ->
-                        Toast.makeText(requireActivity(), "Authentication Success", Toast.LENGTH_SHORT).show())
+                .addOnCompleteListener(task -> {
+                })
+//                        Toast.makeText(requireActivity(), "Authentication Success", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> FirebaseAuth.getInstance().signOut());
 
         androidx.appcompat.app.AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireActivity(), R.style.PersonalSafetyAlert_AlertDialogTheme);
@@ -156,7 +157,7 @@ public class SettingsFragment extends DaggerFragment implements HostScreen {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
             if (user != null) {
-                Toast.makeText(requireActivity(), "ONLINE", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(requireActivity(), "ONLINE", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "initUserName: ONLINE ");
                 DatabaseReference reference = FirebaseDatabase.getInstance("https://personalsafetyalert-a5eef-default-rtdb.firebaseio.com/").getReference();
                 reference

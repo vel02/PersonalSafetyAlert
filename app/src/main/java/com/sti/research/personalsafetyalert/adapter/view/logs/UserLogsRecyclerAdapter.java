@@ -21,12 +21,17 @@ public class UserLogsRecyclerAdapter extends RecyclerView.Adapter<BaseBindHolder
     private static final int USER_LOG_TYPE = 1;
     private static final int EXHAUSTED_TYPE = 2;
 
-    private List<Logs> logs = new ArrayList<>();
+    private List<Logs> logs;
 
     @SuppressLint("NotifyDataSetChanged")
     public void refresh(List<Logs> logs) {
         this.logs = logs;
         notifyDataSetChanged();
+    }
+
+    public void clear() {
+        if (logs != null)
+            this.logs.clear();
     }
 
     @NonNull
@@ -58,11 +63,15 @@ public class UserLogsRecyclerAdapter extends RecyclerView.Adapter<BaseBindHolder
 
     @Override
     public int getItemViewType(int position) {
-        if (logs.size() <= 0) {
-            return EXHAUSTED_TYPE;
-        } else {
-            return USER_LOG_TYPE;
+        if (logs != null) {
+
+            if (logs.size() <= 0) {
+                return EXHAUSTED_TYPE;
+            } else {
+                return USER_LOG_TYPE;
+            }
         }
+        return EXHAUSTED_TYPE;
     }
 
     @Override
