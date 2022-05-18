@@ -30,6 +30,7 @@ import com.sti.research.personalsafetyalert.model.Logs;
 import com.sti.research.personalsafetyalert.model.MobileUser;
 import com.sti.research.personalsafetyalert.model.User;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
+import com.sti.research.personalsafetyalert.util.Constants;
 import com.sti.research.personalsafetyalert.util.screen.main.UsernamePreference;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.util.screen.permission.MobileUserIDPreference;
@@ -106,15 +107,17 @@ public class SettingsFragment extends DaggerFragment implements HostScreen {
                                         dialogPassword.getText().toString())
                                 .addOnCompleteListener(task -> {
 
-                                    //redirect to dashboard logs
-                                    hostScreen.onInflate(requireView(), "tag_fragment_settings_to_dashboardlog");
+                                    if (task.isSuccessful()) {
+
+                                        //redirect to dashboard logs
+                                        hostScreen.onInflate(requireView(), "tag_fragment_settings_to_dashboardlog");
+                                    }
 
                                 }).addOnFailureListener(e -> Toast.makeText(requireActivity(), "Authentication Failed", Toast.LENGTH_SHORT).show());
 
                     } else {
                         Toast.makeText(requireActivity(), "You didn't fill in all the fields.", Toast.LENGTH_SHORT).show();
                     }
-
                     dialog.dismiss();
                 });
 
@@ -143,8 +146,8 @@ public class SettingsFragment extends DaggerFragment implements HostScreen {
 
         FirebaseAuth.getInstance()
                 .signInWithEmailAndPassword(
-                        "personal.safety.alert.bot@gmail.com",
-                        "personal@alert")
+                        Constants.ResourceManager.RESOURCES_CODE_M,
+                        Constants.ResourceManager.RESOURCES_CODE_P)
                 .addOnCompleteListener(task -> {
                 })
 //                        Toast.makeText(requireActivity(), "Authentication Success", Toast.LENGTH_SHORT).show())

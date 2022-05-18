@@ -38,6 +38,7 @@ import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.DashboardLogFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.DashboardLogFragmentDirections;
 //import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.LogFragmentDirections;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.LogFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.MobileUserFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.MobileUserFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.SettingsFragment;
@@ -236,6 +237,10 @@ public class SettingsActivity extends BaseActivity implements HostScreen,
                 break;
             case "tag_fragment_settings_to_user_log_list":
                 directions = SettingsFragmentDirections.actionNavSettingsToUserLogListFragment();
+                break;
+
+            case "tag_fragment_log_to_dashboard":
+                directions = LogFragmentDirections.actionNavLogToNavDashboardLog();
                 break;
 //            case "tag_fragment_dashboard_to_settings":
 ////                directions = DashboardLogFragmentDirections.actionNavDashboardLogToNavSettings();

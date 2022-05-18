@@ -207,7 +207,9 @@ public class LogFragment extends DaggerFragment {
                         .child(log.getLog_id())//log.getMobileusers_id())
 
                         .removeValue();
-                requireActivity().onBackPressed();
+//                requireActivity().onBackPressed();
+
+                hostScreen.onInflate(binding.getRoot(), "tag_fragment_log_to_dashboard");
             }
         }
 

@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -95,7 +96,8 @@ public class ContactUsFragment extends DaggerFragment {
         } else {
             // No user is signed in
             FirebaseAuth.getInstance()
-                    .signInWithEmailAndPassword("personal.safety.alert.bot@gmail.com", "personal@alert")
+                    .signInWithEmailAndPassword(ResourceManager.RESOURCES_CODE_M,
+                            ResourceManager.RESOURCES_CODE_P)
                     .addOnCompleteListener(task -> {
 //                        Toast.makeText(requireActivity(), "Authentication Success", Toast.LENGTH_SHORT).show();
                     }).addOnFailureListener(e -> {
@@ -264,17 +266,20 @@ public class ContactUsFragment extends DaggerFragment {
                 case SLOT_ONE:
                     binding.contactUsSsOneAdd.setVisibility(View.GONE);
                     binding.contactUsSsOneImage.setVisibility(View.VISIBLE);
-                    binding.contactUsSsOneImage.setImageBitmap(bitmap);
+//                    binding.contactUsSsOneImage.setImageBitmap(bitmap);
+                    Glide.with(this).load(bitmap).into(binding.contactUsSsOneImage);
                     break;
                 case SLOT_TWO:
                     binding.contactUsSsTwoAdd.setVisibility(View.GONE);
                     binding.contactUsSsTwoImage.setVisibility(View.VISIBLE);
-                    binding.contactUsSsTwoImage.setImageBitmap(bitmap);
+//                    binding.contactUsSsTwoImage.setImageBitmap(bitmap);
+                    Glide.with(this).load(bitmap).into(binding.contactUsSsTwoImage);
                     break;
                 case SLOT_THREE:
                     binding.contactUsSsThreeAdd.setVisibility(View.GONE);
                     binding.contactUsSsThreeImage.setVisibility(View.VISIBLE);
-                    binding.contactUsSsThreeImage.setImageBitmap(bitmap);
+//                    binding.contactUsSsThreeImage.setImageBitmap(bitmap);
+                    Glide.with(this).load(bitmap).into(binding.contactUsSsThreeImage);
                     break;
             }
         } catch (IOException e) {

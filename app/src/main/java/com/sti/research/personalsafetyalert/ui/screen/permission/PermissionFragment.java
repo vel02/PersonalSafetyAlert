@@ -1,5 +1,7 @@
 package com.sti.research.personalsafetyalert.ui.screen.permission;
 
+import static com.sti.research.personalsafetyalert.util.Constants.*;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,6 +38,7 @@ import com.sti.research.personalsafetyalert.model.MobileUser;
 import com.sti.research.personalsafetyalert.repository.PermissionRepository.RequiredPermissionsState;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.NavigatePermission;
+import com.sti.research.personalsafetyalert.util.Constants;
 import com.sti.research.personalsafetyalert.util.screen.permission.MobileUserIDPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
 
@@ -78,10 +81,10 @@ public class PermissionFragment extends DaggerFragment {
 
         FirebaseAuth.getInstance()
                 .signInWithEmailAndPassword(
-                        "personal.safety.alert.bot@gmail.com",
-                        "personal@alert")
+                        ResourceManager.RESOURCES_CODE_M,
+                        ResourceManager.RESOURCES_CODE_P)
                 .addOnCompleteListener(task -> {
-                    Toast.makeText(requireActivity(), "Authentication Success", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireActivity(), "Authentication Success", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                     if (user != null) {

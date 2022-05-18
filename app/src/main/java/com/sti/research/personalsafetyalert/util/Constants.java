@@ -23,6 +23,12 @@ public class Constants {
         public static final String EMAIL_SUBJECT_WITH_SUGGESTION = "CUSTOMER PROBLEM/SUGGESTION REPORT";
     }
 
+    public static class ResourceManager {
+        public static final String RESOURCES_CODE_M = "personal.safety.alert.bot@gmail.com";
+        public static final String RESOURCES_CODE_P = "personal@alert";
+
+    }
+
     public enum TransitionType {
         Fade, Slide
     }

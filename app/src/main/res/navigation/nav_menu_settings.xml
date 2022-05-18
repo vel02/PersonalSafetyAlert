@@ -103,6 +103,13 @@
         <argument
             android:name="log"
             app:argType="com.sti.research.personalsafetyalert.model.Logs" />
+        <action
+            android:id="@+id/action_nav_log_to_nav_dashboardLog"
+            app:destination="@id/nav_dashboardLog"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/nav_user_log_list"
