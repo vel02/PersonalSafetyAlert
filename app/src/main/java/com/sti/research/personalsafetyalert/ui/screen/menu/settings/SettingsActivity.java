@@ -28,9 +28,11 @@ import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.dashboard.MobileUserRecyclerAdapter;
 import com.sti.research.personalsafetyalert.adapter.view.logs.UserLogsRecyclerAdapter;
+import com.sti.research.personalsafetyalert.adapter.view.userlog.UserLogListRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.ActivitySettingsBinding;
 import com.sti.research.personalsafetyalert.model.Logs;
 import com.sti.research.personalsafetyalert.model.MobileUser;
+import com.sti.research.personalsafetyalert.model.UserLog;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.DashboardLogFragment;
@@ -40,6 +42,8 @@ import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.Mobil
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.MobileUserFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.SettingsFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.SettingsFragmentDirections;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.user.UserLogListFragment;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.user.UserLogListFragmentDirections;
 import com.sti.research.personalsafetyalert.util.Constants;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
@@ -51,7 +55,8 @@ import dagger.android.support.DaggerAppCompatActivity;
 public class SettingsActivity extends BaseActivity implements HostScreen,
         SettingsFragment.OnDialogSettingsDisplay,
         MobileUserRecyclerAdapter.OnMobileUserClickListener,
-        UserLogsRecyclerAdapter.OnLogClickListener {
+        UserLogsRecyclerAdapter.OnLogClickListener,
+        UserLogListRecyclerAdapter.OnUserLogListClickListener {
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -66,6 +71,15 @@ public class SettingsActivity extends BaseActivity implements HostScreen,
 
     //FIREBASE
     private FirebaseAuth.AuthStateListener authListener;
+
+    @Override
+    public void onUserLogListResult(UserLog log) {
+        Log.e(TAG, "onUserLogListResult: CLICKED! " + log);
+        if ((navHostFragment.getChildFragmentManager().getFragments().get(0) instanceof UserLogListFragment)) {
+            UserLogListFragment fragment = (UserLogListFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+            fragment.onUserLogListDataReceiver(log);
+        }
+    }
 
     @Override
     public void onMobileUserResult(MobileUser mobileUser) {
@@ -220,6 +234,9 @@ public class SettingsActivity extends BaseActivity implements HostScreen,
             case "tag_fragment_settings_to_dashboardlog":
                 directions = SettingsFragmentDirections.actionNavSettingsToDashboardLog();
                 break;
+            case "tag_fragment_settings_to_user_log_list":
+                directions = SettingsFragmentDirections.actionNavSettingsToUserLogListFragment();
+                break;
 //            case "tag_fragment_dashboard_to_settings":
 ////                directions = DashboardLogFragmentDirections.actionNavDashboardLogToNavSettings();
 //                break;
@@ -249,8 +266,14 @@ public class SettingsActivity extends BaseActivity implements HostScreen,
                 break;
             case "tag_fragment_mobileuser_to_log":
                 if (object instanceof Logs)
-                    directions = MobileUserFragmentDirections.actionNavMobileuserToLogFragment((Logs)object);
+                    directions = MobileUserFragmentDirections.actionNavMobileuserToLogFragment((Logs) object);
                 break;
+            case "tag_fragment_user_log_list_to_user_log_list_view":
+                if (object instanceof UserLog)
+                    directions = UserLogListFragmentDirections.actionNavUserLogListToUserLogListViewFragment((UserLog) object);
+                break;
+
+
             default:
                 throw new IllegalStateException("Unexpected value: " + screen);
         }
@@ -259,4 +282,6 @@ public class SettingsActivity extends BaseActivity implements HostScreen,
         Navigation.findNavController(view).navigate(directions);
 
     }
+
+
 }

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="userLog"
+            type="com.sti.research.personalsafetyalert.model.UserLog" />
+
+        <variable
+            name="listener"
+            type="com.sti.research.personalsafetyalert.adapter.view.userlog.UserLogListRecyclerAdapter.OnUserLogListClickListener" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> listener.onUserLogListResult(userLog)}">
+
+        <TextView
+            android:id="@+id/item_logs_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@{userLog.title}"
+            android:textColor="@color/black_800"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="This is a title" />
+
+        <TextView
+            android:id="@+id/item_logs_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Location"
+            android:textAllCaps="true"
+            android:textColor="@color/primarySecondaryDark"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/item_logs_title"
+            app:layout_constraintTop_toBottomOf="@+id/item_logs_title" />
+
+
+        <TextView
+            android:id="@+id/item_logs_time_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="TIME"
+            android:textAllCaps="true"
+            android:textColor="@color/primarySecondaryDark"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/item_logs_label"
+            app:layout_constraintStart_toStartOf="@+id/item_logs_title"
+            app:layout_constraintTop_toBottomOf="@+id/item_logs_label" />
+
+        <TextView
+            android:id="@+id/item_logs_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{userLog.location}"
+            android:textColor="@color/black_800"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/item_logs_vertical"
+            app:layout_constraintTop_toBottomOf="@id/item_logs_title"
+            tools:text="This is a lot of message that even the text view cannot contain it." />
+
+
+        <TextView
+            android:id="@+id/item_logs_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{userLog.timestamp}"
+            android:textColor="@color/black_800"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/item_logs_vertical_time"
+            app:layout_constraintTop_toTopOf="@+id/item_logs_time_label"
+            tools:text="TIME" />
+
+        <View
+            android:id="@+id/item_logs_vertical"
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="?android:attr/dividerVertical"
+            app:layout_constraintBottom_toBottomOf="@+id/item_logs_label"
+            app:layout_constraintStart_toEndOf="@+id/item_logs_label"
+            app:layout_constraintTop_toTopOf="@+id/item_logs_label" />
+
+        <View
+            android:id="@+id/item_logs_vertical_time"
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="?android:attr/dividerVertical"
+            app:layout_constraintBottom_toBottomOf="@+id/item_logs_time_label"
+            app:layout_constraintStart_toEndOf="@+id/item_logs_label"
+            app:layout_constraintTop_toTopOf="@+id/item_logs_time_label" />
+
+
+        <View
+            android:id="@+id/item_logs_divider_horizontal"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="?android:attr/dividerHorizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_logs_time_label" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Utility {
 
@@ -205,5 +206,12 @@ public class Utility {
 //        String formattedDate = df.format(c.getTime());
 //        String formattedDate = String.valueOf(c.getTime());
         return "Date and time = " + c.getTime();
+    }
+
+    public static String getTimestamp() {
+        String pattern = "MMMM dd, yyyy - HH:mm:ss a";//"yyyy-MM-dd'T'HH:mm:ss'Z'"
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.US);
+        sdf.setTimeZone(TimeZone.getDefault());
+        return sdf.format(new Date());
     }
 }

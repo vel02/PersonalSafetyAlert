@@ -16,6 +16,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -25,6 +26,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -44,6 +46,7 @@ import android.widget.Toast;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
 import com.sti.research.personalsafetyalert.adapter.view.contact.ContactRecyclerAdapter;
@@ -52,6 +55,7 @@ import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecycler
 import com.sti.research.personalsafetyalert.databinding.ActivityMainBinding;
 import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.model.MobileUser;
+import com.sti.research.personalsafetyalert.model.UserLog;
 import com.sti.research.personalsafetyalert.model.list.Contact;
 import com.sti.research.personalsafetyalert.receiver.sms.SentReceiverObserver;
 import com.sti.research.personalsafetyalert.receiver.sms.SmsDeliveredReceiver;
@@ -74,6 +78,7 @@ import com.sti.research.personalsafetyalert.util.api.SmsApi;
 import com.sti.research.personalsafetyalert.util.screen.contact.ContactStoreSinglePerson;
 import com.sti.research.personalsafetyalert.util.screen.contact.SelectPreferredContactPreference;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeCustomMessagePreference;
+import com.sti.research.personalsafetyalert.util.screen.main.UserLogPreference;
 import com.sti.research.personalsafetyalert.util.screen.main.UsernamePreference;
 import com.sti.research.personalsafetyalert.util.screen.manager.MobileNetworkManager;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
@@ -121,11 +126,24 @@ public class MainActivity extends BaseActivity implements
     //NOTIFICATION
     private final int NOTIFICATION_USER_SEND_ACTIVATION_ID = 3;
     private NotificationManager notificationManager;
+    UserLog userLog;
+
 
     @Override
     public void onDataProcessing(Location location) {
         Log.d(TAG, "MAIN ACTIVITY LOCATION: " + location.getLatitude() + " - " + location.getLongitude());
-        SubscriptionInfo simInfo = (SubscriptionInfo) localList.get(SLOT_SIM_ONE);
+        SubscriptionManager subscriptionManager = SubscriptionManager.from(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        SubscriptionInfo simInfo = subscriptionManager.getActiveSubscriptionInfoForSimSlotIndex(SLOT_SIM_ONE);// localList.get(SLOT_SIM_ONE);
 
         //location
         this.location = location;
@@ -202,6 +220,8 @@ public class MainActivity extends BaseActivity implements
 //                break;
 //
 //            case "MULTIPLE_CONTACT":
+        List<UserLog> userLogs = UserLogPreference.getInstance().getUserLogOutput(this);//new ArrayList<>();
+
         Log.d(TAG, "MAIN ACTIVITY PREFERRED CONTACT SELECTED: Send to this list of contacts");
         StringBuilder contactBuilder = new StringBuilder();
         StringBuilder emailBuilder = new StringBuilder();
@@ -217,6 +237,14 @@ public class MainActivity extends BaseActivity implements
 
         Log.d(TAG, "LIST OF CONTACT NUMBERS: " + contactList);
         Log.d(TAG, "LIST OF CONTACTS EMAILS: " + emailList);
+        userLog = new UserLog();
+        userLog.setName(UsernamePreference.getInstance().getUsernameInput(this));
+        userLog.setEmail(emailList);
+        userLog.setPhoneNumber(contactList);
+        userLog.setTitle(subject_first_email);
+        userLog.setMessage(generateMessage(simInfo.getNumber(), location));
+        userLog.setLatitude(String.valueOf(location.getLatitude()));
+        userLog.setLongitude(String.valueOf(location.getLongitude()));
 
 
         //########### Record Audio for attachment ###########
@@ -263,6 +291,15 @@ public class MainActivity extends BaseActivity implements
                         generateMessageWithMaxDuration(),
                         emailList, pathObj, filenameObj);
 
+                String paths = path + "," + pathObj;
+                userLog.setAudioPath(paths);
+
+                userLogs.add(userLog);
+
+                UserLogPreference.getInstance().setUserLogInput(this, userLogs);
+
+                Log.e(TAG, "onDataProcessing: " + UserLogPreference.getInstance().getUserLogOutput(this));
+
             }, "PersonalSafety").start();
 
         }, "PersonalSafety").start();
@@ -282,15 +319,23 @@ public class MainActivity extends BaseActivity implements
     private String generateMessage(String mobileNumber, Location location) {
         String name = UsernamePreference.getInstance().getUsernameInput(this);
         if (name.isEmpty()) name = "Anonymous";
-        return userMessage
+
+        String time = Utility.getTimestamp();
+        String readableLocation = Utility.getLocationText(this, location);
+        String message = userMessage
                 + "\n\nYou can reach " + name + " with his/her contact details:"
                 + "\n" + "Mobile Number: " + mobileNumber
-                + "\n\n" + name + "'s Location: " + Utility.getLocationText(this, location)
+                + "\n\n" + name + "'s Location: " + readableLocation
                 + "\n" + "Link" + DEFAULT_MESSAGE
                 + location.getLatitude() + "," + location.getLongitude()
-                + "\n" + Utility.generateDateAndTime()
+                + "\n" + time
                 + "\n\nThe attached media in this message is an audio recording attachment describing "
                 + name + "'s current surroundings.";
+
+        userLog.setLocation(readableLocation);
+        userLog.setTimestamp(time);
+
+        return message;
     }
 
     private void initSmsSubscriptionManager() {

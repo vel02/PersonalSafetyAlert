@@ -4,10 +4,14 @@ import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.Da
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.LogScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.MobileUserScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.SettingsScreenScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.user.UserLogListScreenScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.user.UserLogListViewScreenScope;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.DashboardLogFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.LogFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.MobileUserFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.SettingsFragment;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.user.UserLogListFragment;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.user.UserLogListViewFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -30,5 +34,13 @@ public abstract class SettingsFragmentBuilderModule {
     @LogScreenScope
     @ContributesAndroidInjector
     abstract LogFragment contributeLogFragment();
+
+    @UserLogListScreenScope
+    @ContributesAndroidInjector
+    abstract UserLogListFragment contributeUserLogListFragment();
+
+    @UserLogListViewScreenScope
+    @ContributesAndroidInjector
+    abstract UserLogListViewFragment contributeUserLogListViewFragment();
 
 }

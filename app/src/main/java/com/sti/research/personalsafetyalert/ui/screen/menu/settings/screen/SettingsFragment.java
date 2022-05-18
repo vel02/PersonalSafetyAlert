@@ -65,6 +65,15 @@ public class SettingsFragment extends DaggerFragment implements HostScreen {
 //        registerNewEmail("personal.safety.alert.bot@gmail.com", "personal@alert");
 
 
+        binding.layoutUserLogReview.setOnClickListener(v -> {
+
+
+            hostScreen.onInflate(requireView(), "tag_fragment_settings_to_user_log_list");
+
+
+        });
+
+
         binding.layoutAdminAuth.setOnClickListener(vw -> {
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

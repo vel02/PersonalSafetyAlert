@@ -27,8 +27,11 @@ import com.sti.research.personalsafetyalert.ui.MainActivity;
 import com.sti.research.personalsafetyalert.ui.splash.SplashActivity;
 import com.sti.research.personalsafetyalert.util.Constants;
 import com.sti.research.personalsafetyalert.util.screen.home.HomeInitialMessage;
+import com.sti.research.personalsafetyalert.util.screen.main.UserLogPreference;
 import com.sti.research.personalsafetyalert.util.screen.splash.SplashNavigationPreference;
 import com.sti.research.personalsafetyalert.viewmodel.ViewModelProviderFactory;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -60,6 +63,7 @@ public class WelcomeActivity extends DaggerAppCompatActivity implements HostScre
         getIntentObject();
         initController();
         subscribeObservers();
+        UserLogPreference.getInstance().setUserLogInput(this, new ArrayList<>());
     }
 
     @SuppressLint("RtlHardcoded")

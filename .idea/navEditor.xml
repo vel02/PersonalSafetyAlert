@@ -325,8 +325,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="304" />
-                            <option name="y" value="6" />
+                            <option name="x" value="296" />
+                            <option name="y" value="228" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -346,18 +346,9 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="375" />
-                            <option name="y" value="-526" />
+                            <option name="x" value="1039" />
+                            <option name="y" value="214" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_logFragment_to_nav_mobileuser">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -367,8 +358,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="708" />
-                            <option name="y" value="15" />
+                            <option name="x" value="666" />
+                            <option name="y" value="225" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -399,7 +390,36 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_nav_settings_to_userLogListFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="nav_user_log_list">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="288" />
+                            <option name="y" value="-194" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="userLogListViewFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="663" />
+                            <option name="y" value="-186" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
