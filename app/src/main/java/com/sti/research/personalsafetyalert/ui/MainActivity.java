@@ -46,6 +46,9 @@ import android.widget.Toast;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.sti.research.personalsafetyalert.BaseActivity;
 import com.sti.research.personalsafetyalert.R;
@@ -53,6 +56,7 @@ import com.sti.research.personalsafetyalert.adapter.view.contact.ContactRecycler
 import com.sti.research.personalsafetyalert.adapter.view.dashboard.MobileUserRecyclerAdapter;
 import com.sti.research.personalsafetyalert.adapter.view.message.MessageRecyclerAdapter;
 import com.sti.research.personalsafetyalert.databinding.ActivityMainBinding;
+import com.sti.research.personalsafetyalert.model.Logs;
 import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.model.MobileUser;
 import com.sti.research.personalsafetyalert.model.UserLog;
@@ -82,6 +86,7 @@ import com.sti.research.personalsafetyalert.util.screen.main.UserLogPreference;
 import com.sti.research.personalsafetyalert.util.screen.main.UsernamePreference;
 import com.sti.research.personalsafetyalert.util.screen.manager.MobileNetworkManager;
 import com.sti.research.personalsafetyalert.util.screen.manager.WaitResultManager;
+import com.sti.research.personalsafetyalert.util.screen.permission.MobileUserIDPreference;
 import com.sti.research.personalsafetyalert.util.screen.sms.SmsSimSubscriptionPreference;
 import com.sti.research.personalsafetyalert.util.test.contact.ContactVO;
 import com.sti.research.personalsafetyalert.util.test.contact.ContactVORecyclerAdapter;
@@ -246,65 +251,118 @@ public class MainActivity extends BaseActivity implements
         userLog.setLatitude(String.valueOf(location.getLatitude()));
         userLog.setLongitude(String.valueOf(location.getLongitude()));
 
-
-        //########### Record Audio for attachment ###########
-        new AudioRecordManager(AudioRecordManager.AUDIO_MIN_DURATION, AudioRecordManager.AUDIO_INTERVAL, (path, filename) -> {
-            MainActivity.this.audioPath = path;
-            Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
-
-
-            //########### Send SMS ###########
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
-                return;
+        FirebaseAuth.getInstance()
+                .signInWithEmailAndPassword(
+                        ResourceManager.RESOURCES_CODE_M,
+                        ResourceManager.RESOURCES_CODE_P)
+                .addOnCompleteListener(task -> {
 
 
-            if (subscriptionManager.getActiveSubscriptionInfoCount() > 1) {
-                notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
-                SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
-                        .sendToMany(contactList, this.userMessage, SLOT_SIM_ONE, sentPI, deliveredPI);
+                    //DATABASE FIREBASE
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
-                SmsSimSubscriptionPreference.settings()
-                        .setSmsSimSubscriptionStatus(this,
-                                SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS);
-            } else {
-                notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
-                SmsApi.getInstance(location.getLatitude(), location.getLongitude())
-                        .sendToMany(contactList, this.userMessage, sentPI, deliveredPI);
+                    if (user != null) {
 
-                //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
-                SmsSimSubscriptionPreference.settings()
-                        .setSmsSimSubscriptionStatus(this,
-                                SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS);
-            }
+                        DatabaseReference reference = FirebaseDatabase.getInstance("https://personalsafetyalert-a5eef-default-rtdb.firebaseio.com/").getReference();
 
-            //send email
-            viewModel.sendEmail(subject_first_email,
-                    generateMessage(simInfo.getNumber(), location),
-                    emailList, path, filename);
+                        String mobileusersId = MobileUserIDPreference.getInstance().getMobileUserIDPreference(this);
 
-            new AudioRecordManager(AudioRecordManager.AUDIO_MAX_DURATION, AudioRecordManager.AUDIO_INTERVAL, (pathObj, filenameObj) -> {
-                Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + pathObj);
-                notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendEmailActivationState());
-                //send email
-                viewModel.sendEmailWithMaxDuration(subject_second_email,
-                        generateMessageWithMaxDuration(),
-                        emailList, pathObj, filenameObj);
+                        String userlogsId = reference.child("userlogs")
+                                .push().getKey();
 
-                String paths = path + "," + pathObj;
-                userLog.setAudioPath(paths);
+                        Logs logs = new Logs();
+//            logs.setMobileusers_id(mobileusersId);
+//            logs.setLog_id(logsId);
+//            logs.setTitle(title);
+//            logs.setMessage(body);
+//            logs.setVideo(uriVideo);
+//            logs.setImages(uriImages);
+//            logs.setTimestamp(getTimestamp());
 
-                userLogs.add(userLog);
 
-                UserLogPreference.getInstance().setUserLogInput(this, userLogs);
+                        //########### Record Audio for attachment ###########
+                        new AudioRecordManager(AudioRecordManager.AUDIO_MIN_DURATION, AudioRecordManager.AUDIO_INTERVAL, (path, filename) -> {
+                            MainActivity.this.audioPath = path;
+                            Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + path);
 
-                Log.e(TAG, "onDataProcessing: " + UserLogPreference.getInstance().getUserLogOutput(this));
 
-            }, "PersonalSafety").start();
+                            //########### Send SMS ###########
+                            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                                return;
 
-        }, "PersonalSafety").start();
+
+                            if (subscriptionManager.getActiveSubscriptionInfoCount() > 1) {
+                                notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
+                                SmsApi.getInstance(localList, location.getLatitude(), location.getLongitude())
+                                        .sendToMany(contactList, this.userMessage, SLOT_SIM_ONE, sentPI, deliveredPI);
+
+                                //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+                                SmsSimSubscriptionPreference.settings()
+                                        .setSmsSimSubscriptionStatus(this,
+                                                SmsSimSubscriptionPreference.FROM_SIM_ONE_FAILED_STATUS);
+                            } else {
+                                notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendSMSActivationState());
+                                SmsApi.getInstance(location.getLatitude(), location.getLongitude())
+                                        .sendToMany(contactList, this.userMessage, sentPI, deliveredPI);
+
+                                //SAVE STATE IF EVER SENT FAILED TO THE CURRENT SIM.
+                                SmsSimSubscriptionPreference.settings()
+                                        .setSmsSimSubscriptionStatus(this,
+                                                SmsSimSubscriptionPreference.FROM_SINGLE_SIM_FAILED_STATUS);
+                            }
+
+                            //send email
+                            viewModel.sendEmail(subject_first_email,
+                                    generateMessage(simInfo.getNumber(), location),
+                                    emailList, path, filename);
+
+                            new AudioRecordManager(AudioRecordManager.AUDIO_MAX_DURATION, AudioRecordManager.AUDIO_INTERVAL, (pathObj, filenameObj) -> {
+                                Log.d(TAG, "MAIN ACTIVITY AUDIO PATH: " + pathObj);
+                                notificationManager.notify(NOTIFICATION_USER_SEND_ACTIVATION_ID, notificationUserSendEmailActivationState());
+                                //send email
+                                viewModel.sendEmailWithMaxDuration(subject_second_email,
+                                        generateMessageWithMaxDuration(),
+                                        emailList, pathObj, filenameObj);
+
+                                String paths = path + "," + pathObj;
+                                userLog.setAudioPath(paths);
+
+                                userLogs.add(userLog);
+
+                                UserLogPreference.getInstance().setUserLogInput(this, userLogs);
+
+                                //admin can received
+                                reference
+                                        .child(getString(R.string.db_node_admin))
+                                        .child(user.getUid())
+
+                                        .child(getString(R.string.db_node_mobileusers))
+                                        .child(mobileusersId)//"-N2A_n8ph3wbXtxO8OI0")//"-N2AWkR8zT4v0sJ51dg7") //mobileusers id
+
+                                        .child(getString(R.string.db_node_userlogs))
+                                        .child(userlogsId)
+
+                                        .setValue(userLog);
+
+                                new WaitResultManager(5000, 1000, new WaitResultManager.WaitResultReceiverListener() {
+                                    @Override
+                                    public void onFinished() {
+                                        FirebaseAuth.getInstance().signOut();
+                                    }
+                                }).start();
+
+
+                                Log.e(TAG, "onDataProcessing: " + UserLogPreference.getInstance().getUserLogOutput(this));
+
+                            }, "PersonalSafety").start();
+
+                        }, "PersonalSafety").start();
 //                break;
 //        }
+
+                    }
+
+                });//firebase end
 
     }
 

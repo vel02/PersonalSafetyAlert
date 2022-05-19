@@ -170,7 +170,7 @@ public class SettingsFragment extends DaggerFragment implements HostScreen {
 
             if (user != null) {
 //                Toast.makeText(requireActivity(), "ONLINE", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "initUserName: ONLINE ");
+//                Log.e(TAG, "initUserName: ONLINE ");
                 DatabaseReference reference = FirebaseDatabase.getInstance("https://personalsafetyalert-a5eef-default-rtdb.firebaseio.com/").getReference();
                 reference
                         .child(getString(R.string.db_node_admin))

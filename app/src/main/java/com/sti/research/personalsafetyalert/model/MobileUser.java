@@ -13,21 +13,39 @@ public class MobileUser implements Parcelable {
     private String admin_id;
     private String username;
     private List<Logs> logs;
+    private List<UserLog> userLogs;
 
     public MobileUser() {
     }
 
-    public MobileUser(String id, String admin_id, String username, List<Logs> logs) {
+    public MobileUser(String id, String admin_id, String username, List<Logs> logs, List<UserLog> userLogs) {
         this.id = id;
         this.admin_id = admin_id;
         this.username = username;
         this.logs = logs;
+        this.userLogs = userLogs;
     }
 
     protected MobileUser(Parcel in) {
         id = in.readString();
         admin_id = in.readString();
         username = in.readString();
+        logs = in.createTypedArrayList(Logs.CREATOR);
+        userLogs = in.createTypedArrayList(UserLog.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(admin_id);
+        dest.writeString(username);
+        dest.writeTypedList(logs);
+        dest.writeTypedList(userLogs);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<MobileUser> CREATOR = new Creator<MobileUser>() {
@@ -74,25 +92,22 @@ public class MobileUser implements Parcelable {
         this.logs = logs;
     }
 
+    public List<UserLog> getUserLogs() {
+        return userLogs;
+    }
+
+    public void setUserLogs(List<UserLog> userLogs) {
+        this.userLogs = userLogs;
+    }
+
     @Override
     public String toString() {
-        return "\n\nMobileUser{" +
-                "\nid='" + id + '\'' +
-                "\nadmin_id='" + admin_id + '\'' +
-                "\nusername='" + username + '\'' +
-                "\nlogs=" + logs +
-                "}\n\n";
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id);
-        parcel.writeString(admin_id);
-        parcel.writeString(username);
+        return "MobileUser{" +
+                "id='" + id + '\'' +
+                ", admin_id='" + admin_id + '\'' +
+                ", username='" + username + '\'' +
+                ", logs=" + logs +
+                ", userLogs=" + userLogs +
+                '}';
     }
 }

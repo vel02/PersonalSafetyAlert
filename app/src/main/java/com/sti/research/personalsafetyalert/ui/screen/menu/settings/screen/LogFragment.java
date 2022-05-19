@@ -161,7 +161,7 @@ public class LogFragment extends DaggerFragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
-        inflater.inflate(R.menu.menu_admin_user_log, menu);
+        inflater.inflate(R.menu.menu_admin, menu);
     }
 
     @Override
