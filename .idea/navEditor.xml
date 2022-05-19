@@ -331,7 +331,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_nav_dashboardLog_to_mobileUserFragment">
+                            <entry key="action_nav_dashboardLog_to_nav_view_user_logs">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -346,9 +346,18 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1039" />
-                            <option name="y" value="214" />
+                            <option name="x" value="1297" />
+                            <option name="y" value="-385" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_nav_log_to_nav_dashboardLog">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -358,8 +367,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="666" />
-                            <option name="y" value="225" />
+                            <option name="x" value="946" />
+                            <option name="y" value="-131" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -426,8 +435,46 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="1582" />
+                            <option name="y" value="72" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="nav_view_user_logs">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="644" />
+                            <option name="y" value="212" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_nav_view_user_logs_to_nav_mobileuser">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_nav_view_user_logs_to_viewMobileUserLogsFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="viewMobileUserLogsFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="957" />
+                            <option name="y" value="456" />
                           </Point>
                         </option>
                       </LayoutPositions>

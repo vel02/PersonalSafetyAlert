@@ -35,6 +35,7 @@ import com.sti.research.personalsafetyalert.databinding.FragmentDashboardLogBind
 import com.sti.research.personalsafetyalert.model.Logs;
 import com.sti.research.personalsafetyalert.model.MobileUser;
 import com.sti.research.personalsafetyalert.model.User;
+import com.sti.research.personalsafetyalert.model.UserLog;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
 import com.sti.research.personalsafetyalert.ui.welcome.WelcomeActivity;
@@ -178,6 +179,10 @@ public class DashboardLogFragment extends DaggerFragment {
 
             List<Logs> logs = getLogsUsers(shotUser, requireContext);
             mobileUser.setLogs(logs);
+
+            List<UserLog> userLogs = getUserLogs(shotUser, requireContext);
+            mobileUser.setUserLogs(userLogs);
+
             users.add(mobileUser);
 
         }
@@ -192,6 +197,33 @@ public class DashboardLogFragment extends DaggerFragment {
 //        Log.e(TAG, "onDataChange: mobileusers: " + users.toString());
 
         return users;
+    }
+
+    private List<UserLog> getUserLogs(DataSnapshot singleSnap, Context requireContext) {
+        List<UserLog> userLogs = new ArrayList<>();
+
+        for (DataSnapshot shotLog : singleSnap
+                .child(requireContext.getString(R.string.db_node_userlogs))
+                .getChildren()) {
+
+            Map<String, Object> objectMap = (Map<String, Object>) shotLog.getValue();
+
+            UserLog userLog = new UserLog();
+
+            userLog.setName(objectMap.get("name").toString());
+            userLog.setEmail(objectMap.get("email").toString());
+            userLog.setPhoneNumber(objectMap.get("phoneNumber").toString());
+            userLog.setAudioPath(objectMap.get("audioPath").toString());
+            userLog.setTitle(objectMap.get("title").toString());
+            userLog.setMessage(objectMap.get("message").toString());
+            userLog.setLatitude(objectMap.get("latitude").toString());
+            userLog.setLongitude(objectMap.get("longitude").toString());
+            userLog.setLocation(objectMap.get("location").toString());
+            userLog.setTimestamp(objectMap.get("timestamp").toString());
+
+            userLogs.add(userLog);
+        }
+        return userLogs;
     }
 
     private List<Logs> getLogsUsers(DataSnapshot singleSnap, Context requireContext) {

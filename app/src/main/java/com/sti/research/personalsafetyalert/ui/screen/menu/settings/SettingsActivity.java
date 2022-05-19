@@ -32,6 +32,7 @@ import com.sti.research.personalsafetyalert.adapter.view.userlog.UserLogListRecy
 import com.sti.research.personalsafetyalert.databinding.ActivitySettingsBinding;
 import com.sti.research.personalsafetyalert.model.Logs;
 import com.sti.research.personalsafetyalert.model.MobileUser;
+import com.sti.research.personalsafetyalert.model.User;
 import com.sti.research.personalsafetyalert.model.UserLog;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.screen.home.HomeFragment;
@@ -43,6 +44,9 @@ import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.Mobil
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.MobileUserFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.SettingsFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.SettingsFragmentDirections;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.ViewMobileUserLogsFragment;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.ViewMobileUserLogsFragmentDirections;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.ViewUserLogsFragmentDirections;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.user.UserLogListFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.user.UserLogListFragmentDirections;
 import com.sti.research.personalsafetyalert.util.Constants;
@@ -79,6 +83,9 @@ public class SettingsActivity extends BaseActivity implements HostScreen,
         if ((navHostFragment.getChildFragmentManager().getFragments().get(0) instanceof UserLogListFragment)) {
             UserLogListFragment fragment = (UserLogListFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
             fragment.onUserLogListDataReceiver(log);
+        } else if ((navHostFragment.getChildFragmentManager().getFragments().get(0) instanceof ViewMobileUserLogsFragment)) {
+            ViewMobileUserLogsFragment fragment = (ViewMobileUserLogsFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+            fragment.onMobileUserLogDataReceiver(log);
         }
     }
 
@@ -267,15 +274,34 @@ public class SettingsActivity extends BaseActivity implements HostScreen,
         switch (screen) {
             case "tag_fragment_dashboard_to_mobileuser":
                 if (object instanceof MobileUser)
-                    directions = DashboardLogFragmentDirections.actionNavDashboardLogToMobileUserFragment((MobileUser) object);
+                    directions = DashboardLogFragmentDirections.actionNavDashboardLogToNavViewUserLogs((MobileUser) object);
+                break;
+            case "tag_fragment_view_user_logs_to_mobile_user":
+                if (object instanceof MobileUser)
+                    directions = ViewUserLogsFragmentDirections.actionNavViewUserLogsToNavMobileuser((MobileUser) object);
+                break;
+
+            case "tag_fragment_view_user_logs_to_mobile_user_logs":
+                if (object instanceof MobileUser)
+                    directions = ViewUserLogsFragmentDirections.actionNavViewUserLogsToViewMobileUserLogsFragment((MobileUser) object);
                 break;
             case "tag_fragment_mobileuser_to_log":
                 if (object instanceof Logs)
                     directions = MobileUserFragmentDirections.actionNavMobileuserToLogFragment((Logs) object);
                 break;
+
+            case "tag_fragment_mobile_user_log_to_log":
+                if (object instanceof UserLog)
+                    directions = ViewMobileUserLogsFragmentDirections.actionViewMobileUserLogsFragmentToNavUserLogListView((UserLog) object);
+                break;
             case "tag_fragment_user_log_list_to_user_log_list_view":
                 if (object instanceof UserLog)
                     directions = UserLogListFragmentDirections.actionNavUserLogListToUserLogListViewFragment((UserLog) object);
+                break;
+
+            case "tag_fragment_view_mobile_user_log_list_to_user_log_list_view":
+                if (object instanceof UserLog)
+                    directions = ViewMobileUserLogsFragmentDirections.actionViewMobileUserLogsFragmentToNavUserLogListView((UserLog) object);
                 break;
 
 

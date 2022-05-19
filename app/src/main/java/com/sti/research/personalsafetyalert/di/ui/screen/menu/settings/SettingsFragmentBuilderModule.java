@@ -4,12 +4,16 @@ import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.Da
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.LogScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.MobileUserScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.SettingsScreenScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.ViewMobileUserLogsScreenScope;
+import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.ViewUserLogsScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.user.UserLogListScreenScope;
 import com.sti.research.personalsafetyalert.di.ui.screen.menu.settings.screen.user.UserLogListViewScreenScope;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.DashboardLogFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.LogFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.MobileUserFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.SettingsFragment;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.ViewMobileUserLogsFragment;
+import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.ViewUserLogsFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.user.UserLogListFragment;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.user.UserLogListViewFragment;
 
@@ -42,5 +46,13 @@ public abstract class SettingsFragmentBuilderModule {
     @UserLogListViewScreenScope
     @ContributesAndroidInjector
     abstract UserLogListViewFragment contributeUserLogListViewFragment();
+
+    @ViewUserLogsScreenScope
+    @ContributesAndroidInjector
+    abstract ViewUserLogsFragment contributeViewUserLogsListFragment();
+
+    @ViewMobileUserLogsScreenScope
+    @ContributesAndroidInjector
+    abstract ViewMobileUserLogsFragment contributeViewMobileUserLogsListFragment();
 
 }

@@ -152,7 +152,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="16dp"
-                                android:layout_weight="7"
+                                android:layout_weight="6"
                                 android:contentDescription="@string/desc_contact_phone_number_logo"
                                 android:src="@drawable/ic_phone" />
 
@@ -160,7 +160,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="8dp"
-                                android:layout_weight="16"
+                                android:layout_weight="18"
                                 android:text="@string/txt_mobile"
                                 android:textStyle="bold" />
 
@@ -168,7 +168,7 @@
                                 android:id="@+id/update_contact_phone_number"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="78"
+                                android:layout_weight="76"
                                 android:background="@null"
                                 android:hint="@string/txt_phone_number"
                                 android:importantForAutofill="no"

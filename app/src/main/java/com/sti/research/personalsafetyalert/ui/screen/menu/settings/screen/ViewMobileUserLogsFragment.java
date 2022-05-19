@@ -23,88 +23,61 @@ import android.widget.TextView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.sti.research.personalsafetyalert.R;
-import com.sti.research.personalsafetyalert.adapter.view.dashboard.MobileUserRecyclerAdapter;
 import com.sti.research.personalsafetyalert.adapter.view.logs.UserLogsRecyclerAdapter;
-import com.sti.research.personalsafetyalert.databinding.FragmentMobileUserBinding;
+import com.sti.research.personalsafetyalert.adapter.view.userlog.UserLogListRecyclerAdapter;
+import com.sti.research.personalsafetyalert.databinding.FragmentViewMobileUserLogsBinding;
 import com.sti.research.personalsafetyalert.model.Logs;
-import com.sti.research.personalsafetyalert.model.Message;
 import com.sti.research.personalsafetyalert.model.MobileUser;
-import com.sti.research.personalsafetyalert.model.User;
+import com.sti.research.personalsafetyalert.model.UserLog;
 import com.sti.research.personalsafetyalert.ui.HostScreen;
 import com.sti.research.personalsafetyalert.ui.screen.menu.settings.SettingsActivity;
-import com.sti.research.personalsafetyalert.util.screen.permission.MobileUserIDPreference;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import dagger.android.support.DaggerFragment;
 
+public class ViewMobileUserLogsFragment extends DaggerFragment {
 
-public class MobileUserFragment extends DaggerFragment {
 
-    private FragmentMobileUserBinding binding;
-
+    private FragmentViewMobileUserLogsBinding binding;
     private MobileUser mobileUser;
 
     private HostScreen hostScreen;
-    private UserLogsRecyclerAdapter adapter;
 
+    private UserLogListRecyclerAdapter adapter;
 
-    public void onUserLogDataReceiver(Logs log) {
+    public void onMobileUserLogDataReceiver(UserLog log) {
         Log.e("MOBILEUSER", "onUserLogDataReceiver: " + log);
-        hostScreen.onInflate(requireView(), "tag_fragment_mobileuser_to_log", log);
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentMobileUserBinding.inflate(inflater);
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        initContactRecyclerAdapter();
-        if (mobileUser != null) {
-
-            ((SettingsActivity) getActivity()).getSupportActionBar().setTitle(mobileUser.getUsername() + "'s Report logs");
-            Log.e("MOBILEUSER", "onViewCreated: " + mobileUser);
-
-            List<Logs> logsList = mobileUser.getLogs();
-            if (logsList.size() > 0) {
-                adapter.refresh(logsList);
-
-                for (Logs log : logsList) {
-                    Log.e("MOBILEUSER", "onViewCreated: " + log.toString() + " size: " + logsList.size());
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    private void initContactRecyclerAdapter() {
-        binding.rvLogsList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new UserLogsRecyclerAdapter();
-        binding.rvLogsList.setAdapter(adapter);
+        hostScreen.onInflate(requireView(), "tag_fragment_mobile_user_log_to_log", log);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentViewMobileUserLogsBinding.inflate(inflater);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Log.e("MOBILEUSERLOGS", "onViewCreated: " + mobileUser);
+        initRecyclerAdapter();
+
+        if (mobileUser != null) {
+            ((SettingsActivity) getActivity()).getSupportActionBar().setTitle(mobileUser.getUsername() + "'s Mobile logs");
+            adapter.refresh(mobileUser.getUserLogs());
+        }
+    }
+
+    private void initRecyclerAdapter() {
+        binding.rvUserLogsList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        adapter = new UserLogListRecyclerAdapter();
+        binding.rvUserLogsList.setAdapter(adapter);
     }
 
     @Override
@@ -135,9 +108,11 @@ public class MobileUserFragment extends DaggerFragment {
 
                 positive.setOnClickListener(v -> {
                     FirebaseAuth.getInstance().signOut();
+//                    hostScreen.onInflate(binding.getRoot(), "tag_fragment_dashboard_to_settings");
                     Intent intent = new Intent(requireActivity(), SettingsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
+
                     dialog.dismiss();
                 });
             }

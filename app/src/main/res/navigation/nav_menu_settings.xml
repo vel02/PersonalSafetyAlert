@@ -30,22 +30,9 @@
         android:name="com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.DashboardLogFragment"
         android:label="Logs"
         tools:layout="@layout/fragment_dashboard_log">
-        <!--        <action-->
-        <!--            android:id="@+id/action_nav_dashboardLog_to_nav_settings"-->
-        <!--            app:destination="@id/nav_settings"-->
-        <!--            app:enterAnim="@anim/fade_in"-->
-        <!--            app:exitAnim="@anim/fade_out"-->
-        <!--            app:popEnterAnim="@anim/fade_in"-->
-        <!--            app:popExitAnim="@anim/fade_out"-->
-        <!--            app:popUpTo="@id/nav_settings"-->
-        <!--            app:popUpToInclusive="true" />-->
         <action
-            android:id="@+id/action_nav_dashboardLog_to_mobileUserFragment"
-            app:destination="@id/nav_mobileuser"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out" />
+            android:id="@+id/action_nav_dashboardLog_to_nav_view_user_logs"
+            app:destination="@id/nav_view_user_logs" />
     </fragment>
     <fragment
         android:id="@+id/nav_mobileuser"
@@ -132,6 +119,33 @@
         <argument
             android:name="userlog"
             app:argType="com.sti.research.personalsafetyalert.model.UserLog" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_view_user_logs"
+        android:name="com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.ViewUserLogsFragment"
+        android:label="View User's Log"
+        tools:layout="@layout/fragment_view_user_logs">
+        <argument
+            android:name="mobileUser"
+            app:argType="com.sti.research.personalsafetyalert.model.MobileUser" />
+        <action
+            android:id="@+id/action_nav_view_user_logs_to_nav_mobileuser"
+            app:destination="@id/nav_mobileuser" />
+        <action
+            android:id="@+id/action_nav_view_user_logs_to_viewMobileUserLogsFragment"
+            app:destination="@id/viewMobileUserLogsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewMobileUserLogsFragment"
+        android:name="com.sti.research.personalsafetyalert.ui.screen.menu.settings.screen.ViewMobileUserLogsFragment"
+        android:label="User Mobile Logs"
+        tools:layout="@layout/fragment_view_mobile_user_logs">
+        <argument
+            android:name="mobileUser"
+            app:argType="com.sti.research.personalsafetyalert.model.MobileUser" />
+        <action
+            android:id="@+id/action_viewMobileUserLogsFragment_to_nav_user_log_list_view"
+            app:destination="@id/nav_user_log_list_view" />
     </fragment>
 
 </navigation>
